@@ -1,0 +1,37 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 912px;
+    text-align: left;
+}
+
+.scrollView {
+    scrollbar-color: #6969dd #e0e0e0;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.headerGrid {
+
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.img {
+    max-width: 100%;
+    height: auto;
+}
+
+.imgContainer {
+    width: 240px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+

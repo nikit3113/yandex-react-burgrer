@@ -7,13 +7,7 @@
 }
 
 .scrollView {
-    scrollbar-color: #6969dd #e0e0e0;
-    flex-grow: 1;
     overflow: auto;
-}
-
-.headerGrid {
-
 }
 
 .grid {
@@ -22,16 +16,28 @@
     gap: 24px;
 }
 
-.img {
-    max-width: 100%;
-    height: auto;
-}
-
-.imgContainer {
-    width: 240px;
-    height: 120px;
+.ingredient_card__text {
     display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
 }
+
+.ingredient_card__image {
+    width: 240px;
+    height: 120px;
+    margin: 0 20px;
+}
+.ingredient_card__price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.ingredient_card__price svg {
+    margin-left: 9px;
+}
+
 
 

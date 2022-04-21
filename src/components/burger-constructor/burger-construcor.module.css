@@ -4,3 +4,45 @@
     width: 568px;
     height: 912px;
 }
+
+.scrollView {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.containerLockedIngredient {
+    display: flex;
+    align-items: stretch;
+}
+
+.containerIngredient {
+    composes: containerLockedIngredient;
+    position: relative;
+}
+
+.dragIconContainer {
+    align-self: center;
+    position: absolute;
+    left: 0;
+}
+
+.rowTotal {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.price {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.price svg {
+    margin-left: 9px;
+    height: 33px;
+    width: 33px;
+}
+

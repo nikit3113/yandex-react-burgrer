@@ -7,19 +7,19 @@ import data from '../burger-ingredients/test-data.json';
 class BurgerConstructor extends React.Component {
   render() {
     return (
-      <main className={constructorStyles.main + ' pl-4 pr-4'}>
-        <section className='mt-25 mb-4 pl-8' style={{ display: "flex", alignItems: 'stretch' }}>
+      <section className={constructorStyles.main + ' pl-4 pr-4'}>
+        <div className={constructorStyles.containerLockedIngredient + ' mt-25 mb-4 pl-8 mr-2'}>
           <ConstructorElement
             text={data[0].name}
             thumbnail={data[0].image}
             price={data[0].price} type={'top'}
             isLocked={true}
           />
-        </section>
-        <section style={{ display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-          {data.map((ingredient, index) =>
-            <div className='mb-4 pl-8' style={{ display: "flex", alignItems: 'stretch', position: "relative" }}>
-              <div style={{ alignSelf: "center",position: 'absolute', left:0}}>
+        </div>
+        <div className={constructorStyles.scrollView}>
+          {data.map((ingredient) =>
+            <div className={constructorStyles.containerIngredient + ' mb-4 pl-8'}>
+              <div className={constructorStyles.dragIconContainer}>
                 <DragIcon></DragIcon>
               </div>
               <ConstructorElement
@@ -30,23 +30,23 @@ class BurgerConstructor extends React.Component {
               />
             </div>
           )}
-        </section>
-        <section className='pl-8' style={{ display: "flex", alignItems: 'stretch' }}>
+        </div>
+        <div className={constructorStyles.containerLockedIngredient + ' pl-8 mr-2'}>
           <ConstructorElement
             text={data[0].name}
             thumbnail={data[0].image}
             price={data[0].price} type={'bottom'}
             isLocked={true}
           />
-        </section>
-        <section className="mt-10 mb-15" style={{ display: "flex", justifyContent: 'end', alignItems: 'center' }}>
-          <div className="mr-10" style={{ display: "flex", height: '100%',alignItems:'center'}}>
-            <p className="text text_type_digits-medium mr-3">610</p>
+        </div>
+        <span className={constructorStyles.rowTotal + " mt-10 mb-15 mr-2"}>
+          <span className={constructorStyles.price + ' text text_type_digits-medium mt-1 mb-1 mr-10'}>
+            {610}
             <CurrencyIcon type={'primary'}/>
-          </div>
+          </span>
           <Button>Оформить заказ</Button>
-        </section>
-      </main>
+        </span>
+      </section>
     );
   }
 }

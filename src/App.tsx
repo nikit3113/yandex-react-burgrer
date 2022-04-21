@@ -8,10 +8,10 @@ function App() {
     return (
         <div className="App">
             <AppHeader/>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+            <main style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
                 <BurgerIngredients/>
                 <BurgerConstructor/>
-            </div>
+            </main>
         </div>
     );
 }

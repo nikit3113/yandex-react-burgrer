@@ -1,0 +1,19 @@
+.modal {
+    background-color: var(--background);
+    border-radius: 40px;
+    margin: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    width: 640px;
+}
+
+.closeButton {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}

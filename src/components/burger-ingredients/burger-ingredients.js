@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
-import data from './test-data.json';
+import PropTypes from "prop-types";
 
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
@@ -80,34 +80,32 @@ const IngredientCard = (props) => {
 }
 
 class BurgerIngredients extends React.Component {
-  state = {
-    isLoading: false,
-    hasError: false,
-    ingredients: []
-  };
-
-  componentDidMount() {
-    this.getIngredients();
-  }
-
-  getIngredients = () => {
-    this.setState({ ingredients: [...data], isLoading: false, hasError: false })
-    //this.setState({ ...this.state, hasError: false, isLoading: true });
-    // fetch(`https://api....`)
-    //   .then(res => res.json())
-    //   .then(ingredients => this.setState({ ingredients: [...ingredients], isLoading: false, hasError: false }))
-    //   .catch(e => this.setState({ ...this.state, isLoading: false, hasError: true }))
-  };
-
   render() {
     return (
       <section className={ingredientsStyles.main + ' mr-10'}>
         <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
         <Tabs/>
-        <IngredientList className="mt-10" ingredients={this.state.ingredients}></IngredientList>
+        <IngredientList className="mt-10" ingredients={this.props.ingredients}></IngredientList>
       </section>
     );
   }
 }
+
+BurgerIngredients.propTypes = {
+  ingredients: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    proteins: PropTypes.number,
+    fat: PropTypes.number,
+    carbohydrates: PropTypes.number,
+    calories: PropTypes.number,
+    price: PropTypes.number,
+    image: PropTypes.string,
+    image_mobile: PropTypes.string,
+    image_large: PropTypes.string,
+    __v: PropTypes.number
+  })),
+};
 
 export default BurgerIngredients;

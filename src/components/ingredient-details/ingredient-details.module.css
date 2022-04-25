@@ -1,0 +1,21 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.infoElem {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+    min-width: 120px;
+    color: #8585AD;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+}

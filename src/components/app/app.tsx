@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
-import AppHeader from "./components/app-header/app-header";
-import BurgerIngredients from "./components/burger-ingredients/burger-ingredients";
-import BurgerConstructor from "./components/burger-constructor/burger-constructor";
-import testData from './utils/testData';
-import Modal from "./components/modal/modal";
-import OrderDetails from "./components/order-details/order-details";
-import IngredientDetails from "./components/ingredient-details/ingredient-details";
+import appStyles from './app.module.css';
+import AppHeader from "../app-header/app-header";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import BurgerConstructor from "../burger-constructor/burger-constructor";
+import testData from '../../utils/testData';
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 const URL_API = 'https://norma.nomoreparties.space/';
 
@@ -62,11 +62,11 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className={appStyles.app}>
             <AppHeader/>
-            <main style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+            <main className={appStyles.main}>
                 <BurgerIngredients ingredients={testData}/>
-                <BurgerConstructor bun={testData[0]} ingredients={testData}/>
+                <BurgerConstructor bun={testData[0]} ingredients={testData.filter((el)=> el.type!=='bun')}/>
                 {modalVisible && (modalIngredientDetails())}
             </main>
         </div>

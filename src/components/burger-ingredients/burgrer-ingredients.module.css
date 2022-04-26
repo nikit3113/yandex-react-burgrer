@@ -1,3 +1,13 @@
+.counter_container {
+    display: flex;
+    position: relative;
+}
+
+.tabs {
+    display: flex;
+    margin: 0 auto;
+}
+
 .main {
     display: flex;
     flex-direction: column;
@@ -29,12 +39,14 @@
     height: 120px;
     margin: 0 20px;
 }
+
 .ingredient_card__price {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
+
 .ingredient_card__price svg {
     margin-left: 9px;
 }

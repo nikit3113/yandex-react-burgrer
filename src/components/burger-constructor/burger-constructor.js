@@ -57,7 +57,7 @@ class BurgerConstructor extends React.Component {
 }
 
 BurgerConstructor.propTypes = {
-  bun: PropTypes.shape(IngredientPropType),
+  bun: PropTypes.shape(IngredientPropType).isRequired,
   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropType)),
 };
 

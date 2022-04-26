@@ -90,7 +90,7 @@ class BurgerIngredients extends React.Component {
 }
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropType)),
+  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropType)).isRequired,
 };
 
 export default BurgerIngredients;

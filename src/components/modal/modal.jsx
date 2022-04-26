@@ -4,8 +4,6 @@ import styleModal from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const modalRoot = document.getElementById("react-modals");
-
 function Modal(props) {
   const { children, textHeader, onClose } = props;
 
@@ -21,7 +19,7 @@ function Modal(props) {
     return () => {
       document.body.removeEventListener("keyup", onEscape);
     };
-  }, [])
+  }, [onClose])
 
   return (
     <ModalOverlay onClick={onClose}>

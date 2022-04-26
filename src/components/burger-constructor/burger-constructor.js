@@ -20,12 +20,14 @@ class BurgerConstructor extends React.Component {
         </div>
         <div className={constructorStyles.scrollView}>
           {ingredients.map((ingredient) =>
-            <div className={constructorStyles.containerIngredient + ' mb-4 pl-8'}>
+            <div
+              className={constructorStyles.containerIngredient + ' mb-4 pl-8'}
+              key={ingredient._id}
+            >
               <div className={constructorStyles.dragIconContainer}>
                 <DragIcon></DragIcon>
               </div>
               <ConstructorElement
-                key={ingredient._id}
                 text={ingredient.name}
                 thumbnail={ingredient.image}
                 price={ingredient.price}

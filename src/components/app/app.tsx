@@ -11,7 +11,7 @@ function App() {
             <AppHeader/>
             <main className={appStyles.main}>
                 <BurgerIngredients ingredients={testData}/>
-                <BurgerConstructor bun={testData[0]} ingredients={testData}/>
+                <BurgerConstructor bun={testData[0]} ingredients={testData.filter((el)=> el.type!=='bun')}/>
             </main>
         </div>
     );

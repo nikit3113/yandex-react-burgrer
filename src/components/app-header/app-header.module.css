@@ -1,0 +1,25 @@
+.header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    background-color: var(--background-alt);
+    color: var(--text-primary-color);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+}
+
+.menuItem {
+    background-color: var(--background-alt);
+    color: var(--text-primary-color);
+    border: none;
+    outline: none;
+    display: flex;
+    border-radius: 40px;
+}
+

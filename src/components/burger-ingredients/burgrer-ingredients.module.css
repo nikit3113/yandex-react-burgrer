@@ -1,0 +1,55 @@
+.counter_container {
+    display: flex;
+    position: relative;
+}
+
+.tabs {
+    display: flex;
+    margin: 0 auto;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 912px;
+    text-align: left;
+}
+
+.scrollView {
+    overflow: auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.ingredient_card__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.ingredient_card__image {
+    width: 240px;
+    height: 120px;
+    margin: 0 20px;
+}
+
+.ingredient_card__price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.ingredient_card__price svg {
+    margin-left: 9px;
+}
+
+
+

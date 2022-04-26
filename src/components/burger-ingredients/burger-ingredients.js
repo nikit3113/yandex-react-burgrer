@@ -6,10 +6,7 @@ import PropTypes from "prop-types";
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
   return (
-    <div style={{
-      display: 'flex',
-      margin: '0 auto'
-    }}>
+    <div className={ingredientsStyles.tabs}>
       <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
         Булки
       </Tab>
@@ -66,7 +63,7 @@ const IngredientCard = (props) => {
 
   return (
     <div>
-      <div style={{ display: "flex", position: "relative" }}>
+      <div className={ingredientsStyles.counter_container}>
         {price ? <Counter count={price}/> : null}
       </div>
       <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>

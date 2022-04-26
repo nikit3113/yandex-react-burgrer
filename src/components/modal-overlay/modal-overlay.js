@@ -7,7 +7,7 @@ const modalRoot = document.getElementById("react-modals");
 
 function ModalOverlay(props) {
   return ReactDOM.createPortal(
-    <div className={styleModalOver.modal}>
+    <div className={styleModalOver.modal} onClick={props.onClick}>
       {props.children}
     </div>
     ,

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styles from './ingredient-details.module.css'
 
 function IngredientDetails(props) {
+  if (!props.ingredient) return null;
   return (
     <div className={styles.root}>
       <img src={props.ingredient.image_large} alt={props.ingredient.name}/>

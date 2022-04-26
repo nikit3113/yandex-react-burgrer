@@ -24,8 +24,8 @@ function Modal(props) {
   }, [])
 
   return (
-    <ModalOverlay>
-      <section className={styleModal.modal}>
+    <ModalOverlay onClick={onClose}>
+      <section className={styleModal.modal} onClick={e => e.stopPropagation()}>
         <header className={styleModal.header + ' ml-10 mt-10 mr-10 '}>
           <p className={'text_type_main-large'}>{textHeader}</p>
           <button className={styleModal.closeButton} onClick={onClose}>

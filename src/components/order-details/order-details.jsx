@@ -6,8 +6,8 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 
 function OrderDetails(props) {
   return (
-    <div style={styles.root}>
-      <span className={'text_type_digits-large mb-8'}>{props.orderNum}</span>
+    <div className={styles.root}>
+      <span className={'text_type_digits-large mb-8'}>034536</span>
       <p className={'text_type_main-medium mb-15'}>идентификатор заказа</p>
       <div className={styles.image}>
         <CheckMarkIcon/>

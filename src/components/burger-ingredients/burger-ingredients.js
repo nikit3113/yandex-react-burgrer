@@ -31,6 +31,7 @@ const IngredientList = (props) => {
       <div className={[ingredientsStyles.grid, props.className].join(' ')}>
         {buns.map((bun) =>
           <IngredientCard
+            onClick={() => props.openIngredientModal(bun)}
             key={bun._id}
             text={bun.name}
             thumbnail={bun.image}
@@ -41,6 +42,7 @@ const IngredientList = (props) => {
       <div className={[ingredientsStyles.grid, props.className].join(' ')}>
         {sauces.map((sauce) =>
           <IngredientCard
+            onClick={() => props.openIngredientModal(sauce)}
             key={sauce._id}
             text={sauce.name}
             thumbnail={sauce.image}
@@ -50,6 +52,7 @@ const IngredientList = (props) => {
       <div className={[ingredientsStyles.grid, props.className].join(' ')}>
         {mains.map((main) =>
           <IngredientCard
+            onClick={() => props.openIngredientModal(main)}
             key={main._id}
             text={main.name}
             thumbnail={main.image}
@@ -61,11 +64,12 @@ const IngredientList = (props) => {
 
 const IngredientCard = (props) => {
   const { text, thumbnail, price } = props;
+  const count = 0;
 
   return (
-    <div>
+    <div onClick={props.onClick}>
       <div className={ingredientsStyles.counter_container}>
-        {price ? <Counter count={price}/> : null}
+        {count ? <Counter count={count}/> : null}
       </div>
       <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
       <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
@@ -83,7 +87,11 @@ class BurgerIngredients extends React.Component {
       <section className={ingredientsStyles.main + ' mr-10'}>
         <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
         <Tabs/>
-        <IngredientList className="mt-10" ingredients={this.props.ingredients}></IngredientList>
+        <IngredientList
+          className="mt-10"
+          ingredients={this.props.ingredients}
+          openIngredientModal={this.props.openIngredientModal}>
+        </IngredientList>
       </section>
     );
   }

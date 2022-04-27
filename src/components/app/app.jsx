@@ -24,7 +24,6 @@ function App() {
 
 
   useEffect(() => {
-      console.log('useEffect ' + API_INGREDIENTS);
       setIngredients({ ...ingredients, hasError: false, isLoading: true });
       fetch(API_INGREDIENTS)
         .then(res => {
@@ -37,8 +36,7 @@ function App() {
             setIngredients({ ...ingredients, hasError: false, isLoading: false });
           }
         )
-        .catch(e => {
-          console.log('catch ' + JSON.stringify(e));
+        .catch(() => {
           setIngredients({ ...ingredients, isLoading: false, hasError: true });
         })
 

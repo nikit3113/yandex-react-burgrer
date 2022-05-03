@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import appStyles from './app.module.css';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
+import {ConstructorContext} from "../../services/constructorContext"
 import testData from '../../utils/testData';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
@@ -14,7 +15,11 @@ function App() {
   const [ingredients, setIngredients] = useState({
     data: [],
     isLoading: false,
-    hasError: false
+    hasError: false,
+  });
+  const [constructor, setConstructor] = useState({
+    bun: undefined,
+    filling: [],
   });
   const [orderModalVisible, setOrderModalVisible] = React.useState(false);
   const [ingredientModal, setIngredientModal] = React.useState({
@@ -24,7 +29,7 @@ function App() {
 
 
   useEffect(() => {
-      setIngredients({ ...ingredients, hasError: false, isLoading: true });
+      setIngredients({...ingredients, hasError: false, isLoading: true});
       fetch(API_INGREDIENTS)
         .then(res => {
           if (res.ok) {
@@ -33,11 +38,12 @@ function App() {
           return Promise.reject(`Ошибка ${res.status}`);
         })
         .then(ingredients => {
-            setIngredients({ ...ingredients, hasError: false, isLoading: false });
+            setIngredients({...ingredients, hasError: false, isLoading: false});
+            setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
           }
         )
         .catch(() => {
-          setIngredients({ ...ingredients, isLoading: false, hasError: true });
+          setIngredients({...ingredients, isLoading: false, hasError: true});
         })
 
     }
@@ -52,11 +58,11 @@ function App() {
   }
 
   function handleOpenIngredientModal(ingredient) {
-    setIngredientModal({ visible: true, ingredient: ingredient });
+    setIngredientModal({visible: true, ingredient: ingredient});
   }
 
   function handleCloseIngredientModal() {
-    setIngredientModal({ ...ingredientModal, visible: false});
+    setIngredientModal({...ingredientModal, visible: false});
   }
 
   const modalIngredientDetails = () => {
@@ -82,19 +88,19 @@ function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader/>
-      <main className={appStyles.main}>
-        <BurgerIngredients
-          ingredients={ingredients.data}
-          openIngredientModal={handleOpenIngredientModal}
-        />
-        <BurgerConstructor
-          bun={ingredients.data[0]}
-          openOrderModal={handleOpenOrderModal}
-          ingredients={ingredients.data.filter(el => el.type !== 'bun')}
-        />
-        {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
-        {orderModalVisible && (modalOrderDetails())}
-      </main>
+      <ConstructorContext.Provider value={[constructor, setConstructor]}>
+        <main className={appStyles.main}>
+          <BurgerIngredients
+            ingredients={ingredients.data}
+            openIngredientModal={handleOpenIngredientModal}
+          />
+          <BurgerConstructor
+            openOrderModal={handleOpenOrderModal}
+          />
+          {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
+          {orderModalVisible && (modalOrderDetails())}
+        </main>
+      </ConstructorContext.Provider>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import React from "react";
-import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
-import { IngredientPropType } from "../../utils/types";
+import {IngredientPropType} from "../../utils/types";
 
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
@@ -63,7 +63,7 @@ const IngredientList = (props) => {
 }
 
 const IngredientCard = (props) => {
-  const { text, thumbnail, price } = props;
+  const {text, thumbnail, price} = props;
   const count = 0;
 
   return (
@@ -76,29 +76,29 @@ const IngredientCard = (props) => {
         {price}
         <CurrencyIcon type={'primary'}/>
       </span>
-      <span className={ingredientsStyles.ingredient_card__text + " text text_type_main-default pb-8"}>{text}</span>
+      <span
+        className={ingredientsStyles.ingredient_card__text + " text text_type_main-default pb-8"}>{text}</span>
     </div>
   )
 }
 
-class BurgerIngredients extends React.Component {
-  render() {
-    return (
-      <section className={ingredientsStyles.main + ' mr-10'}>
-        <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
-        <Tabs/>
-        <IngredientList
-          className="mt-10"
-          ingredients={this.props.ingredients}
-          openIngredientModal={this.props.openIngredientModal}>
-        </IngredientList>
-      </section>
-    );
-  }
+function BurgerIngredients(props) {
+  return (
+    <section className={ingredientsStyles.main + ' mr-10'}>
+      <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
+      <Tabs/>
+      <IngredientList
+        className="mt-10"
+        ingredients={props.ingredients}
+        openIngredientModal={props.openIngredientModal}>
+      </IngredientList>
+    </section>
+  );
 }
 
 BurgerIngredients.propTypes = {
   ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropType)).isRequired,
+  openIngredientModal: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

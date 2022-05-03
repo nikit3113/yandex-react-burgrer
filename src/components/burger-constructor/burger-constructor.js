@@ -3,6 +3,7 @@ import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/
 import constructorStyles from './burger-construcor.module.css';
 import {ConstructorContext} from "../../services/constructorContext";
 import PropTypes from "prop-types";
+import {postOrder} from "../../api/api";
 
 function BurgerConstructor(props) {
   const [{bun, filling}] = useContext(ConstructorContext);
@@ -48,7 +49,14 @@ function BurgerConstructor(props) {
               filling.reduce((prev, cur) => prev + cur.price, 0)}
             <CurrencyIcon type={'primary'}/>
           </span>
-          <Button onClick={props.openOrderModal}>Оформить заказ</Button>
+          <Button onClick={() => {
+            postOrder({ingredients: [bun._id, ...filling.map((el=> el._id))]})
+              .then((data) => {
+                console.log(data);
+                props.openOrderModal(data.order.number);
+              })
+              .catch(() => console.log('error post order'))
+          }}>Оформить заказ</Button>
         </span>
     </section>
   );

@@ -4,12 +4,10 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import {ConstructorContext} from "../../services/constructorContext"
-import testData from '../../utils/testData';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-
-const API_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
+import {API_INGREDIENTS} from "../../api/api";
 
 function App() {
   const [ingredients, setIngredients] = useState({
@@ -21,10 +19,13 @@ function App() {
     bun: undefined,
     filling: [],
   });
-  const [orderModalVisible, setOrderModalVisible] = React.useState(false);
+  const [orderModal, setOrderModal] = React.useState({
+    visible: false,
+    orderNumber: undefined,
+  });
   const [ingredientModal, setIngredientModal] = React.useState({
     visible: false,
-    ingredient: undefined
+    ingredient: undefined,
   });
 
 
@@ -49,12 +50,12 @@ function App() {
     }
     , []);
 
-  function handleOpenOrderModal() {
-    setOrderModalVisible(true);
+  function handleOpenOrderModal(orderNumber) {
+    setOrderModal({visible: true, orderNumber: orderNumber});
   }
 
   function handleCloseOrderModal() {
-    setOrderModalVisible(false);
+    setOrderModal({...orderModal, visible: false});
   }
 
   function handleOpenIngredientModal(ingredient) {
@@ -80,7 +81,7 @@ function App() {
       <Modal
         onClose={handleCloseOrderModal}
       >
-        <OrderDetails></OrderDetails>
+        <OrderDetails orderNumber={orderModal.orderNumber}></OrderDetails>
       </Modal>
     );
   }
@@ -98,7 +99,7 @@ function App() {
             openOrderModal={handleOpenOrderModal}
           />
           {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
-          {orderModalVisible && (modalOrderDetails())}
+          {orderModal.visible && (modalOrderDetails(orderModal.orderNumber))}
         </main>
       </ConstructorContext.Provider>
     </div>

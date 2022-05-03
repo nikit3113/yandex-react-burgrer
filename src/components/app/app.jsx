@@ -7,7 +7,7 @@ import {ConstructorContext} from "../../services/constructorContext"
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {API_INGREDIENTS} from "../../api/api";
+import {getIngredients} from "../../api/api";
 
 function App() {
   const [ingredients, setIngredients] = useState({
@@ -31,14 +31,7 @@ function App() {
 
   useEffect(() => {
       setIngredients({...ingredients, hasError: false, isLoading: true});
-      fetch(API_INGREDIENTS)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка ${res.status}`);
-        })
-        .then(ingredients => {
+      getIngredients().then(ingredients => {
             setIngredients({...ingredients, hasError: false, isLoading: false});
             setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
           }

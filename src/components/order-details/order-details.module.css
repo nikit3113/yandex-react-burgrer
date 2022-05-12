@@ -8,8 +8,15 @@
     display: flex;
     height: 120px;
     width: 120px;
-    background-color: var(--colors-interface-accent);
-    justify-content: center;
-    align-items: center;
-    border-radius: 60px;
+    background-image: url('/public/static/icons/done.png');
+}
+
+.title {
+    text-align: center;
+    color: #F2F2F3;
+    text-shadow: 0 0 16px rgba(51, 51, 255, 0.25), 0 0 8px rgba(51, 51, 255, 0.25), 0 4px 32px rgba(51, 51, 255, 0.5);
+}
+.waitingText {
+    text-align: center;
+    color: #8585AD;
 }

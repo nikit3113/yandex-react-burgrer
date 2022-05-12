@@ -36,8 +36,9 @@ function App() {
             setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
           }
         )
-        .catch(() => {
+        .catch((error) => {
           setIngredients({...ingredients, isLoading: false, hasError: true});
+          alert(error);
         })
 
     }
@@ -74,7 +75,7 @@ function App() {
       <Modal
         onClose={handleCloseOrderModal}
       >
-        <OrderDetails orderNumber={orderModal.orderNumber}></OrderDetails>
+        <OrderDetails orderNumber={orderModal.orderNumber}/>
       </Modal>
     );
   }

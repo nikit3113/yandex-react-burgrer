@@ -4,7 +4,8 @@ const API_ORDERS = 'https://norma.nomoreparties.space/api/orders';
 // Запросить ингредиенты:
 export async function getIngredients() {
   const response = await fetch(API_INGREDIENTS);
-  return await response.json();
+  if (response.ok) return await response.json();
+  throw new Error(`Ошибка запроса на сервер ${response.status}`);
 }
 
 // Сделать заказ:
@@ -16,5 +17,6 @@ export async function postOrder(data = {}) {
     },
     body: JSON.stringify(data),
   });
-  return await response.json();
+  if (response.ok) return await response.json();
+  throw new Error(`Ошибка запроса на сервер ${response.status}`);
 }

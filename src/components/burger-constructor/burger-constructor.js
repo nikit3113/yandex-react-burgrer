@@ -6,7 +6,23 @@ import PropTypes from "prop-types";
 import {postOrder} from "../../api/api";
 
 function BurgerConstructor(props) {
+  const {openOrderModal} = props;
   const [{bun, filling}] = useContext(ConstructorContext);
+
+  function handleCheckoutButton() {
+    postOrder({ingredients: [bun._id, ...filling.map((el => el._id))]})
+      .then((data) => {
+        openOrderModal(data.order.number);
+      })
+      .catch(() => alert('Error: checkout failed'))
+  }
+
+  const cost = React.useMemo(() => {
+    return bun ?
+      filling.reduce((prev, cur) => prev + cur.price, bun.price * 2) :
+      filling.reduce((prev, cur) => prev + cur.price, 0);
+  }, [filling, bun]);
+
   return (
     <section className={constructorStyles.main + ' pl-4 pr-4'}>
       {bun && <div className={constructorStyles.containerLockedIngredient + ' mt-25 mb-4 pl-8 mr-2'}>
@@ -44,19 +60,10 @@ function BurgerConstructor(props) {
       </div>}
       <span className={constructorStyles.rowTotal + " mt-10 mb-15 mr-2"}>
           <span className={constructorStyles.price + ' text text_type_digits-medium mt-1 mb-1 mr-10'}>
-            {bun ?
-              filling.reduce((prev, cur) => prev + cur.price, bun.price * 2) :
-              filling.reduce((prev, cur) => prev + cur.price, 0)}
+            {cost}
             <CurrencyIcon type={'primary'}/>
           </span>
-          <Button onClick={() => {
-            postOrder({ingredients: [bun._id, ...filling.map((el=> el._id))]})
-              .then((data) => {
-                console.log(data);
-                props.openOrderModal(data.order.number);
-              })
-              .catch(() => console.log('error post order'))
-          }}>Оформить заказ</Button>
+          <Button onClick={handleCheckoutButton}>Оформить заказ</Button>
         </span>
     </section>
   );

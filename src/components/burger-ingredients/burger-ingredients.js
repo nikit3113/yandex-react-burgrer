@@ -6,6 +6,7 @@ import {IngredientPropType} from "../../utils/types";
 
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
+
   return (
     <div className={ingredientsStyles.tabs}>
       <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
@@ -21,17 +22,18 @@ const Tabs = () => {
   )
 }
 
-const IngredientList = (props) => {
-  const buns = props.ingredients.filter(ingredient => ingredient.type === 'bun');
-  const sauces = props.ingredients.filter(ingredient => ingredient.type === 'sauce');
-  const mains = props.ingredients.filter(ingredient => ingredient.type === 'main');
+const IngredientList = ({ingredients, openIngredientModal, className}) => {
+  const buns = ingredients.filter(ingredient => ingredient.type === 'bun');
+  const sauces = ingredients.filter(ingredient => ingredient.type === 'sauce');
+  const mains = ingredients.filter(ingredient => ingredient.type === 'main');
+
   return (
     <div className={ingredientsStyles.scrollView + ' mt-10'}>
       <header className='text_type_main-medium'>Булки</header>
-      <div className={[ingredientsStyles.grid, props.className].join(' ')}>
+      <div className={[ingredientsStyles.grid, className].join(' ')}>
         {buns.map((bun) =>
           <IngredientCard
-            onClick={() => props.openIngredientModal(bun)}
+            onClick={() => openIngredientModal(bun)}
             key={bun._id}
             text={bun.name}
             thumbnail={bun.image}
@@ -39,20 +41,20 @@ const IngredientList = (props) => {
           />)}
       </div>
       <header className='text_type_main-medium mt-10'>Соусы</header>
-      <div className={[ingredientsStyles.grid, props.className].join(' ')}>
+      <div className={[ingredientsStyles.grid, className].join(' ')}>
         {sauces.map((sauce) =>
           <IngredientCard
-            onClick={() => props.openIngredientModal(sauce)}
+            onClick={() => openIngredientModal(sauce)}
             key={sauce._id}
             text={sauce.name}
             thumbnail={sauce.image}
             price={sauce.price}/>)}
       </div>
       <header className='text_type_main-medium mt-10'>Начинки</header>
-      <div className={[ingredientsStyles.grid, props.className].join(' ')}>
+      <div className={[ingredientsStyles.grid, className].join(' ')}>
         {mains.map((main) =>
           <IngredientCard
-            onClick={() => props.openIngredientModal(main)}
+            onClick={() => openIngredientModal(main)}
             key={main._id}
             text={main.name}
             thumbnail={main.image}
@@ -62,12 +64,9 @@ const IngredientList = (props) => {
   )
 }
 
-const IngredientCard = (props) => {
-  const {text, thumbnail, price} = props;
-  const count = 0;
-
+const IngredientCard = ({text, thumbnail, price, count, onClick}) => {
   return (
-    <div onClick={props.onClick}>
+    <div onClick={onClick}>
       <div className={ingredientsStyles.counter_container}>
         {count ? <Counter count={count}/> : null}
       </div>
@@ -83,14 +82,16 @@ const IngredientCard = (props) => {
 }
 
 function BurgerIngredients(props) {
+  const {ingredients, openIngredientModal} = props;
+
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>
       <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
       <Tabs/>
       <IngredientList
         className="mt-10"
-        ingredients={props.ingredients}
-        openIngredientModal={props.openIngredientModal}>
+        ingredients={ingredients}
+        openIngredientModal={openIngredientModal}>
       </IngredientList>
     </section>
   );

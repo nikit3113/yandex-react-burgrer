@@ -9,58 +9,42 @@ const Tabs = () => {
 
   return (
     <div className={ingredientsStyles.tabs}>
-      <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>
-        Булки
-      </Tab>
-      <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>
-        Соусы
-      </Tab>
-      <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>
-        Начинки
-      </Tab>
+      <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>Булки</Tab>
+      <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>Соусы</Tab>
+      <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>Начинки</Tab>
     </div>
   )
 }
 
-const IngredientList = ({ingredients, openIngredientModal, className}) => {
+const IngredientList = ({ingredients, openIngredientModal}) => {
   const buns = ingredients.filter(ingredient => ingredient.type === 'bun');
   const sauces = ingredients.filter(ingredient => ingredient.type === 'sauce');
   const mains = ingredients.filter(ingredient => ingredient.type === 'main');
 
   return (
     <div className={ingredientsStyles.scrollView + ' mt-10'}>
-      <header className='text_type_main-medium'>Булки</header>
-      <div className={[ingredientsStyles.grid, className].join(' ')}>
-        {buns.map((bun) =>
+      <IngredientsCategoryList title={'Булки'} ingredients={buns} onIngredientClick={openIngredientModal}/>
+      <IngredientsCategoryList title={'Соусы'} ingredients={sauces} onIngredientClick={openIngredientModal}/>
+      <IngredientsCategoryList title={'Начинки'} ingredients={mains} onIngredientClick={openIngredientModal}/>
+    </div>
+  )
+}
+
+const IngredientsCategoryList = ({title, ingredients, onIngredientClick}) => {
+  return (
+    <>
+      <header className='text_type_main-medium'>{title}</header>
+      <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
+        {ingredients.map((ingredient) =>
           <IngredientCard
-            onClick={() => openIngredientModal(bun)}
-            key={bun._id}
-            text={bun.name}
-            thumbnail={bun.image}
-            price={bun.price}
+            onClick={() => onIngredientClick(ingredient)}
+            key={ingredient._id}
+            text={ingredient.name}
+            thumbnail={ingredient.image}
+            price={ingredient.price}
           />)}
       </div>
-      <header className='text_type_main-medium mt-10'>Соусы</header>
-      <div className={[ingredientsStyles.grid, className].join(' ')}>
-        {sauces.map((sauce) =>
-          <IngredientCard
-            onClick={() => openIngredientModal(sauce)}
-            key={sauce._id}
-            text={sauce.name}
-            thumbnail={sauce.image}
-            price={sauce.price}/>)}
-      </div>
-      <header className='text_type_main-medium mt-10'>Начинки</header>
-      <div className={[ingredientsStyles.grid, className].join(' ')}>
-        {mains.map((main) =>
-          <IngredientCard
-            onClick={() => openIngredientModal(main)}
-            key={main._id}
-            text={main.name}
-            thumbnail={main.image}
-            price={main.price}/>)}
-      </div>
-    </div>
+    </>
   )
 }
 
@@ -89,7 +73,6 @@ function BurgerIngredients(props) {
       <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
       <Tabs/>
       <IngredientList
-        className="mt-10"
         ingredients={ingredients}
         openIngredientModal={openIngredientModal}>
       </IngredientList>

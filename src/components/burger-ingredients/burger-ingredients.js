@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
@@ -17,9 +17,9 @@ const Tabs = () => {
 }
 
 const IngredientList = ({ingredients, openIngredientModal}) => {
-  const buns = ingredients.filter(ingredient => ingredient.type === 'bun');
-  const sauces = ingredients.filter(ingredient => ingredient.type === 'sauce');
-  const mains = ingredients.filter(ingredient => ingredient.type === 'main');
+  const buns = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'bun'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'sauce'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'main'), [ingredients]);
 
   return (
     <div className={ingredientsStyles.scrollView + ' mt-10'}>

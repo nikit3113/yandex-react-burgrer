@@ -7,11 +7,16 @@ import {IngredientPropType} from "../../utils/types";
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
 
+  const onTabClick = (tab) => {
+    setCurrent(tab);
+    const headerCategory = document.getElementById(tab);
+    if (headerCategory) headerCategory.scrollIntoView({behavior: 'smooth'});
+  }
   return (
     <div className={ingredientsStyles.tabs}>
-      <Tab value="Булки" active={current === 'Булки'} onClick={setCurrent}>Булки</Tab>
-      <Tab value="Соусы" active={current === 'Соусы'} onClick={setCurrent}>Соусы</Tab>
-      <Tab value="Начинки" active={current === 'Начинки'} onClick={setCurrent}>Начинки</Tab>
+      <Tab value="buns" active={current === 'buns'} onClick={onTabClick}>Булки</Tab>
+      <Tab value="sauces" active={current === 'sauces'} onClick={onTabClick}>Соусы</Tab>
+      <Tab value="mains" active={current === 'mains'} onClick={onTabClick}>Начинки</Tab>
     </div>
   )
 }
@@ -23,17 +28,20 @@ const IngredientList = ({ingredients, openIngredientModal}) => {
 
   return (
     <div className={ingredientsStyles.scrollView + ' mt-10'}>
-      <IngredientsCategoryList title={'Булки'} ingredients={buns} onIngredientClick={openIngredientModal}/>
-      <IngredientsCategoryList title={'Соусы'} ingredients={sauces} onIngredientClick={openIngredientModal}/>
-      <IngredientsCategoryList title={'Начинки'} ingredients={mains} onIngredientClick={openIngredientModal}/>
+      <IngredientsCategoryList title={'Булки'} ingredients={buns} onIngredientClick={openIngredientModal}
+                               id={'buns'}/>
+      <IngredientsCategoryList title={'Соусы'} ingredients={sauces} onIngredientClick={openIngredientModal}
+                               id={'sauces'}/>
+      <IngredientsCategoryList title={'Начинки'} ingredients={mains} onIngredientClick={openIngredientModal}
+                               id={'mains'}/>
     </div>
   )
 }
 
-const IngredientsCategoryList = ({title, ingredients, onIngredientClick}) => {
+const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id}) => {
   return (
     <>
-      <header className='text_type_main-medium'>{title}</header>
+      <header className='text_type_main-medium' id={id}>{title}</header>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
         {ingredients.map((ingredient) =>
           <IngredientCard

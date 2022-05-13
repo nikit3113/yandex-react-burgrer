@@ -60,7 +60,7 @@ const IngredientCard = ({text, thumbnail, price, count, onClick}) => {
   return (
     <div onClick={onClick}>
       <div className={ingredientsStyles.counter_container}>
-        {count ? <Counter count={count}/> : null}
+        {count && <Counter count={count}/>}
       </div>
       <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
       <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>

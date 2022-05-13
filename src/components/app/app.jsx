@@ -1,62 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import appStyles from './app.module.css';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import testData from '../../utils/testData';
+import {ConstructorContext} from "../../services/constructorContext"
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-
-const API_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
+import {getIngredients} from "../../api/api";
 
 function App() {
   const [ingredients, setIngredients] = useState({
     data: [],
     isLoading: false,
-    hasError: false
+    hasError: false,
   });
-  const [orderModalVisible, setOrderModalVisible] = React.useState(false);
+  const [constructor, setConstructor] = useState({
+    bun: undefined,
+    filling: [],
+  });
+  const [orderModal, setOrderModal] = React.useState({
+    visible: false,
+    orderNumber: undefined,
+  });
   const [ingredientModal, setIngredientModal] = React.useState({
     visible: false,
-    ingredient: undefined
+    ingredient: undefined,
   });
 
 
   useEffect(() => {
-      setIngredients({ ...ingredients, hasError: false, isLoading: true });
-      fetch(API_INGREDIENTS)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка ${res.status}`);
-        })
-        .then(ingredients => {
-            setIngredients({ ...ingredients, hasError: false, isLoading: false });
+      setIngredients({...ingredients, hasError: false, isLoading: true});
+      getIngredients().then(ingredients => {
+            setIngredients({...ingredients, hasError: false, isLoading: false});
+            setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
           }
         )
-        .catch(() => {
-          setIngredients({ ...ingredients, isLoading: false, hasError: true });
+        .catch((error) => {
+          setIngredients({...ingredients, isLoading: false, hasError: true});
+          alert(error);
         })
 
     }
     , []);
 
-  function handleOpenOrderModal() {
-    setOrderModalVisible(true);
+  function handleOpenOrderModal(orderNumber) {
+    setOrderModal({visible: true, orderNumber: orderNumber});
   }
 
   function handleCloseOrderModal() {
-    setOrderModalVisible(false);
+    setOrderModal({...orderModal, visible: false});
   }
 
   function handleOpenIngredientModal(ingredient) {
-    setIngredientModal({ visible: true, ingredient: ingredient });
+    setIngredientModal({visible: true, ingredient: ingredient});
   }
 
   function handleCloseIngredientModal() {
-    setIngredientModal({ ...ingredientModal, visible: false});
+    setIngredientModal({...ingredientModal, visible: false});
   }
 
   const modalIngredientDetails = () => {
@@ -74,7 +75,7 @@ function App() {
       <Modal
         onClose={handleCloseOrderModal}
       >
-        <OrderDetails></OrderDetails>
+        <OrderDetails orderNumber={orderModal.orderNumber}/>
       </Modal>
     );
   }
@@ -82,19 +83,19 @@ function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader/>
-      <main className={appStyles.main}>
-        <BurgerIngredients
-          ingredients={ingredients.data}
-          openIngredientModal={handleOpenIngredientModal}
-        />
-        <BurgerConstructor
-          bun={ingredients.data[0]}
-          openOrderModal={handleOpenOrderModal}
-          ingredients={ingredients.data.filter(el => el.type !== 'bun')}
-        />
-        {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
-        {orderModalVisible && (modalOrderDetails())}
-      </main>
+      <ConstructorContext.Provider value={[constructor, setConstructor]}>
+        <main className={appStyles.main}>
+          <BurgerIngredients
+            ingredients={ingredients.data}
+            openIngredientModal={handleOpenIngredientModal}
+          />
+          <BurgerConstructor
+            openOrderModal={handleOpenOrderModal}
+          />
+          {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
+          {orderModal.visible && (modalOrderDetails(orderModal.orderNumber))}
+        </main>
+      </ConstructorContext.Provider>
     </div>
   );
 }

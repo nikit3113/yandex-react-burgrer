@@ -1,4 +1,4 @@
-import {postOrder} from "../../api/api";
+import {getIngredients, postOrder} from "../../api/api";
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
@@ -8,7 +8,7 @@ export const GET_ORDER_NUMBER_SUCCESS = 'GET_ORDER_NUMBER_SUCCESS';
 export const GET_ORDER_NUMBER_FAILED = 'GET_ORDER_NUMBER_FAILED';
 
 
-export function getIngredients() {
+export function dispatchIngredients() {
   return function (dispatch) {
     dispatch({
       type: GET_INGREDIENTS_REQUEST,
@@ -26,7 +26,7 @@ export function getIngredients() {
   }
 }
 
-export function getOrderNumber(ingredients_id) {
+export function dispatchOrderNumber(ingredients_id) {
   return function (dispatch) {
     dispatch({
       type: GET_ORDER_NUMBER_REQUEST,

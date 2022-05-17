@@ -7,14 +7,10 @@ import {ConstructorContext} from "../../services/constructorContext"
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {getIngredients} from "../../api/api";
+import {dispatchIngredients} from "../../services/actions";
+import {useDispatch} from "react-redux";
 
 function App() {
-  const [ingredients, setIngredients] = useState({
-    data: [],
-    isLoading: false,
-    hasError: false,
-  });
   const [constructor, setConstructor] = useState({
     bun: undefined,
     filling: [],
@@ -28,19 +24,10 @@ function App() {
     ingredient: undefined,
   });
 
+  const dispatch = useDispatch();
 
   useEffect(() => {
-      setIngredients({...ingredients, hasError: false, isLoading: true});
-      getIngredients().then(ingredients => {
-            setIngredients({...ingredients, hasError: false, isLoading: false});
-            setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
-          }
-        )
-        .catch((error) => {
-          setIngredients({...ingredients, isLoading: false, hasError: true});
-          alert(error);
-        })
-
+      dispatch(dispatchIngredients());
     }
     , []);
 
@@ -86,7 +73,6 @@ function App() {
       <ConstructorContext.Provider value={[constructor, setConstructor]}>
         <main className={appStyles.main}>
           <BurgerIngredients
-            ingredients={ingredients.data}
             openIngredientModal={handleOpenIngredientModal}
           />
           <BurgerConstructor

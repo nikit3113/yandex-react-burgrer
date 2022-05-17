@@ -3,6 +3,7 @@ import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-u
 import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
 import {IngredientPropType} from "../../utils/types";
+import {useSelector} from "react-redux";
 
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
@@ -74,7 +75,8 @@ const IngredientCard = ({text, thumbnail, price, count, onClick}) => {
 }
 
 function BurgerIngredients(props) {
-  const {ingredients, openIngredientModal} = props;
+  const { openIngredientModal} = props;
+  const {ingredients}  = useSelector(store => store.ingredients);
 
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>
@@ -89,7 +91,6 @@ function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape(IngredientPropType)).isRequired,
   openIngredientModal: PropTypes.func.isRequired,
 };
 

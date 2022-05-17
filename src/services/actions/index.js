@@ -26,12 +26,12 @@ export function getIngredients() {
   }
 }
 
-export function getOrderNumber(ingredients) {
+export function getOrderNumber(ingredients_id) {
   return function (dispatch) {
     dispatch({
       type: GET_ORDER_NUMBER_REQUEST,
     });
-    postOrder({ingredients: [bun._id, ...filling.map((el => el._id))]})
+    postOrder(ingredients_id)
       .then((data) => {
         dispatch({
           type: GET_ORDER_NUMBER_SUCCESS,

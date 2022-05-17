@@ -1,13 +1,26 @@
-import React, {useContext} from "react";
+import React from "react";
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
-import {ConstructorContext} from "../../services/constructorContext";
 import PropTypes from "prop-types";
 import {postOrder} from "../../api/api";
+import {useDrop} from "react-dnd";
+import {useDispatch, useSelector} from "react-redux";
+import {ADD_INGREDIENT, DELETE_INGREDIENT} from "../../services/actions";
 
 function BurgerConstructor(props) {
   const {openOrderModal} = props;
-  const [{bun, filling}] = useContext(ConstructorContext);
+  const {bun, filling} = {bun: undefined, filling: []};
+  const dispatch = useDispatch();
+  const {constructor} = useSelector(state => state.common);
+
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: ['bun','sauce','main'],
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    }),
+    drop ({id}) {
+      moveItem(id)},
+  });
 
   function handleCheckoutButton() {
     postOrder({ingredients: [bun._id, ...filling.map((el => el._id))]})
@@ -23,8 +36,24 @@ function BurgerConstructor(props) {
       filling.reduce((prev, cur) => prev + cur.price, 0);
   }, [filling, bun]);
 
+  const className = isHover ? constructorStyles.main_dropped: constructorStyles.main;
+
+  const moveItem = (id) => {
+    dispatch({
+      type: ADD_INGREDIENT,
+      id
+    });
+  };
+
+  const deleteItem = (id) => {
+    dispatch({
+      type: DELETE_INGREDIENT,
+      id
+    });
+  };
+
   return (
-    <section className={constructorStyles.main + ' pl-4 pr-4'}>
+    <section className={className + ' pl-4 pr-4'}  ref={dropTarget}>
       {bun && <div className={constructorStyles.containerLockedIngredient + ' mt-25 mb-4 pl-8 mr-2'}>
         <ConstructorElement
           text={bun.name + ' (верх)'}
@@ -34,7 +63,7 @@ function BurgerConstructor(props) {
         />
       </div>}
       <div className={constructorStyles.scrollView}>
-        {filling.map((ingredient) =>
+        {constructor.map((ingredient) =>
           <div
             className={constructorStyles.containerIngredient + ' mb-4 pl-8'}
             key={ingredient._id}
@@ -46,6 +75,7 @@ function BurgerConstructor(props) {
               text={ingredient.name}
               thumbnail={ingredient.image}
               price={ingredient.price}
+              handleClose={()=>{deleteItem(ingredient._id)}}
             />
           </div>
         )}

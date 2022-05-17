@@ -4,6 +4,7 @@ import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
 import {IngredientPropType} from "../../utils/types";
 import {useSelector} from "react-redux";
+import {useDrag} from "react-dnd";
 
 const Tabs = () => {
   const [current, setCurrent] = React.useState('Булки')
@@ -48,18 +49,28 @@ const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id}) =>
           <IngredientCard
             onClick={() => onIngredientClick(ingredient)}
             key={ingredient._id}
+            id={ingredient._id}
             text={ingredient.name}
             thumbnail={ingredient.image}
             price={ingredient.price}
+            type={ingredient.type}
           />)}
       </div>
     </>
   )
 }
 
-const IngredientCard = ({text, thumbnail, price, count, onClick}) => {
+const IngredientCard = ({text, thumbnail, price, count, onClick, id, type}) => {
+  const [{ opacity }, ref] = useDrag({
+    type: type,
+    item: {id},
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1
+    })
+  })
+
   return (
-    <div onClick={onClick}>
+    <div onClick={onClick} ref={ref} style={{opacity}}>
       <div className={ingredientsStyles.counter_container}>
         {count && <Counter count={count}/>}
       </div>
@@ -76,7 +87,7 @@ const IngredientCard = ({text, thumbnail, price, count, onClick}) => {
 
 function BurgerIngredients(props) {
   const { openIngredientModal} = props;
-  const {ingredients}  = useSelector(store => store.ingredients);
+  const {ingredients}  = useSelector(store => store.common);
 
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>

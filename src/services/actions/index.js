@@ -3,9 +3,13 @@ import {getIngredients, postOrder} from "../../api/api";
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED';
+
 export const GET_ORDER_NUMBER_REQUEST = 'GET_ORDER_NUMBER_REQUEST';
 export const GET_ORDER_NUMBER_SUCCESS = 'GET_ORDER_NUMBER_SUCCESS';
 export const GET_ORDER_NUMBER_FAILED = 'GET_ORDER_NUMBER_FAILED';
+
+export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+export const ADD_INGREDIENT = 'ADD_INGREDIENT';
 
 
 export function dispatchIngredients() {

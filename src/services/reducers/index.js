@@ -1,5 +1,7 @@
 import {combineReducers} from "redux";
 import {
+  ADD_INGREDIENT,
+  DELETE_INGREDIENT,
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
@@ -10,6 +12,9 @@ const initialState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
+
+  constructor: [],
+
   orderNumber: undefined,
   orderNumberRequest: false,
   orderNumberFailed: false,
@@ -59,6 +64,17 @@ export const commonReducer = (state = initialState, action) => {
         orderNumberFailed: true,
       }
     }
+    case DELETE_INGREDIENT: {
+      return {
+        ...state,
+        constructor: [...state.constructor].filter(item => item._id !== action.id) };
+    }
+    case ADD_INGREDIENT: {
+      return {
+        ...state,
+        constructor: [...state.constructor, ...state.ingredients.filter(item => item._id === action.id)]
+      };
+    }
     default: {
       return state;
     }
@@ -66,5 +82,5 @@ export const commonReducer = (state = initialState, action) => {
 }
 
 export const rootReducer = combineReducers({
-  ingredients: commonReducer,
+  common: commonReducer,
 });

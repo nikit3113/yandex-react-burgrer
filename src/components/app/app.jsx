@@ -3,18 +3,15 @@ import appStyles from './app.module.css';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import {ConstructorContext} from "../../services/constructorContext"
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import {dispatchIngredients} from "../../services/actions";
 import {useDispatch} from "react-redux";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 function App() {
-  const [constructor, setConstructor] = useState({
-    bun: undefined,
-    filling: [],
-  });
   const [orderModal, setOrderModal] = React.useState({
     visible: false,
     orderNumber: undefined,
@@ -70,7 +67,7 @@ function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader/>
-      <ConstructorContext.Provider value={[constructor, setConstructor]}>
+      <DndProvider backend={HTML5Backend}>
         <main className={appStyles.main}>
           <BurgerIngredients
             openIngredientModal={handleOpenIngredientModal}
@@ -81,7 +78,7 @@ function App() {
           {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
           {orderModal.visible && (modalOrderDetails(orderModal.orderNumber))}
         </main>
-      </ConstructorContext.Provider>
+      </DndProvider>
     </div>
   );
 }

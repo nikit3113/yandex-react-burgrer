@@ -10,10 +10,10 @@ import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber} from "../../serv
 function BurgerConstructor(props) {
   const {openOrderModal} = props;
   const dispatch = useDispatch();
-  const {constructor} = useSelector(state => state.common);
-  const bun = constructor.find((item)=>item.type==='bun');
-  const filling = constructor.filter((item)=>item.type!=='bun');
-  const buttonDisabled = !constructor.length;
+  const {constructorItems} = useSelector(state => state.common);
+  const bun = constructorItems.find((item)=>item.type==='bun');
+  const filling = constructorItems.filter((item)=>item.type!=='bun');
+  const buttonDisabled = !constructorItems.length;
 
   const [{isHover}, dropTarget] = useDrop({
     accept: ['bun', 'sauce', 'main'],
@@ -26,13 +26,13 @@ function BurgerConstructor(props) {
   });
 
   function handleCheckoutButton() {
-    dispatch(dispatchOrderNumber({ingredients: [...constructor.map((el => el._id))]}));
+    dispatch(dispatchOrderNumber({ingredients: [...constructorItems.map((el => el._id))]}));
     openOrderModal();
   }
 
   const cost = React.useMemo(() => {
-    return constructor.reduce((prev, cur) => prev + cur.price, 0);
-  }, [constructor]);
+    return constructorItems.reduce((prev, cur) => prev + cur.price, 0);
+  }, [constructorItems]);
 
   const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
 

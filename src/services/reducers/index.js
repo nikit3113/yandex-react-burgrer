@@ -13,7 +13,7 @@ const initialState = {
   ingredientsRequest: false,
   ingredientsFailed: false,
 
-  constructor: [],
+  constructorItems: [],
 
   orderNumber: undefined,
   orderNumberRequest: false,
@@ -67,25 +67,25 @@ export const commonReducer = (state = initialState, action) => {
       }
     }
     case DELETE_INGREDIENT: {
-      let index = state.constructor.map(item => item._id).indexOf(action.id);
-      const constructor = [...state.constructor];
-      constructor.splice(index,1);
+      let index = state.constructorItems.map(item => item._id).indexOf(action.id);
+      const constructorItems = [...state.constructorItems];
+      constructorItems.splice(index,1);
       return {
         ...state,
-        constructor,
+        constructorItems,
       };
     }
     case ADD_INGREDIENT: {
       const item = state.ingredients.find(item => item._id === action.id);
-      let constructor = [];
+      let constructorItems = [];
       if (item.type === 'bun') {
-        constructor = [...state.constructor.filter((item) => item.type !== 'bun'), item, item];
+        constructorItems = [...state.constructorItems.filter((item) => item.type !== 'bun'), item, item];
       } else {
-        constructor = [...state.constructor, item];
+        constructorItems = [...state.constructorItems, item];
       }
       return {
         ...state,
-        constructor,
+        constructorItems,
       };
     }
     default: {

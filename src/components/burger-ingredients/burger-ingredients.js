@@ -82,7 +82,9 @@ const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id, ref
   )
 }
 
-const IngredientCard = ({text, thumbnail, price, count, onClick, id, type}) => {
+const IngredientCard = ({text, thumbnail, price,  onClick, id, type}) => {
+  const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id? ++prev: prev, 0);
+
   const [{opacity}, ref] = useDrag({
     type: type,
     item: {id},
@@ -94,7 +96,7 @@ const IngredientCard = ({text, thumbnail, price, count, onClick, id, type}) => {
   return (
     <div onClick={onClick} ref={ref} style={{opacity}}>
       <div className={ingredientsStyles.counter_container}>
-        {count && <Counter count={count}/>}
+        {!!count && <Counter count={count}/>}
       </div>
       <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
       <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>

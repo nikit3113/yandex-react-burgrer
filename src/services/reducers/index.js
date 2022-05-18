@@ -65,14 +65,25 @@ export const commonReducer = (state = initialState, action) => {
       }
     }
     case DELETE_INGREDIENT: {
+      let index = state.constructor.map(item => item._id).indexOf(action.id);
+      const constructor = [...state.constructor];
+      constructor.splice(index,1);
       return {
         ...state,
-        constructor: [...state.constructor].filter(item => item._id !== action.id) };
+        constructor,
+      };
     }
     case ADD_INGREDIENT: {
+      const item = state.ingredients.find(item => item._id === action.id);
+      let constructor = [];
+      if (item.type === 'bun') {
+        constructor = [...state.constructor.filter((item) => item.type !== 'bun'), item, item];
+      } else {
+        constructor = [...state.constructor, item];
+      }
       return {
         ...state,
-        constructor: [...state.constructor, ...state.ingredients.filter(item => item._id === action.id)]
+        constructor,
       };
     }
     default: {

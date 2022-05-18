@@ -2,7 +2,6 @@ import React from "react";
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
 import PropTypes from "prop-types";
-import {postOrder} from "../../api/api";
 import {useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
 import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber} from "../../services/actions";
@@ -11,8 +10,8 @@ function BurgerConstructor(props) {
   const {openOrderModal} = props;
   const dispatch = useDispatch();
   const {constructorItems} = useSelector(state => state.common);
-  const bun = constructorItems.find((item)=>item.type==='bun');
-  const filling = constructorItems.filter((item)=>item.type!=='bun');
+  const bun = constructorItems.find((item) => item.type === 'bun');
+  const filling = constructorItems.filter((item) => item.type !== 'bun');
   const buttonDisabled = !constructorItems.length;
 
   const [{isHover}, dropTarget] = useDrop({
@@ -67,7 +66,7 @@ function BurgerConstructor(props) {
             key={index}
           >
             <div className={constructorStyles.dragIconContainer}>
-              <DragIcon></DragIcon>
+              <DragIcon type={'primary'}/>
             </div>
             <ConstructorElement
               text={ingredient.name}

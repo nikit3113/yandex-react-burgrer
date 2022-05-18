@@ -62,7 +62,6 @@ export const commonReducer = (state = initialState, action) => {
       }
     }
     case SET_CURRENT_ITEM: {
-      console.log('set cuuree')
       return {
         ...state,
         currentItem: action.item,

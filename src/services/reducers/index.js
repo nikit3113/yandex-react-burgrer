@@ -5,7 +5,7 @@ import {
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
-  GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, UNSET_CURRENT_ITEM
+  GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, SWAP_INGREDIENTS, UNSET_CURRENT_ITEM
 } from "../actions";
 
 const initialState = {
@@ -97,6 +97,16 @@ export const commonReducer = (state = initialState, action) => {
       } else {
         constructorItems = [...state.constructorItems, item];
       }
+      return {
+        ...state,
+        constructorItems,
+      };
+    }
+    case SWAP_INGREDIENTS: {
+      const constructorItems = [...state.constructorItems];
+      const oldIngredient = constructorItems[action.oldId];
+      constructorItems.splice(action.oldId, 1);
+      constructorItems.splice(action.newId, 0, oldIngredient);
       return {
         ...state,
         constructorItems,

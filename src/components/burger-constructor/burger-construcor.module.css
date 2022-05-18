@@ -29,6 +29,12 @@
     position: relative;
 }
 
+.containerIngredientDropped {
+    composes: containerLockedIngredient;
+    position: relative;
+    background-color: #8585AD;
+}
+
 .dragIconContainer {
     align-self: center;
     position: absolute;

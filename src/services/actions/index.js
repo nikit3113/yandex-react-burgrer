@@ -13,6 +13,7 @@ export const UNSET_CURRENT_ITEM = 'UNSET_CURRENT_ITEM';
 
 export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
 export const ADD_INGREDIENT = 'ADD_INGREDIENT';
+export const SWAP_INGREDIENTS = 'SWAP_INGREDIENTS'
 
 
 export function dispatchIngredients() {

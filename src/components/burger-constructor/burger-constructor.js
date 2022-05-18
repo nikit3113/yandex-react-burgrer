@@ -1,17 +1,71 @@
-import React from "react";
+import React, {useRef} from "react";
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
 import PropTypes from "prop-types";
-import {useDrop} from "react-dnd";
+import {useDrag, useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
-import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber} from "../../services/actions";
+import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber, SWAP_INGREDIENTS} from "../../services/actions";
+
+const ConstructorItem = (props) => {
+  const {ingredient, index} = props;
+  const dispatch = useDispatch();
+  const ref = useRef();
+  const deleteItem = (id) => {
+    dispatch({
+      type: DELETE_INGREDIENT,
+      id,
+    });
+  };
+
+  const [{opacity}, dragRef] = useDrag({
+    type: 'items',
+    item: {index},
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1
+    })
+  })
+
+  const [{isHover}, dropRef] = useDrop({
+    accept: 'items',
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    }),
+    drop(item) {
+      dispatch({
+        type: SWAP_INGREDIENTS,
+        oldId: item.index,
+        newId: index,
+      });
+    },
+  });
+
+  const className = isHover ? constructorStyles.containerIngredientDropped : constructorStyles.containerIngredient;
+
+  dragRef(dropRef(ref));
+
+  return <div
+    className={className + ' mb-4 pl-8'}
+    key={index}
+    ref={ref}
+    style={{opacity}}
+  >
+    <div className={constructorStyles.dragIconContainer}>
+      <DragIcon type={'primary'}/>
+    </div>
+    <ConstructorElement
+      text={ingredient.name}
+      thumbnail={ingredient.image}
+      price={ingredient.price}
+      handleClose={() => deleteItem(ingredient._id)}
+    />
+  </div>
+}
 
 function BurgerConstructor(props) {
   const {openOrderModal} = props;
   const dispatch = useDispatch();
   const {constructorItems} = useSelector(state => state.common);
   const bun = constructorItems.find((item) => item.type === 'bun');
-  const filling = constructorItems.filter((item) => item.type !== 'bun');
   const buttonDisabled = !constructorItems.length;
 
   const [{isHover}, dropTarget] = useDrop({
@@ -42,12 +96,6 @@ function BurgerConstructor(props) {
     });
   };
 
-  const deleteItem = (id) => {
-    dispatch({
-      type: DELETE_INGREDIENT,
-      id,
-    });
-  };
 
   return (
     <section className={className + ' pl-4 pr-4'} ref={dropTarget}>
@@ -59,24 +107,12 @@ function BurgerConstructor(props) {
           isLocked={true}
         />
       </div>}
+
       <div className={constructorStyles.scrollView}>
-        {filling.map((ingredient, index) =>
-          <div
-            className={constructorStyles.containerIngredient + ' mb-4 pl-8'}
-            key={index}
-          >
-            <div className={constructorStyles.dragIconContainer}>
-              <DragIcon type={'primary'}/>
-            </div>
-            <ConstructorElement
-              text={ingredient.name}
-              thumbnail={ingredient.image}
-              price={ingredient.price}
-              handleClose={() => deleteItem(ingredient._id)}
-            />
-          </div>
-        )}
+        {constructorItems.map((ingredient, index) => ingredient.type !== 'bun' ?
+          <ConstructorItem ingredient={ingredient} key={index} index={index}/> : null)}
       </div>
+
       {bun && <div className={constructorStyles.containerLockedIngredient + ' pl-8 mr-2'}>
         <ConstructorElement
           text={bun.name + ' (низ)'}

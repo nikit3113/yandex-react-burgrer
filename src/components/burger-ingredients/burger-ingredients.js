@@ -1,49 +1,71 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useRef} from "react";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
-import {IngredientPropType} from "../../utils/types";
 import {useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 
-const Tabs = () => {
-  const [current, setCurrent] = React.useState('Булки')
-
+const Tabs = ({currentTab, setCurrentTab}) => {
   const onTabClick = (tab) => {
-    setCurrent(tab);
+    setCurrentTab(tab);
     const headerCategory = document.getElementById(tab);
     if (headerCategory) headerCategory.scrollIntoView({behavior: 'smooth'});
   }
   return (
     <div className={ingredientsStyles.tabs}>
-      <Tab value="buns" active={current === 'buns'} onClick={onTabClick}>Булки</Tab>
-      <Tab value="sauces" active={current === 'sauces'} onClick={onTabClick}>Соусы</Tab>
-      <Tab value="mains" active={current === 'mains'} onClick={onTabClick}>Начинки</Tab>
+      <Tab value="buns" active={currentTab === 'buns'} onClick={onTabClick}>Булки</Tab>
+      <Tab value="sauces" active={currentTab === 'sauces'} onClick={onTabClick}>Соусы</Tab>
+      <Tab value="mains" active={currentTab === 'mains'} onClick={onTabClick}>Начинки</Tab>
     </div>
   )
 }
 
-const IngredientList = ({ingredients, openIngredientModal}) => {
+const IngredientList = ({ingredients, openIngredientModal, setCurrentTab}) => {
   const buns = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'bun'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'sauce'), [ingredients]);
   const mains = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'main'), [ingredients]);
 
+  const scrollRef = useRef(null),
+    bunsHeaderRef = useRef(null),
+    sauceHeaderRef = useRef(null),
+    mainHeaderRef = useRef(null);
+
+  const scrollHandler = () => {
+    const scrollPosition = scrollRef.current.getBoundingClientRect().top;
+
+    const bunsHeaderPosition = bunsHeaderRef.current.getBoundingClientRect().top;
+    const saucesHeaderPosition = sauceHeaderRef.current.getBoundingClientRect().top;
+    const mainsHeaderPosition = mainHeaderRef.current.getBoundingClientRect().top;
+
+    const bunDiff = Math.abs(scrollPosition - bunsHeaderPosition);
+    const sauceDiff = Math.abs(scrollPosition - saucesHeaderPosition);
+    const mainDiff = Math.abs(scrollPosition - mainsHeaderPosition);
+
+    if (bunDiff < sauceDiff) {
+      setCurrentTab('buns');
+    } else if (sauceDiff < mainDiff) {
+      setCurrentTab('sauces');
+    } else {
+      setCurrentTab('mains');
+    }
+  };
+
   return (
-    <div className={ingredientsStyles.scrollView + ' mt-10'}>
+    <div className={ingredientsStyles.scrollView + ' mt-10'} ref={scrollRef} onScroll={scrollHandler}>
       <IngredientsCategoryList title={'Булки'} ingredients={buns} onIngredientClick={openIngredientModal}
-                               id={'buns'}/>
+                               id={'buns'} refer={bunsHeaderRef}/>
       <IngredientsCategoryList title={'Соусы'} ingredients={sauces} onIngredientClick={openIngredientModal}
-                               id={'sauces'}/>
+                               id={'sauces'} refer={sauceHeaderRef}/>
       <IngredientsCategoryList title={'Начинки'} ingredients={mains} onIngredientClick={openIngredientModal}
-                               id={'mains'}/>
+                               id={'mains'} refer={mainHeaderRef}/>
     </div>
   )
 }
 
-const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id}) => {
+const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id, refer}) => {
   return (
     <>
-      <header className='text_type_main-medium' id={id}>{title}</header>
+      <header className='text_type_main-medium' id={id} ref={refer}>{title}</header>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
         {ingredients.map((ingredient) =>
           <IngredientCard
@@ -61,7 +83,7 @@ const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id}) =>
 }
 
 const IngredientCard = ({text, thumbnail, price, count, onClick, id, type}) => {
-  const [{ opacity }, ref] = useDrag({
+  const [{opacity}, ref] = useDrag({
     type: type,
     item: {id},
     collect: monitor => ({
@@ -86,16 +108,17 @@ const IngredientCard = ({text, thumbnail, price, count, onClick, id, type}) => {
 }
 
 function BurgerIngredients(props) {
-  const { openIngredientModal} = props;
-  const {ingredients}  = useSelector(store => store.common);
-
+  const {openIngredientModal} = props;
+  const {ingredients} = useSelector(store => store.common);
+  const [currentTab, setCurrentTab] = React.useState('buns')
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>
       <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
-      <Tabs/>
+      <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <IngredientList
         ingredients={ingredients}
-        openIngredientModal={openIngredientModal}>
+        openIngredientModal={openIngredientModal}
+        setCurrentTab={setCurrentTab}>
       </IngredientList>
     </section>
   );

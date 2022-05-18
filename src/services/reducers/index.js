@@ -5,7 +5,7 @@ import {
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
-  GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS
+  GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, UNSET_CURRENT_ITEM
 } from "../actions";
 
 const initialState = {
@@ -14,6 +14,8 @@ const initialState = {
   ingredientsFailed: false,
 
   constructorItems: [],
+
+  currentItem: undefined,
 
   orderNumber: undefined,
   orderNumberRequest: false,
@@ -59,6 +61,19 @@ export const commonReducer = (state = initialState, action) => {
         orderNumberFailed: false,
       }
     }
+    case SET_CURRENT_ITEM: {
+      console.log('set cuuree')
+      return {
+        ...state,
+        currentItem: action.item,
+      }
+    }
+    case UNSET_CURRENT_ITEM: {
+      return {
+        ...state,
+        currentItem: initialState.currentItem,
+      }
+    }
     case GET_ORDER_NUMBER_FAILED: {
       return {
         ...state,
@@ -69,7 +84,7 @@ export const commonReducer = (state = initialState, action) => {
     case DELETE_INGREDIENT: {
       let index = state.constructorItems.map(item => item._id).indexOf(action.id);
       const constructorItems = [...state.constructorItems];
-      constructorItems.splice(index,1);
+      constructorItems.splice(index, 1);
       return {
         ...state,
         constructorItems,

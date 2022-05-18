@@ -2,8 +2,9 @@ import React, {useMemo, useRef} from "react";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes from "prop-types";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
+import {SET_CURRENT_ITEM} from "../../services/actions";
 
 const Tabs = ({currentTab, setCurrentTab}) => {
   const onTabClick = (tab) => {
@@ -20,7 +21,7 @@ const Tabs = ({currentTab, setCurrentTab}) => {
   )
 }
 
-const IngredientList = ({ingredients, openIngredientModal, setCurrentTab}) => {
+const IngredientList = ({ingredients, setCurrentTab}) => {
   const buns = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'bun'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'sauce'), [ingredients]);
   const mains = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'main'), [ingredients]);
@@ -52,24 +53,31 @@ const IngredientList = ({ingredients, openIngredientModal, setCurrentTab}) => {
 
   return (
     <div className={ingredientsStyles.scrollView + ' mt-10'} ref={scrollRef} onScroll={scrollHandler}>
-      <IngredientsCategoryList title={'Булки'} ingredients={buns} onIngredientClick={openIngredientModal}
+      <IngredientsCategoryList title={'Булки'} ingredients={buns}
                                id={'buns'} refer={bunsHeaderRef}/>
-      <IngredientsCategoryList title={'Соусы'} ingredients={sauces} onIngredientClick={openIngredientModal}
+      <IngredientsCategoryList title={'Соусы'} ingredients={sauces}
                                id={'sauces'} refer={sauceHeaderRef}/>
-      <IngredientsCategoryList title={'Начинки'} ingredients={mains} onIngredientClick={openIngredientModal}
+      <IngredientsCategoryList title={'Начинки'} ingredients={mains}
                                id={'mains'} refer={mainHeaderRef}/>
     </div>
   )
 }
 
-const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id, refer}) => {
+const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
+  const dispatch = useDispatch();
   return (
     <>
       <header className='text_type_main-medium' id={id} ref={refer}>{title}</header>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
         {ingredients.map((ingredient) =>
           <IngredientCard
-            onClick={() => onIngredientClick(ingredient)}
+            onClick={() => {
+              dispatch(
+                {
+                  type: SET_CURRENT_ITEM,
+                  item: ingredient,
+                })
+            }}
             key={ingredient._id}
             id={ingredient._id}
             text={ingredient.name}
@@ -82,8 +90,8 @@ const IngredientsCategoryList = ({title, ingredients, onIngredientClick, id, ref
   )
 }
 
-const IngredientCard = ({text, thumbnail, price,  onClick, id, type}) => {
-  const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id? ++prev: prev, 0);
+const IngredientCard = ({text, thumbnail, price, onClick, id, type}) => {
+  const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id ? ++prev : prev, 0);
 
   const [{opacity}, ref] = useDrag({
     type: type,
@@ -102,15 +110,14 @@ const IngredientCard = ({text, thumbnail, price,  onClick, id, type}) => {
       <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
         {price}
         <CurrencyIcon type={'primary'}/>
-      </span>
+          </span>
       <span
         className={ingredientsStyles.ingredient_card__text + " text text_type_main-default pb-8"}>{text}</span>
     </div>
   )
 }
 
-function BurgerIngredients(props) {
-  const {openIngredientModal} = props;
+function BurgerIngredients() {
   const {ingredients} = useSelector(store => store.common);
   const [currentTab, setCurrentTab] = React.useState('buns')
   return (
@@ -119,15 +126,10 @@ function BurgerIngredients(props) {
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <IngredientList
         ingredients={ingredients}
-        openIngredientModal={openIngredientModal}
         setCurrentTab={setCurrentTab}>
       </IngredientList>
     </section>
   );
 }
-
-BurgerIngredients.propTypes = {
-  openIngredientModal: PropTypes.func.isRequired,
-};
 
 export default BurgerIngredients;

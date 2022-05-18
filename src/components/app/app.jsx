@@ -6,22 +6,18 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {dispatchIngredients} from "../../services/actions";
-import {useDispatch} from "react-redux";
+import {dispatchIngredients, UNSET_CURRENT_ITEM} from "../../services/actions";
+import {useDispatch, useSelector} from "react-redux";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 
 function App() {
-  const [orderModal, setOrderModal] = React.useState({
+  const [orderModal, setOrderModal] = useState({
     visible: false,
     orderNumber: undefined,
   });
-  const [ingredientModal, setIngredientModal] = React.useState({
-    visible: false,
-    ingredient: undefined,
-  });
-
   const dispatch = useDispatch();
+  const currentItem = useSelector(store => store.common.currentItem);
 
   useEffect(() => {
       dispatch(dispatchIngredients());
@@ -36,21 +32,19 @@ function App() {
     setOrderModal({...orderModal, visible: false});
   }
 
-  function handleOpenIngredientModal(ingredient) {
-    setIngredientModal({visible: true, ingredient: ingredient});
-  }
-
-  function handleCloseIngredientModal() {
-    setIngredientModal({...ingredientModal, visible: false});
-  }
-
   const modalIngredientDetails = () => {
+    const closeHandler = () => {
+      dispatch(dispatch(
+        {
+          type: UNSET_CURRENT_ITEM,
+        }))
+    }
     return (
       <Modal
         textHeader={'Детали ингредиента'}
-        onClose={handleCloseIngredientModal}
+        onClose={closeHandler}
       >
-        <IngredientDetails ingredient={ingredientModal.ingredient}></IngredientDetails>
+        <IngredientDetails/>
       </Modal>
     );
   }
@@ -69,14 +63,12 @@ function App() {
       <AppHeader/>
       <DndProvider backend={HTML5Backend}>
         <main className={appStyles.main}>
-          <BurgerIngredients
-            openIngredientModal={handleOpenIngredientModal}
-          />
+          <BurgerIngredients/>
           <BurgerConstructor
             openOrderModal={handleOpenOrderModal}
           />
-          {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
-          {orderModal.visible && (modalOrderDetails(orderModal.orderNumber))}
+          {!!currentItem && (modalIngredientDetails())}
+          {orderModal.visible && (modalOrderDetails())}
         </main>
       </DndProvider>
     </div>

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {postOrder} from "../../api/api";
 import {useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
-import {ADD_INGREDIENT, DELETE_INGREDIENT} from "../../services/actions";
+import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber} from "../../services/actions";
 
 function BurgerConstructor(props) {
   const {openOrderModal} = props;
@@ -13,6 +13,7 @@ function BurgerConstructor(props) {
   const {constructor} = useSelector(state => state.common);
   const bun = constructor.find((item)=>item.type==='bun');
   const filling = constructor.filter((item)=>item.type!=='bun');
+  const buttonDisabled = !constructor.length;
 
   const [{isHover}, dropTarget] = useDrop({
     accept: ['bun', 'sauce', 'main'],
@@ -25,11 +26,8 @@ function BurgerConstructor(props) {
   });
 
   function handleCheckoutButton() {
-    postOrder({ingredients: [...constructor.map((el => el._id))]})
-      .then((data) => {
-        openOrderModal(data.order.number);
-      })
-      .catch(() => alert('Error: checkout failed'))
+    dispatch(dispatchOrderNumber({ingredients: [...constructor.map((el => el._id))]}));
+    openOrderModal();
   }
 
   const cost = React.useMemo(() => {
@@ -93,7 +91,7 @@ function BurgerConstructor(props) {
             {cost}
             <CurrencyIcon type={'primary'}/>
           </span>
-          <Button onClick={handleCheckoutButton}>Оформить заказ</Button>
+          <Button disabled={buttonDisabled} onClick={handleCheckoutButton}>Оформить заказ</Button>
         </span>
     </section>
   );

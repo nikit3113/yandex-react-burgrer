@@ -28,8 +28,8 @@ function App() {
     }
     , []);
 
-  function handleOpenOrderModal(orderNumber) {
-    setOrderModal({visible: true, orderNumber: orderNumber});
+  function handleOpenOrderModal() {
+    setOrderModal({visible: true});
   }
 
   function handleCloseOrderModal() {

@@ -25,6 +25,7 @@ export const commonReducer = (state = initialState, action) => {
     case GET_INGREDIENTS_REQUEST: {
       return {
         ...state,
+        ingredients: initialState.ingredients,
         ingredientsRequest: true,
       }
     }
@@ -46,13 +47,14 @@ export const commonReducer = (state = initialState, action) => {
     case GET_ORDER_NUMBER_REQUEST: {
       return {
         ...state,
+        orderNumber: initialState.orderNumber,
         orderNumberRequest: true,
       }
     }
     case GET_ORDER_NUMBER_SUCCESS: {
       return {
         ...state,
-        orderNumber: action.data,
+        orderNumber: action.orderNumber,
         orderNumberRequest: false,
         orderNumberFailed: false,
       }

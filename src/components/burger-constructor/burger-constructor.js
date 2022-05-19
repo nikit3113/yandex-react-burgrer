@@ -43,22 +43,24 @@ const ConstructorItem = (props) => {
 
   dragRef(dropRef(ref));
 
-  return <div
-    className={className + ' mb-4 pl-8'}
-    key={index}
-    ref={ref}
-    style={{opacity}}
-  >
-    <div className={constructorStyles.dragIconContainer}>
-      <DragIcon type={'primary'}/>
+  return (
+    <div
+      className={className + ' mb-4 pl-8'}
+      key={index}
+      ref={ref}
+      style={{opacity}}
+    >
+      <div className={constructorStyles.dragIconContainer}>
+        <DragIcon type={'primary'}/>
+      </div>
+      <ConstructorElement
+        text={ingredient.name}
+        thumbnail={ingredient.image}
+        price={ingredient.price}
+        handleClose={() => deleteItem(ingredient._id)}
+      />
     </div>
-    <ConstructorElement
-      text={ingredient.name}
-      thumbnail={ingredient.image}
-      price={ingredient.price}
-      handleClose={() => deleteItem(ingredient._id)}
-    />
-  </div>
+  );
 }
 
 function BurgerConstructor(props) {

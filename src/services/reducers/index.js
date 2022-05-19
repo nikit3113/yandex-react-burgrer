@@ -60,6 +60,7 @@ export const commonReducer = (state = initialState, action) => {
         orderNumber: action.orderNumber,
         orderNumberRequest: false,
         orderNumberFailed: false,
+        constructorItems: initialState.constructorItems,
       }
     }
     case SET_CURRENT_ITEM: {

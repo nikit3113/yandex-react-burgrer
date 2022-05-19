@@ -1,22 +1,23 @@
-const API_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients';
-const API_ORDERS = 'https://norma.nomoreparties.space/api/orders';
+const BASE_URL = 'https://norma.nomoreparties.space/api';
+
+const checkResponse = (res) => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+};
 
 // Запросить ингредиенты:
 export async function getIngredients() {
-  const response = await fetch(API_INGREDIENTS);
-  if (response.ok) return await response.json();
-  throw new Error(`Ошибка запроса на сервер ${response.status}`);
+  const response = await fetch(BASE_URL + '/ingredients');
+  return checkResponse(response);
 }
 
 // Сделать заказ:
 export async function postOrder(data = {}) {
-  const response = await fetch(API_ORDERS, {
+  const response = await fetch(BASE_URL + '/orders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data),
   });
-  if (response.ok) return await response.json();
-  throw new Error(`Ошибка запроса на сервер ${response.status}`);
+  return checkResponse(response);
 }

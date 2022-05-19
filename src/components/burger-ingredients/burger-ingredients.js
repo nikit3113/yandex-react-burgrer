@@ -67,7 +67,7 @@ const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
   const dispatch = useDispatch();
   return (
     <>
-      <header className='text_type_main-medium' id={id} ref={refer}>{title}</header>
+      <h1 className='text_type_main-medium' id={id} ref={refer}>{title}</h1>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
         {ingredients.map((ingredient) =>
           <IngredientCard
@@ -122,7 +122,7 @@ function BurgerIngredients() {
   const [currentTab, setCurrentTab] = React.useState('buns')
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>
-      <header className="text text_type_main-large mt-10 mb-5">Собери бургер</header>
+      <h1 className="text text_type_main-large mt-10 mb-5">Собери бургер</h1>
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <IngredientList
         ingredients={ingredients}

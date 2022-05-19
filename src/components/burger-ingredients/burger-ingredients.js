@@ -1,10 +1,11 @@
 import React, {useMemo, useRef} from "react";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burgrer-ingredients.module.css';
-import PropTypes from "prop-types";
+import PropTypes, {shape} from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 import {SET_CURRENT_ITEM} from "../../services/actions";
+import {IngredientPropType} from "../../utils/types";
 
 const Tabs = ({currentTab, setCurrentTab}) => {
   const onTabClick = (tab) => {
@@ -62,6 +63,10 @@ const IngredientList = ({ingredients, setCurrentTab}) => {
     </div>
   )
 }
+IngredientList.propTypes = {
+  ingredients: PropTypes.arrayOf(shape(IngredientPropType)).isRequired,
+  setCurrentTab: PropTypes.func.isRequired,
+};
 
 const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
   const dispatch = useDispatch();
@@ -89,6 +94,12 @@ const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
     </>
   )
 }
+IngredientsCategoryList.propTypes = {
+  title: PropTypes.string.isRequired,
+  ingredients: PropTypes.arrayOf(shape(IngredientPropType)).isRequired,
+  id: PropTypes.string.isRequired,
+  refer: PropTypes.any,
+};
 
 const IngredientCard = ({text, thumbnail, price, onClick, id, type}) => {
   const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id ? ++prev : prev, 0);
@@ -116,6 +127,14 @@ const IngredientCard = ({text, thumbnail, price, onClick, id, type}) => {
     </div>
   )
 }
+IngredientCard.propTypes = {
+  text: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+};
 
 function BurgerIngredients() {
   const {ingredients} = useSelector(store => store.common);

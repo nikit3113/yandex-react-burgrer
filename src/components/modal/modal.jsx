@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import styleModal from './modal.module.css';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-function Modal(props) {
-  const { children, textHeader, onClose } = props;
-
+function Modal({children, textHeader, onClose}) {
   useEffect(() => {
     function onEscape(e) {
       if (e.key === "Escape") {

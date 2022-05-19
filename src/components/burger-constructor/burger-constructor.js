@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
 import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber, SWAP_INGREDIENTS} from "../../services/actions";
+import {ConstructorItemPropType} from "../../utils/types";
 
-const ConstructorItem = (props) => {
-  const {ingredient} = props;
+const ConstructorItem = ({ingredient}) => {
   const dispatch = useDispatch();
   const ref = useRef();
-  const deleteItem = (id) => {
+  const deleteItem = () => {
     dispatch({
       type: DELETE_INGREDIENT,
       payload: {id: ingredient.id},
@@ -59,14 +59,17 @@ const ConstructorItem = (props) => {
         text={ingredient.name}
         thumbnail={ingredient.image}
         price={ingredient.price}
-        handleClose={() => deleteItem(ingredient._id)}
+        handleClose={() => deleteItem()}
       />
     </div>
   );
 }
 
-function BurgerConstructor(props) {
-  const {openOrderModal} = props;
+ConstructorItem.propTypes = {
+  ingredient: PropTypes.shape(ConstructorItemPropType).isRequired,
+};
+
+function BurgerConstructor({openOrderModal}) {
   const dispatch = useDispatch();
   const {constructorItems} = useSelector(state => state.common);
   const bun = constructorItems.find((item) => item.type === 'bun');
@@ -113,7 +116,7 @@ function BurgerConstructor(props) {
       </div>}
 
       <div className={constructorStyles.scrollView}>
-        {constructorItems.map((ingredient, index) => ingredient.type !== 'bun' ?
+        {constructorItems.map((ingredient) => ingredient.type !== 'bun' ?
           <ConstructorItem ingredient={ingredient} key={ingredient.id}/> : null)}
       </div>
 
@@ -135,7 +138,6 @@ function BurgerConstructor(props) {
     </section>
   );
 }
-
 
 BurgerConstructor.propTypes = {
   openOrderModal: PropTypes.func.isRequired,

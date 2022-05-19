@@ -7,6 +7,7 @@ import {
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
   GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, SWAP_INGREDIENTS, UNSET_CURRENT_ITEM
 } from "../actions";
+import {v4 as uuid} from "uuid";
 
 const initialState = {
   ingredients: [],
@@ -81,7 +82,8 @@ export const commonReducer = (state = initialState, action) => {
       }
     }
     case DELETE_INGREDIENT: {
-      let index = state.constructorItems.map(item => item._id).indexOf(action.id);
+      let index = state.constructorItems.map(item => item.id).indexOf(action.payload.id);
+      if (index===-1) return {...state}
       const constructorItems = [...state.constructorItems];
       constructorItems.splice(index, 1);
       return {
@@ -90,7 +92,10 @@ export const commonReducer = (state = initialState, action) => {
       };
     }
     case ADD_INGREDIENT: {
-      const item = state.ingredients.find(item => item._id === action.id);
+      const item = {
+        ...state.ingredients.find(item => item._id === action.payload.id),
+        id: uuid(),
+      };
       let constructorItems = [];
       if (item.type === 'bun') {
         constructorItems = [...state.constructorItems.filter((item) => item.type !== 'bun'), item, item];
@@ -104,9 +109,12 @@ export const commonReducer = (state = initialState, action) => {
     }
     case SWAP_INGREDIENTS: {
       const constructorItems = [...state.constructorItems];
-      const oldIngredient = constructorItems[action.oldId];
-      constructorItems.splice(action.oldId, 1);
-      constructorItems.splice(action.newId, 0, oldIngredient);
+      const mapId = constructorItems.map(item => item.id);
+      const oldIndex = mapId.indexOf(action.payload.oldId);
+      const newIndex = mapId.indexOf(action.payload.newId);
+      const oldIngredient = constructorItems[oldIndex];
+      constructorItems.splice(oldIndex, 1);
+      constructorItems.splice(newIndex, 0, oldIngredient);
       return {
         ...state,
         constructorItems,

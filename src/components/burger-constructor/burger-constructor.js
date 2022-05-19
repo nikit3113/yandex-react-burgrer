@@ -7,19 +7,19 @@ import {useDispatch, useSelector} from "react-redux";
 import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber, SWAP_INGREDIENTS} from "../../services/actions";
 
 const ConstructorItem = (props) => {
-  const {ingredient, index} = props;
+  const {ingredient} = props;
   const dispatch = useDispatch();
   const ref = useRef();
   const deleteItem = (id) => {
     dispatch({
       type: DELETE_INGREDIENT,
-      id,
+      payload: {id: ingredient.id},
     });
   };
 
   const [{opacity}, dragRef] = useDrag({
     type: 'items',
-    item: {index},
+    item: {id: ingredient.id},
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.5 : 1
     })
@@ -33,8 +33,10 @@ const ConstructorItem = (props) => {
     drop(item) {
       dispatch({
         type: SWAP_INGREDIENTS,
-        oldId: item.index,
-        newId: index,
+        payload: {
+          oldId: item.id,
+          newId: ingredient.id,
+        }
       });
     },
   });
@@ -46,7 +48,7 @@ const ConstructorItem = (props) => {
   return (
     <div
       className={className + ' mb-4 pl-8'}
-      key={index}
+      key={ingredient.id}
       ref={ref}
       style={{opacity}}
     >
@@ -94,7 +96,7 @@ function BurgerConstructor(props) {
   const moveItem = (id) => {
     dispatch({
       type: ADD_INGREDIENT,
-      id
+      payload: {id}
     });
   };
 
@@ -112,7 +114,7 @@ function BurgerConstructor(props) {
 
       <div className={constructorStyles.scrollView}>
         {constructorItems.map((ingredient, index) => ingredient.type !== 'bun' ?
-          <ConstructorItem ingredient={ingredient} key={index} index={index}/> : null)}
+          <ConstructorItem ingredient={ingredient} key={ingredient.id}/> : null)}
       </div>
 
       {bun && <div className={constructorStyles.containerLockedIngredient + ' pl-8 mr-2'}>

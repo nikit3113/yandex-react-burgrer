@@ -27,7 +27,7 @@ export function dispatchIngredients() {
         data: ingredients.data,
       })
     )
-      .catch((error) => {
+      .catch(() => {
         dispatch({
           type: GET_INGREDIENTS_FAILED
         });
@@ -35,19 +35,19 @@ export function dispatchIngredients() {
   }
 }
 
-export function dispatchOrderNumber(ingredients_id) {
+export function dispatchOrderNumber(ingredientsId) {
   return function (dispatch) {
     dispatch({
       type: GET_ORDER_NUMBER_REQUEST,
     });
-    postOrder(ingredients_id)
+    postOrder(ingredientsId)
       .then((data) => {
         dispatch({
           type: GET_ORDER_NUMBER_SUCCESS,
           orderNumber: data.order.number
         })
       })
-      .catch((error) => {
+      .catch(() => {
         dispatch({
           type: GET_ORDER_NUMBER_FAILED
         })
@@ -55,11 +55,11 @@ export function dispatchOrderNumber(ingredients_id) {
   }
 }
 
-export function addToConstructor(ingredients_id) {
+export function addToConstructor(ingredientId) {
   return {
-    type : ADD_INGREDIENT,
+    type: ADD_INGREDIENT,
     payload: {
-      id:ingredients_id,
+      id: ingredientId,
       uuid: uuid(),
     }
   }

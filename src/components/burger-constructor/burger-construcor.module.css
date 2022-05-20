@@ -5,6 +5,14 @@
     height: 912px;
 }
 
+.main_dropped {
+    display: flex;
+    flex-direction: column;
+    width: 568px;
+    height: 912px;
+    background-color: #8585AD;
+}
+
 .scrollView {
     display: flex;
     flex-direction: column;
@@ -21,6 +29,12 @@
     position: relative;
 }
 
+.containerIngredientDropped {
+    composes: containerLockedIngredient;
+    position: relative;
+    background-color: #8585AD;
+}
+
 .dragIconContainer {
     align-self: center;
     position: absolute;
@@ -28,6 +42,7 @@
 }
 
 .rowTotal {
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: end;

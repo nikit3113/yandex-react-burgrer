@@ -1,30 +1,113 @@
-import React, {useContext} from "react";
+import React, {useRef} from "react";
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
-import {ConstructorContext} from "../../services/constructorContext";
 import PropTypes from "prop-types";
-import {postOrder} from "../../api/api";
+import {useDrag, useDrop} from "react-dnd";
+import {useDispatch, useSelector} from "react-redux";
+import {
+  SWAP_INGREDIENTS,
+  DELETE_INGREDIENT,
+  addToConstructor,
+  dispatchOrderNumber,
+} from "../../services/actions";
+import {ConstructorItemPropType} from "../../utils/types";
 
-function BurgerConstructor(props) {
-  const {openOrderModal} = props;
-  const [{bun, filling}] = useContext(ConstructorContext);
+const ConstructorItem = ({ingredient}) => {
+  const dispatch = useDispatch();
+  const ref = useRef();
+  const deleteItem = () => {
+    dispatch({
+      type: DELETE_INGREDIENT,
+      payload: {id: ingredient.id},
+    });
+  };
+
+  const [{opacity}, dragRef] = useDrag({
+    type: 'items',
+    item: {id: ingredient.id},
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1
+    })
+  })
+
+  const [{isHover}, dropRef] = useDrop({
+    accept: 'items',
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    }),
+    drop(item) {
+      dispatch({
+        type: SWAP_INGREDIENTS,
+        payload: {
+          oldId: item.id,
+          newId: ingredient.id,
+        }
+      });
+    },
+  });
+
+  const className = isHover ? constructorStyles.containerIngredientDropped : constructorStyles.containerIngredient;
+
+  dragRef(dropRef(ref));
+
+  return (
+    <div
+      className={className + ' mb-4 pl-8'}
+      key={ingredient.id}
+      ref={ref}
+      style={{opacity}}
+    >
+      <div className={constructorStyles.dragIconContainer}>
+        <DragIcon type={'primary'}/>
+      </div>
+      <ConstructorElement
+        text={ingredient.name}
+        thumbnail={ingredient.image}
+        price={ingredient.price}
+        handleClose={() => deleteItem()}
+      />
+    </div>
+  );
+}
+
+ConstructorItem.propTypes = {
+  ingredient: PropTypes.shape(ConstructorItemPropType).isRequired,
+};
+
+function BurgerConstructor({openOrderModal}) {
+  const dispatch = useDispatch();
+  const {constructorItems} = useSelector(state => state.common);
+  const bun = constructorItems.find((item) => item.type === 'bun');
+  const buttonDisabled = !constructorItems.length;
+
+  const [{isHover}, dropTarget] = useDrop({
+    accept: ['bun', 'sauce', 'main'],
+    collect: monitor => ({
+      isHover: monitor.isOver()
+    }),
+    drop({id}) {
+      moveItem(id)
+    },
+  });
 
   function handleCheckoutButton() {
-    postOrder({ingredients: [bun._id, ...filling.map((el => el._id))]})
-      .then((data) => {
-        openOrderModal(data.order.number);
-      })
-      .catch(() => alert('Error: checkout failed'))
+    dispatch(dispatchOrderNumber({ingredients: [...constructorItems.map((el => el._id))]}));
+    openOrderModal();
   }
 
   const cost = React.useMemo(() => {
-    return bun ?
-      filling.reduce((prev, cur) => prev + cur.price, bun.price * 2) :
-      filling.reduce((prev, cur) => prev + cur.price, 0);
-  }, [filling, bun]);
+    return constructorItems.reduce((prev, cur) => prev + cur.price, 0);
+  }, [constructorItems]);
+
+  const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
+
+  const moveItem = (id) => {
+    dispatch(addToConstructor(id));
+  };
+
 
   return (
-    <section className={constructorStyles.main + ' pl-4 pr-4'}>
+    <section className={className + ' pl-4 pr-4'} ref={dropTarget}>
       {bun && <div className={constructorStyles.containerLockedIngredient + ' mt-25 mb-4 pl-8 mr-2'}>
         <ConstructorElement
           text={bun.name + ' (верх)'}
@@ -33,23 +116,12 @@ function BurgerConstructor(props) {
           isLocked={true}
         />
       </div>}
+
       <div className={constructorStyles.scrollView}>
-        {filling.map((ingredient) =>
-          <div
-            className={constructorStyles.containerIngredient + ' mb-4 pl-8'}
-            key={ingredient._id}
-          >
-            <div className={constructorStyles.dragIconContainer}>
-              <DragIcon></DragIcon>
-            </div>
-            <ConstructorElement
-              text={ingredient.name}
-              thumbnail={ingredient.image}
-              price={ingredient.price}
-            />
-          </div>
-        )}
+        {constructorItems.map((ingredient) => ingredient.type !== 'bun' ?
+          <ConstructorItem ingredient={ingredient} key={ingredient.id}/> : null)}
       </div>
+
       {bun && <div className={constructorStyles.containerLockedIngredient + ' pl-8 mr-2'}>
         <ConstructorElement
           text={bun.name + ' (низ)'}
@@ -63,12 +135,11 @@ function BurgerConstructor(props) {
             {cost}
             <CurrencyIcon type={'primary'}/>
           </span>
-          <Button onClick={handleCheckoutButton}>Оформить заказ</Button>
+          <Button disabled={buttonDisabled} onClick={handleCheckoutButton}>Оформить заказ</Button>
         </span>
     </section>
   );
 }
-
 
 BurgerConstructor.propTypes = {
   openOrderModal: PropTypes.func.isRequired,

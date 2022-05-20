@@ -16,6 +16,10 @@ p {
   margin: 0;
 }
 
+h1 {
+  margin: 0;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 8px;

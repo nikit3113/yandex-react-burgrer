@@ -3,70 +3,48 @@ import appStyles from './app.module.css';
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import {ConstructorContext} from "../../services/constructorContext"
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {getIngredients} from "../../api/api";
+import {dispatchIngredients, UNSET_CURRENT_ITEM} from "../../services/actions";
+import {useDispatch, useSelector} from "react-redux";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 function App() {
-  const [ingredients, setIngredients] = useState({
-    data: [],
-    isLoading: false,
-    hasError: false,
-  });
-  const [constructor, setConstructor] = useState({
-    bun: undefined,
-    filling: [],
-  });
-  const [orderModal, setOrderModal] = React.useState({
+  const [orderModal, setOrderModal] = useState({
     visible: false,
     orderNumber: undefined,
   });
-  const [ingredientModal, setIngredientModal] = React.useState({
-    visible: false,
-    ingredient: undefined,
-  });
-
+  const dispatch = useDispatch();
+  const currentItem = useSelector(store => store.common.currentItem);
 
   useEffect(() => {
-      setIngredients({...ingredients, hasError: false, isLoading: true});
-      getIngredients().then(ingredients => {
-            setIngredients({...ingredients, hasError: false, isLoading: false});
-            setConstructor({bun: ingredients.data[0], filling: ingredients.data.filter(el => el.type !== 'bun')})
-          }
-        )
-        .catch((error) => {
-          setIngredients({...ingredients, isLoading: false, hasError: true});
-          alert(error);
-        })
-
+      dispatch(dispatchIngredients());
     }
     , []);
 
-  function handleOpenOrderModal(orderNumber) {
-    setOrderModal({visible: true, orderNumber: orderNumber});
+  function handleOpenOrderModal() {
+    setOrderModal({visible: true});
   }
 
   function handleCloseOrderModal() {
     setOrderModal({...orderModal, visible: false});
   }
 
-  function handleOpenIngredientModal(ingredient) {
-    setIngredientModal({visible: true, ingredient: ingredient});
-  }
-
-  function handleCloseIngredientModal() {
-    setIngredientModal({...ingredientModal, visible: false});
-  }
-
   const modalIngredientDetails = () => {
+    const closeHandler = () => {
+      dispatch(dispatch(
+        {
+          type: UNSET_CURRENT_ITEM,
+        }))
+    }
     return (
       <Modal
         textHeader={'Детали ингредиента'}
-        onClose={handleCloseIngredientModal}
+        onClose={closeHandler}
       >
-        <IngredientDetails ingredient={ingredientModal.ingredient}></IngredientDetails>
+        <IngredientDetails/>
       </Modal>
     );
   }
@@ -83,19 +61,16 @@ function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader/>
-      <ConstructorContext.Provider value={[constructor, setConstructor]}>
+      <DndProvider backend={HTML5Backend}>
         <main className={appStyles.main}>
-          <BurgerIngredients
-            ingredients={ingredients.data}
-            openIngredientModal={handleOpenIngredientModal}
-          />
+          <BurgerIngredients/>
           <BurgerConstructor
             openOrderModal={handleOpenOrderModal}
           />
-          {ingredientModal.visible && (modalIngredientDetails(ingredientModal.ingredient))}
-          {orderModal.visible && (modalOrderDetails(orderModal.orderNumber))}
+          {!!currentItem && (modalIngredientDetails())}
+          {orderModal.visible && (modalOrderDetails())}
         </main>
-      </ConstructorContext.Provider>
+      </DndProvider>
     </div>
   );
 }

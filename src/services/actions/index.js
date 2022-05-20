@@ -1,4 +1,5 @@
 import {getIngredients, postOrder} from "../../api/api";
+import {v4 as uuid} from "uuid";
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
@@ -51,5 +52,15 @@ export function dispatchOrderNumber(ingredients_id) {
           type: GET_ORDER_NUMBER_FAILED
         })
       });
+  }
+}
+
+export function addToConstructor(ingredients_id) {
+  return {
+    type : ADD_INGREDIENT,
+    payload: {
+      id:ingredients_id,
+      uuid: uuid(),
+    }
   }
 }

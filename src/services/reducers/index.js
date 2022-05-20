@@ -7,7 +7,6 @@ import {
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
   GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, SWAP_INGREDIENTS, UNSET_CURRENT_ITEM
 } from "../actions";
-import {v4 as uuid} from "uuid";
 
 const initialState = {
   ingredients: [],
@@ -95,7 +94,7 @@ export const commonReducer = (state = initialState, action) => {
     case ADD_INGREDIENT: {
       const item = {
         ...state.ingredients.find(item => item._id === action.payload.id),
-        id: uuid(),
+        id: action.payload.uuid,
       };
       let constructorItems = [];
       if (item.type === 'bun') {

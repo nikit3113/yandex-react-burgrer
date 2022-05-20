@@ -4,7 +4,12 @@ import constructorStyles from './burger-construcor.module.css';
 import PropTypes from "prop-types";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
-import {ADD_INGREDIENT, DELETE_INGREDIENT, dispatchOrderNumber, SWAP_INGREDIENTS} from "../../services/actions";
+import {
+  SWAP_INGREDIENTS,
+  DELETE_INGREDIENT,
+  addToConstructor,
+  dispatchOrderNumber,
+} from "../../services/actions";
 import {ConstructorItemPropType} from "../../utils/types";
 
 const ConstructorItem = ({ingredient}) => {
@@ -97,10 +102,7 @@ function BurgerConstructor({openOrderModal}) {
   const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
 
   const moveItem = (id) => {
-    dispatch({
-      type: ADD_INGREDIENT,
-      payload: {id}
-    });
+    dispatch(addToConstructor(id));
   };
 
 

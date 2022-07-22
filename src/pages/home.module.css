@@ -8,3 +8,8 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.input {
+    display: flex;
+    justify-content: center;
+}

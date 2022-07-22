@@ -22,14 +22,14 @@ export function ResetPasswordPage() {
     <div className={styles.container}>
       <form>
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
-        <div className={'mt-6'}>
+        <div className={'mt-6 ' + styles.input}>
           <PasswordInput
             placeholder="Введите новый пароль"
             value={form.newPassword}
             name="newPassword"
             onChange={onChange}/>
         </div>
-        <div className={'mt-6'}>
+        <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="Введите код из письма"
             value={form.secretCode}

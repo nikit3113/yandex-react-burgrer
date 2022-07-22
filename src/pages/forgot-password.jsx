@@ -22,7 +22,7 @@ export function ForgotPasswordPage() {
     <div className={styles.container}>
       <form>
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
-        <div className={'mt-6'}>
+        <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="Укажите e-mail"
             value={form.email}

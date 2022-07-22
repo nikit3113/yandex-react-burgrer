@@ -22,14 +22,14 @@ export function LoginPage() {
     <div className={styles.container}>
       <form>
         <h1 className={'text_type_main-large'}>Вход</h1>
-        <div className={'mt-6'}>
+        <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="E-mail"
             value={form.email}
             name="email"
             onChange={onChange}/>
         </div>
-        <div className={'mt-6'}>
+        <div className={'mt-6 ' + styles.input}>
           <PasswordInput
             placeholder="Пароль"
             value={form.password}

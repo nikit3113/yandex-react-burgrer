@@ -1,6 +1,7 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
+import {Link} from "react-router-dom";
 
 export function LoginPage() {
   const [form, setValue] = useState({email: '', password: ''});
@@ -43,15 +44,15 @@ export function LoginPage() {
       </form>
       <p className={`text text_type_main-default text_color_inactive mt-20`}>
         Вы - новый пользователь?{" "}
-        <span className={`text_type_main-default text_color_accent`}>
+        <Link className={`text_type_main-default text_color_accent`} to="/register">
           Зарегистрироваться
-        </span>
+        </Link>
       </p>
       <p className={`text text_type_main-default text_color_inactive mt-4`}>
         Забыли пароль?{" "}
-        <span className={`text_type_main-default text_color_accent`}>
+        <Link className={`text_type_main-default text_color_accent`} to="/forgot-password">
           Восстановить пароль
-        </span>
+        </Link>
       </p>
     </div>
   );

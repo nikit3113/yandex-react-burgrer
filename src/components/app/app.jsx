@@ -10,6 +10,8 @@ import {dispatchIngredients, UNSET_CURRENT_ITEM} from "../../services/actions";
 import {useDispatch, useSelector} from "react-redux";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
+import {LoginPage} from "../../pages/login";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -60,17 +62,26 @@ function App() {
 
   return (
     <div className={appStyles.app}>
-      <AppHeader/>
-      <DndProvider backend={HTML5Backend}>
-        <main className={appStyles.main}>
-          <BurgerIngredients/>
-          <BurgerConstructor
-            openOrderModal={handleOpenOrderModal}
-          />
-          {!!currentItem && (modalIngredientDetails())}
-          {orderModal.visible && (modalOrderDetails())}
-        </main>
-      </DndProvider>
+      <BrowserRouter>
+        <AppHeader/>
+        <DndProvider backend={HTML5Backend}>
+          <main className={appStyles.main}>
+            <Switch>
+              <Route path="/login">
+                <LoginPage></LoginPage>
+              </Route>
+              <Route path="/">
+                <BurgerIngredients/>
+                <BurgerConstructor
+                  openOrderModal={handleOpenOrderModal}
+                />
+                {!!currentItem && (modalIngredientDetails())}
+                {orderModal.visible && (modalOrderDetails())}
+              </Route>
+            </Switch>
+          </main>
+        </DndProvider>
+      </BrowserRouter>
     </div>
   );
 }

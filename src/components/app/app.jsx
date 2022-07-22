@@ -71,16 +71,16 @@ function App() {
           <main className={appStyles.main}>
             <Switch>
               <Route path="/login">
-                <LoginPage></LoginPage>
+                <LoginPage/>
               </Route>
               <Route path="/register">
-                <RegisterPage></RegisterPage>
+                <RegisterPage/>
               </Route>
               <Route path="/forgot-password">
-                <ForgotPasswordPage></ForgotPasswordPage>
+                <ForgotPasswordPage/>
               </Route>
               <Route path="/reset-password">
-                <ResetPasswordPage></ResetPasswordPage>
+                <ResetPasswordPage/>
               </Route>
               <Route path="/">
                 <BurgerIngredients/>

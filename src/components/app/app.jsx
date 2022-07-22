@@ -12,6 +12,9 @@ import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {LoginPage} from "../../pages/login";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {RegisterPage} from "../../pages/register";
+import {ResetPasswordPage} from "../../pages/reset-password";
+import {ForgotPasswordPage} from "../../pages/forgot-password";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -69,6 +72,15 @@ function App() {
             <Switch>
               <Route path="/login">
                 <LoginPage></LoginPage>
+              </Route>
+              <Route path="/register">
+                <RegisterPage></RegisterPage>
+              </Route>
+              <Route path="/forgot-password">
+                <ForgotPasswordPage></ForgotPasswordPage>
+              </Route>
+              <Route path="/reset-password">
+                <ResetPasswordPage></ResetPasswordPage>
               </Route>
               <Route path="/">
                 <BurgerIngredients/>

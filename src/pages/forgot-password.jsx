@@ -12,7 +12,7 @@ export function ForgotPasswordPage() {
     setValue({...form, [e.target.name]: e.target.value});
   };
 
-  let login = useCallback(
+  let onConfirm = useCallback(
     async e => {
       e.preventDefault();
       await passwordForgot(form.email)
@@ -36,7 +36,7 @@ export function ForgotPasswordPage() {
             onChange={onChange}/>
         </div>
         <div className={'mt-6'}>
-          <Button onClick={login} primary={true}>
+          <Button onClick={onConfirm} primary={true}>
             Восстановить
           </Button>
         </div>

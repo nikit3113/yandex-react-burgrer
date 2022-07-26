@@ -1,19 +1,25 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import {passwordForgot, passwordReset} from "../api/api";
 
 export function ResetPasswordPage() {
   const [form, setValue] = useState({newPassword: '', secretCode: '' });
+  const history = useHistory();
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
   };
 
-  let login = useCallback(
-    e => {
+  let onConfirm = useCallback(
+    async e => {
       e.preventDefault();
-      //auth.signIn(form);
+      await passwordReset(form.newPassword, form.secretCode)
+        .then(() => {
+          history.replace({pathname: '/login'});
+        })
+        .catch((er) => console.error(er))
     },
     [form]
   );
@@ -37,7 +43,7 @@ export function ResetPasswordPage() {
             onChange={onChange}/>
         </div>
         <div className={'mt-6'}>
-          <Button onClick={login} primary={true}>
+          <Button onClick={onConfirm} primary={true}>
             Сохранить
           </Button>
         </div>

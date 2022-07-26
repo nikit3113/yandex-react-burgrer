@@ -1,19 +1,25 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import {passwordForgot} from "../api/api";
 
 export function ForgotPasswordPage() {
   const [form, setValue] = useState({email: ''});
+  const history = useHistory();
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
   };
 
   let login = useCallback(
-    e => {
+    async e => {
       e.preventDefault();
-      //auth.signIn(form);
+      await passwordForgot(form.email)
+        .then(() => {
+          history.replace({pathname: '/reset-password'});
+        })
+        .catch((er) => console.error(er))
     },
     [form]
   );

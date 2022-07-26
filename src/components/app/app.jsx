@@ -15,6 +15,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {RegisterPage} from "../../pages/register";
 import {ResetPasswordPage} from "../../pages/reset-password";
 import {ForgotPasswordPage} from "../../pages/forgot-password";
+import {NotFound404} from "../../pages/not-found";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -70,25 +71,28 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <main className={appStyles.main}>
             <Switch>
-              <Route path="/login">
-                <LoginPage/>
-              </Route>
-              <Route path="/register">
-                <RegisterPage/>
-              </Route>
-              <Route path="/forgot-password">
-                <ForgotPasswordPage/>
-              </Route>
-              <Route path="/reset-password">
-                <ResetPasswordPage/>
-              </Route>
-              <Route path="/">
+              <Route path="/" exact={true}>
                 <BurgerIngredients/>
                 <BurgerConstructor
                   openOrderModal={handleOpenOrderModal}
                 />
                 {!!currentItem && (modalIngredientDetails())}
                 {orderModal.visible && (modalOrderDetails())}
+              </Route>
+              <Route path="/login" exact={true}>
+                <LoginPage/>
+              </Route>
+              <Route path="/register" exact={true}>
+                <RegisterPage/>
+              </Route>
+              <Route path="/forgot-password" exact={true}>
+                <ForgotPasswordPage/>
+              </Route>
+              <Route path="/reset-password" exact={true}>
+                <ResetPasswordPage/>
+              </Route>
+              <Route>
+                <NotFound404 />
               </Route>
             </Switch>
           </main>

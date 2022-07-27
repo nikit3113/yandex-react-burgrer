@@ -16,6 +16,7 @@ import {RegisterPage} from "../../pages/register";
 import {ResetPasswordPage} from "../../pages/reset-password";
 import {ForgotPasswordPage} from "../../pages/forgot-password";
 import {NotFound404} from "../../pages/not-found";
+import {ProfilePage} from "../../pages/profile/profile";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -81,6 +82,9 @@ function App() {
               </Route>
               <Route path="/login" exact={true}>
                 <LoginPage/>
+              </Route>
+              <Route path="/profile" exact={true}>
+                <ProfilePage/>
               </Route>
               <Route path="/register" exact={true}>
                 <RegisterPage/>

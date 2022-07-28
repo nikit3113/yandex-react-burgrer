@@ -57,3 +57,15 @@ export async function register(email, password, name) {
   });
   return checkResponse(response);
 }
+
+// Логин:
+export async function login(email, password) {
+  const response = await fetch(BASE_URL + '/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({email, password}),
+  });
+  return checkResponse(response);
+}

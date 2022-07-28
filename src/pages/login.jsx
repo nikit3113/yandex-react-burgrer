@@ -2,9 +2,15 @@ import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
 import {Link} from "react-router-dom";
+import {loginUser} from "../services/actions/user";
+import {useDispatch, useSelector} from "react-redux";
+import Loader from "../components/loader/loader";
 
 export function LoginPage() {
   const [form, setValue] = useState({email: '', password: ''});
+
+  const dispatch = useDispatch();
+  const {user, loginUserRequest, loginUserError} = useSelector(store => store.user);
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
@@ -13,7 +19,7 @@ export function LoginPage() {
   let login = useCallback(
     e => {
       e.preventDefault();
-      //auth.signIn(form);
+      dispatch(loginUser(form.email, form.password));
     },
     [form]
   );
@@ -36,11 +42,13 @@ export function LoginPage() {
             name="password"
             onChange={onChange}/>
         </div>
-        <div className={'mt-6'}>
-          <Button onClick={login} primary={true}>
+        <div className={styles.button_container + ' mt-6'}>
+          <Button disabled={loginUserRequest} onClick={login} primary={true}>
             Войти
           </Button>
+          {loginUserRequest && <Loader/>}
         </div>
+        {loginUserError && <p className={'text text_type_main-default text_color_error mt-2'}>{loginUserError}</p>}
       </form>
       <p className={`text text_type_main-default text_color_inactive mt-20`}>
         Вы - новый пользователь?{" "}

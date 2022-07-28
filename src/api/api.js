@@ -58,7 +58,7 @@ export async function register(email, password, name) {
   return checkResponse(response);
 }
 
-// Логин:
+// Авторизация:
 export async function login(email, password) {
   const response = await fetch(BASE_URL + '/auth/login', {
     method: 'POST',
@@ -66,6 +66,30 @@ export async function login(email, password) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({email, password}),
+  });
+  return checkResponse(response);
+}
+
+// Выход из системы:
+export async function logout() {
+  const response = await fetch(BASE_URL + '/auth/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({token: localStorage.getItem('refreshToken')}),
+  });
+  return checkResponse(response);
+}
+
+// Обновление токена:
+export async function refreshToken() {
+  const response = await fetch(BASE_URL + '/auth/refresh', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({token: localStorage.getItem('refreshToken')}),
   });
   return checkResponse(response);
 }

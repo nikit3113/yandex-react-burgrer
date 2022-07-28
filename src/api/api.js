@@ -24,7 +24,6 @@ export async function postOrder(data = {}) {
 
 // Сброс пароля:
 export async function passwordForgot(email) {
-  console.debug(email)
   const response = await fetch(BASE_URL + '/password-reset', {
     method: 'POST',
     headers: {

@@ -7,6 +7,7 @@ import {
   GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
   GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, SWAP_INGREDIENTS, UNSET_CURRENT_ITEM
 } from "../actions";
+import {userReducer} from "./user";
 
 const initialState = {
   ingredients: [],
@@ -22,7 +23,7 @@ const initialState = {
   orderNumberFailed: false,
 }
 
-export const commonReducer = (state = initialState, action) => {
+const commonReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return {
@@ -128,4 +129,5 @@ export const commonReducer = (state = initialState, action) => {
 
 export const rootReducer = combineReducers({
   common: commonReducer,
+  user: userReducer,
 });

@@ -1,3 +1,5 @@
+import {getCookie} from "../utils/cookie";
+
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = (res) => {
@@ -90,6 +92,30 @@ export async function refreshToken() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({token: localStorage.getItem('refreshToken')}),
+  });
+  return checkResponse(response);
+}
+
+// Получение данных о пользователе:
+export async function getUser() {
+  const response = await fetch(BASE_URL + '/auth/user', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: getCookie('accessToken'),
+    },
+  });
+  return checkResponse(response);
+}
+
+// Редактирование данных пользователя:
+export async function updateUser() {
+  const response = await fetch(BASE_URL + '/auth/user', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: getCookie('accessToken'),
+    },
   });
   return checkResponse(response);
 }

@@ -17,6 +17,7 @@ import {ResetPasswordPage} from "../../pages/reset-password";
 import {ForgotPasswordPage} from "../../pages/forgot-password";
 import {NotFound404} from "../../pages/not-found";
 import {ProfilePage} from "../../pages/profile/profile";
+import {ProtectedRoute} from "../protected-route";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -83,9 +84,9 @@ function App() {
               <Route path="/login" exact={true}>
                 <LoginPage/>
               </Route>
-              <Route path="/profile" exact={true}>
+              <ProtectedRoute path="/profile" exact={true}>
                 <ProfilePage/>
-              </Route>
+              </ProtectedRoute>
               <Route path="/register" exact={true}>
                 <RegisterPage/>
               </Route>

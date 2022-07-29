@@ -1,7 +1,7 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect, useLocation} from "react-router-dom";
 import {loginUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
@@ -11,6 +11,8 @@ export function LoginPage() {
 
   const dispatch = useDispatch();
   const {user, loginUserRequest, loginUserError} = useSelector(store => store.user);
+
+  const {state} = useLocation();
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
@@ -23,6 +25,12 @@ export function LoginPage() {
     },
     [form]
   );
+
+  if (!!user) { // todo this is not working. After f5(reload page) user is false. Need to check user
+    return (
+      <Redirect to={state?.from || "/"}/>
+    );
+  }
 
   return (
     <div className={styles.container}>

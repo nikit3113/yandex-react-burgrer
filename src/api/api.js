@@ -97,7 +97,7 @@ export async function refreshToken() {
 }
 
 // Получение данных о пользователе:
-export async function getUser() {
+export async function getUserApi() {
   const response = await fetch(BASE_URL + '/auth/user', {
     method: 'GET',
     headers: {
@@ -109,13 +109,14 @@ export async function getUser() {
 }
 
 // Редактирование данных пользователя:
-export async function updateUser() {
+export async function updateUserApi(name, email, password) {
   const response = await fetch(BASE_URL + '/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       authorization: getCookie('accessToken'),
     },
+    body: JSON.stringify({name, email, password}),
   });
   return checkResponse(response);
 }

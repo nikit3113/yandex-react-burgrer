@@ -1,15 +1,31 @@
 import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Input, PasswordInput, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
+import {useDispatch, useSelector} from "react-redux";
+import {getUser, updateUser} from "../../services/actions/user";
 
 export function ProfilePage() {
+  const dispatch = useDispatch();
+  const {user, updateUserRequest, updateUserError} = useSelector(store => store.user);
+
   const [form, setValue] = useState({
     name: {text: '', disabled: true},
     email: {text: ''},
     password: {text: '', disabled: true}
   });
 
+  useEffect(() => {
+    dispatch(getUser());
+  }, [])
+
+  useEffect(() => {
+    setValue({
+      ...form,
+      name: {text: user?.name, disabled: form.name.disabled},
+      email: {text: user?.email, disabled: form.email.disabled},
+    });
+  }, [user])
 
   const onChange = e => {
     setValue({...form, [e.target.name]: {text: e.target.value, disabled: form[e.target.name].disabled}});

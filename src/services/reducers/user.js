@@ -5,6 +5,13 @@ import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILED,
+  GET_USER_REQUEST,
+  GET_USER_SUCCESS,
+  GET_USER_FAILED,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILED,
+  LOGOUT
 } from "../actions/user";
 
 const initialState = {
@@ -15,6 +22,12 @@ const initialState = {
 
   loginUserRequest: false,
   loginUserError: null,
+
+  getUserRequest: false,
+  getUserError: null,
+
+  updateUserRequest: false,
+  updateUserError: null,
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -61,6 +74,56 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         loginUserRequest: false,
         loginUserError: action.error,
+      };
+    }
+    case GET_USER_REQUEST: {
+      return {
+        ...state,
+        getUserRequest: true,
+        getUserError: false,
+      };
+    }
+    case GET_USER_SUCCESS: {
+      return {
+        ...state,
+        user: action.data,
+        getUserRequest: false,
+        getUserError: null,
+      };
+    }
+    case GET_USER_FAILED: {
+      return {
+        ...state,
+        getUserRequest: false,
+        getUserError: action.error,
+      };
+    }
+    case UPDATE_USER_REQUEST: {
+      return {
+        ...state,
+        updateUserRequest: true,
+        updateUserError: false,
+      };
+    }
+    case UPDATE_USER_SUCCESS: {
+      return {
+        ...state,
+        user: action.data,
+        updateUserRequest: false,
+        updateUserError: null,
+      };
+    }
+    case UPDATE_USER_FAILED: {
+      return {
+        ...state,
+        updateUserRequest: false,
+        updateUserError: action.error,
+      };
+    }
+    case LOGOUT: {
+      return {
+        ...state,
+        user: null,
       };
     }
     default: {

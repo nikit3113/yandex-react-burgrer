@@ -1,4 +1,4 @@
-import {login, register, getUserApi, updateUserApi} from "../../api/api";
+import {login, register, getUserApi, updateUserApi, saveTokens} from "../../api/api";
 import {setCookie} from "../../utils/cookie";
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
@@ -21,12 +21,11 @@ export function registerUser(email, password, name) {
       type: REGISTER_USER_REQUEST,
     })
     register(email, password, name)
-      .then((data) => {
-        setCookie('accessToken', data?.accessToken);
-        localStorage.setItem('refreshToken', data?.refreshToken);
+      .then(({refreshToken, accessToken, user}) => {
+        saveTokens(refreshToken, accessToken);
         dispatch({
           type: REGISTER_USER_SUCCESS,
-          data: data?.user,
+          data: user,
         })
       })
       .catch((error) => {

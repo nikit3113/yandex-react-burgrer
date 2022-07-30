@@ -1,10 +1,32 @@
-import {getCookie} from "../utils/cookie";
+import {getCookie, setCookie} from "../utils/cookie";
 
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
+
+export const saveTokens = (refreshToken, accessToken) => {
+  setCookie('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+}
+
+const fetchWithRefresh = async (url, options) => {
+  try {
+    const response = await fetch(url, options);
+    return checkResponse(response);
+  } catch (err) {
+    if (err.message === 'jwt expired') {
+      const {refreshToken, accessToken} = refreshTokenApi();
+      saveTokens(refreshToken, accessToken);
+      options.headers.authorization = accessToken;
+      const response = await fetch(url, options);
+      return checkResponse(response);
+    } else {
+      return Promise.reject(err);
+    }
+  }
+}
 
 // Запросить ингредиенты:
 export async function getIngredients() {
@@ -85,7 +107,7 @@ export async function logout() {
 }
 
 // Обновление токена:
-export async function refreshToken() {
+export async function refreshTokenApi() {
   const response = await fetch(BASE_URL + '/auth/refresh', {
     method: 'POST',
     headers: {
@@ -98,7 +120,7 @@ export async function refreshToken() {
 
 // Получение данных о пользователе:
 export async function getUserApi() {
-  const response = await fetch(BASE_URL + '/auth/user', {
+  const response = await fetchWithRefresh(BASE_URL + '/auth/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -110,7 +132,7 @@ export async function getUserApi() {
 
 // Редактирование данных пользователя:
 export async function updateUserApi(name, email, password) {
-  const response = await fetch(BASE_URL + '/auth/user', {
+  const response = await fetchWithRefresh(BASE_URL + '/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

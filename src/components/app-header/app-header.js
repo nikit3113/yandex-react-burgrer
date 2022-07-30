@@ -27,7 +27,8 @@ function AppHeader() {
           <NavLink
             to='/feed'
             className={[headerStyle.link, LINK_MARGIN].join(' ')}
-            activeClassName={headerStyle.leftSideMenu}
+            activeClassName={headerStyle.activeLink}
+            exact
           >
             <ListIcon type={rootIsFeed ? 'primary' : 'secondary'}/>
             <p className={'text text_type_main-default ml-2'}>Лента заказов</p>

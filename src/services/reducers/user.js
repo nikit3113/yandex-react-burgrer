@@ -11,7 +11,9 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILED,
-  LOGOUT
+  LOGOUT,
+  AUTH_CHECKOUT_SUCCESS,
+  AUTH_CHECKOUT_IS_END,
 } from "../actions/user";
 
 const initialState = {
@@ -28,6 +30,8 @@ const initialState = {
 
   updateUserRequest: false,
   updateUserError: null,
+
+  authIsChecked: false,
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -96,6 +100,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         getUserRequest: false,
         getUserError: action.error,
+        user: null,
       };
     }
     case UPDATE_USER_REQUEST: {
@@ -116,6 +121,7 @@ export const userReducer = (state = initialState, action) => {
     case UPDATE_USER_FAILED: {
       return {
         ...state,
+        user: null,
         updateUserRequest: false,
         updateUserError: action.error,
       };
@@ -124,6 +130,18 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
+      };
+    }
+    case AUTH_CHECKOUT_SUCCESS: {
+      return {
+        ...state,
+        authIsChecked: true,
+      };
+    }
+    case AUTH_CHECKOUT_IS_END: {
+      return {
+        ...state,
+        authIsChecked: false,
       };
     }
     default: {

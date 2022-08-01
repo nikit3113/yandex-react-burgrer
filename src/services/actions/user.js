@@ -14,6 +14,8 @@ export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
 export const UPDATE_USER_FAILED = 'UPDATE_USER_FAILED';
 export const LOGOUT = 'LOGOUT';
+export const AUTH_CHECKOUT_SUCCESS = 'AUTH_CHECKOUT_SUCCESS';
+export const AUTH_CHECKOUT_IS_END = 'AUTH_CHECKOUT_IS_END';
 
 export function registerUser(email, password, name) {
   return function (dispatch) {
@@ -78,6 +80,37 @@ export function getUser() {
           error: error?.message
         })
       })
+  }
+}
+
+export function checkToken() {
+  return function (dispatch) {
+    dispatch({
+      type: GET_USER_REQUEST,
+    })
+    getUserApi()
+      .then((data) => {
+        dispatch({
+          type: GET_USER_SUCCESS,
+          data: data?.user,
+        })
+        dispatch(
+          {
+            type: AUTH_CHECKOUT_SUCCESS,
+          }
+        )
+      })
+      .catch((error) => {
+        dispatch({
+          type: GET_USER_FAILED,
+          error: error?.message
+        })
+        dispatch(
+          {
+            type: AUTH_CHECKOUT_SUCCESS,
+          }
+        )
+      }) //todo finally срабатывает раньше чем выполняется then и catch... надо разобарться почему
   }
 }
 

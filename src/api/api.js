@@ -13,15 +13,14 @@ export const saveTokens = (refreshToken, accessToken) => {
 
 const fetchWithRefresh = async (url, options) => {
   try {
-    const response = await fetch(url, options);
-    return checkResponse(response);
+    return await fetch(url, options);
   } catch (err) {
     if (err.message === 'jwt expired') {
       const {refreshToken, accessToken} = refreshTokenApi();
       saveTokens(refreshToken, accessToken);
       options.headers.authorization = accessToken;
       const response = await fetch(url, options);
-      return checkResponse(response);
+      return response;
     } else {
       return Promise.reject(err);
     }

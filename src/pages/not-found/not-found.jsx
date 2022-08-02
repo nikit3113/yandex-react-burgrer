@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import styles from './not-found.module.css';
-import bender404 from '../images/404-bender.png'
+import bender404 from '../../images/404-bender.png'
 
 export function NotFound404() {
   return (

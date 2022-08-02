@@ -16,7 +16,7 @@ import {LoginPage} from "../../pages/login";
 import {RegisterPage} from "../../pages/register";
 import {ResetPasswordPage} from "../../pages/reset-password";
 import {ForgotPasswordPage} from "../../pages/forgot-password";
-import {NotFound404} from "../../pages/not-found";
+import {NotFound404} from "../../pages/not-found/not-found";
 import {ProfilePage} from "../../pages/profile/profile";
 import {ProtectedRoute} from "../protected-route";
 

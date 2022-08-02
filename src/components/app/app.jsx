@@ -19,6 +19,7 @@ import {ForgotPasswordPage} from "../../pages/forgot-password";
 import {NotFound404} from "../../pages/not-found/not-found";
 import {ProfilePage} from "../../pages/profile/profile";
 import {ProtectedRoute} from "../protected-route";
+import {NonAuthRoute} from "../non-auth-route";
 
 function App() {
   const [orderModal, setOrderModal] = useState({
@@ -68,21 +69,21 @@ function App() {
               />
               {orderModal.visible && (modalOrderDetails())}
             </Route>
-            <Route path="/login" exact={true}>
-              <LoginPage/>
-            </Route>
             <ProtectedRoute path="/profile" exact={true}>
               <ProfilePage/>
             </ProtectedRoute>
-            <Route path="/register" exact={true}>
+            <NonAuthRoute path="/login" exact={true}>
+              <LoginPage/>
+            </NonAuthRoute>
+            <NonAuthRoute path="/register" exact={true}>
               <RegisterPage/>
-            </Route>
-            <Route path="/forgot-password" exact={true}>
+            </NonAuthRoute>
+            <NonAuthRoute path="/forgot-password" exact={true}>
               <ForgotPasswordPage/>
-            </Route>
-            <Route path="/reset-password" exact={true}>
+            </NonAuthRoute>
+            <NonAuthRoute path="/reset-password" exact={true}>
               <ResetPasswordPage/>
-            </Route>
+            </NonAuthRoute>
             <Route path='/ingredients/:ingredientId' exact>
               <div className={appStyles.ingredientDetails}>
                 <IngredientDetails/>

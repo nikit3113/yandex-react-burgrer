@@ -10,9 +10,7 @@ export function LoginPage() {
   const [form, setValue] = useState({email: '', password: ''});
 
   const dispatch = useDispatch();
-  const {user, loginUserRequest, loginUserError} = useSelector(store => store.user);
-
-  const {state} = useLocation();
+  const {loginUserRequest, loginUserError} = useSelector(store => store.user);
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
@@ -22,15 +20,7 @@ export function LoginPage() {
     e => {
       e.preventDefault();
       dispatch(loginUser(form.email, form.password));
-    },
-    [form]
-  );
-
-  if (!!user) { // todo this is not working. After f5(reload page) user is false. Need to check user
-    return (
-      <Redirect to={state?.from || "/"}/>
-    );
-  }
+    }, [form]);
 
   return (
     <div className={styles.container}>

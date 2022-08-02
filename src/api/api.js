@@ -13,14 +13,15 @@ export const saveTokens = (refreshToken, accessToken) => {
 
 const fetchWithRefresh = async (url, options) => {
   try {
-    return await fetch(url, options);
+    const response = await fetch(url, options);
+    return await checkResponse(response);
   } catch (err) {
     if (err.message === 'jwt expired') {
-      const {refreshToken, accessToken} = refreshTokenApi();
+      const {refreshToken, accessToken} = await refreshTokenApi();
       saveTokens(refreshToken, accessToken);
       options.headers.authorization = accessToken;
       const response = await fetch(url, options);
-      return response;
+      return await checkResponse(response);
     } else {
       return Promise.reject(err);
     }
@@ -30,7 +31,7 @@ const fetchWithRefresh = async (url, options) => {
 // Запросить ингредиенты:
 export async function getIngredients() {
   const response = await fetch(BASE_URL + '/ingredients');
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Сделать заказ:
@@ -42,7 +43,7 @@ export async function postOrder(data = {}) {
     },
     body: JSON.stringify(data),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Сброс пароля:
@@ -54,7 +55,7 @@ export async function passwordForgot(email) {
     },
     body: JSON.stringify({email}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Сброс пароля:
@@ -66,7 +67,7 @@ export async function passwordReset(password, token) {
     },
     body: JSON.stringify({password, token}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Регистрация:
@@ -78,7 +79,7 @@ export async function register(email, password, name) {
     },
     body: JSON.stringify({email, password, name}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Авторизация:
@@ -90,7 +91,7 @@ export async function login(email, password) {
     },
     body: JSON.stringify({email, password}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Выход из системы:
@@ -102,36 +103,39 @@ export async function logout() {
     },
     body: JSON.stringify({token: localStorage.getItem('refreshToken')}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
 // Обновление токена:
 export async function refreshTokenApi() {
-  const response = await fetch(BASE_URL + '/auth/refresh', {
+  const response = await fetch(BASE_URL + '/auth/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({token: localStorage.getItem('refreshToken')}),
   });
-  return checkResponse(response);
+  return await checkResponse(response);
 }
 
+
+/*
+ * Приватные запросы
+ */
 // Получение данных о пользователе:
 export async function getUserApi() {
-  const response = await fetchWithRefresh(BASE_URL + '/auth/user', {
+  return await fetchWithRefresh(BASE_URL + '/auth/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       authorization: getCookie('accessToken'),
     },
   });
-  return checkResponse(response);
 }
 
 // Редактирование данных пользователя:
 export async function updateUserApi(name, email, password) {
-  const response = await fetchWithRefresh(BASE_URL + '/auth/user', {
+  return await fetchWithRefresh(BASE_URL + '/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -139,5 +143,4 @@ export async function updateUserApi(name, email, password) {
     },
     body: JSON.stringify({name, email, password}),
   });
-  return checkResponse(response);
 }

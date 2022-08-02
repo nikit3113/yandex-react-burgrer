@@ -16,8 +16,6 @@ const initialState = {
 
   constructorItems: [],
 
-  currentItem: undefined,
-
   orderNumber: undefined,
   orderNumberRequest: false,
   orderNumberFailed: false,
@@ -61,18 +59,6 @@ const commonReducer = (state = initialState, action) => {
         orderNumberRequest: false,
         orderNumberFailed: false,
         constructorItems: initialState.constructorItems,
-      }
-    }
-    case SET_CURRENT_ITEM: {
-      return {
-        ...state,
-        currentItem: action.item,
-      }
-    }
-    case UNSET_CURRENT_ITEM: {
-      return {
-        ...state,
-        currentItem: initialState.currentItem,
       }
     }
     case GET_ORDER_NUMBER_FAILED: {

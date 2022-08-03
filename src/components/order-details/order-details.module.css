@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+.loader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .image {
     display: flex;
     height: 120px;

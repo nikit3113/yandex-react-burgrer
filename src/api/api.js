@@ -95,7 +95,7 @@ export async function login(email, password) {
 }
 
 // Выход из системы:
-export async function logout() {
+export async function logoutApi() {
   const response = await fetch(BASE_URL + '/auth/logout', {
     method: 'POST',
     headers: {

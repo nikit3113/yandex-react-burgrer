@@ -3,7 +3,8 @@ import {NavLink} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Input, PasswordInput, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useDispatch, useSelector} from "react-redux";
-import {getUser, updateUser} from "../../services/actions/user";
+import {getUser, logout, updateUser} from "../../services/actions/user";
+import {logoutApi} from "../../api/api";
 
 export function ProfilePage() {
   const dispatch = useDispatch();
@@ -44,6 +45,10 @@ export function ProfilePage() {
     setTimeout(() => inputRef.current.blur(), 0);
   }
 
+  const onLogout = () => {
+    dispatch(logout());
+  }
+
   return (
     <div className={`${styles.container}`}>
       <nav className={`${styles.links}`}>
@@ -61,14 +66,7 @@ export function ProfilePage() {
         >
           <p className={'text text_type_main-medium mt-2 mb-2'}>История заказов</p>
         </NavLink>
-        <NavLink
-          to={"logout"}
-          className={styles.link}
-          activeClassName={styles.active_link}
-        >
-          <p className={'text text_type_main-medium mt-2 mb-2'}>Выход</p>
-        </NavLink>
-
+        <button className={styles.button + ' text_type_main-medium mt-2'} onClick={onLogout}>Выход</button>
         <div className={`mt-20`}>
           <p className={`text text_type_main-default text_color_inactive`}>
             В этом разделе вы можете изменить свои персональные данные

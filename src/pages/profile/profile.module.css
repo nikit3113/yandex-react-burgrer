@@ -9,7 +9,7 @@
 .links {
     display: flex;
     flex-direction: column;
-    text-align: left;
+    align-items: start;
     width: 350px;
 }
 
@@ -17,6 +17,14 @@
     background-color: var(--background-alt);
     color: var(--text-inactive-color);
     text-decoration:none;
+}
+
+.button {
+    background-color: var(--background-alt);
+    color: var(--text-inactive-color);
+    padding: 0;
+    border: none;
+    cursor: pointer;
 }
 
 .active_link {

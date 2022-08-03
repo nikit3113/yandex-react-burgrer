@@ -1,5 +1,5 @@
-import {login, register, getUserApi, updateUserApi, saveTokens} from "../../api/api";
-import {setCookie} from "../../utils/cookie";
+import {login, register, getUserApi, updateUserApi, saveTokens, logoutApi} from "../../api/api";
+import {deleteCookie, setCookie} from "../../utils/cookie";
 
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
@@ -59,6 +59,19 @@ export function loginUser(email, password) {
           error: error?.message
         })
       })
+  }
+}
+
+export function logout() {
+  return function (dispatch) {
+    logoutApi().finally((data) => {
+      deleteCookie('accessToken');
+      localStorage.removeItem('refreshToken');
+      dispatch({
+        type: LOGOUT,
+        data: data?.user,
+      })
+    })
   }
 }
 

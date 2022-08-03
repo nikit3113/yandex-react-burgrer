@@ -1,10 +1,10 @@
 import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {Input, PasswordInput, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Input, EmailInput, Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, updateUser} from "../../services/actions/user";
-import {logoutApi} from "../../api/api";
+import Loader from "../../components/loader/loader";
 
 export function ProfilePage() {
   const dispatch = useDispatch();
@@ -15,6 +15,8 @@ export function ProfilePage() {
     email: {text: ''},
     password: {text: '', disabled: true}
   });
+
+  const isDefault = form.name.text.localeCompare(user.name) == 0 && form.email.text.localeCompare(user.email) == '0' && !form.password.text
 
   useEffect(() => {
     dispatch(getUser());
@@ -47,6 +49,18 @@ export function ProfilePage() {
 
   const onLogout = () => {
     dispatch(logout());
+  }
+
+  const onConfirmChange = () => {
+    dispatch(updateUser(form.name.text, form.email.text, form.password.text));
+  }
+
+  const onResetChange = () => {
+    setValue({
+      ...form,
+      name: {text: user?.name, disabled: form.name.disabled},
+      email: {text: user?.email, disabled: form.email.disabled},
+    });
   }
 
   return (
@@ -107,6 +121,16 @@ export function ProfilePage() {
             name="password"
             onChange={onChange}/>
         </div>
+        <div className={styles.buttons + ' mt-6'}>
+          <Button disabled={isDefault} onClick={onResetChange} type='secondary' htmlType={'reset'}>
+            Отмена
+          </Button>
+          <Button disabled={isDefault} onClick={onConfirmChange} type={'primary'} htmlType={'submit'}>
+            Сохранить
+          </Button>
+          {updateUserRequest && <Loader/>}
+        </div>
+        {updateUserError && <p className={'text text_type_main-default text_color_error mt-2'}>{updateUserError}</p>}
       </div>
     </div>
   )

@@ -34,18 +34,6 @@ export async function getIngredients() {
   return await checkResponse(response);
 }
 
-// Сделать заказ:
-export async function postOrder(data = {}) {
-  const response = await fetch(BASE_URL + '/orders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-  });
-  return await checkResponse(response);
-}
-
 // Сброс пароля:
 export async function passwordForgot(email) {
   const response = await fetch(BASE_URL + '/password-reset', {
@@ -143,4 +131,17 @@ export async function updateUserApi(name, email, password) {
     },
     body: JSON.stringify({name, email, password}),
   });
+}
+
+// Сделать заказ:
+export async function postOrder(data = {}) {
+  const response = await fetch(BASE_URL + '/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: getCookie('accessToken'),
+    },
+    body: JSON.stringify(data),
+  });
+  return await checkResponse(response);
 }

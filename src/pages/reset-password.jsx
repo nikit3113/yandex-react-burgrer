@@ -29,7 +29,8 @@ export function ResetPasswordPage() {
       <form>
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
         <div className={'mt-6 ' + styles.input}>
-          <PasswordInput
+          <Input
+            type={"password"}
             placeholder="Введите новый пароль"
             value={form.newPassword}
             name="newPassword"

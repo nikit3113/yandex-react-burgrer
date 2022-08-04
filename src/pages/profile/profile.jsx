@@ -1,6 +1,6 @@
 import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Input, EmailInput, Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, updateUser} from "../../services/actions/user";
@@ -16,7 +16,9 @@ export function ProfilePage() {
     password: {text: '', disabled: true}
   });
 
-  const isDefault = form.name.text.localeCompare(user.name) == 0 && form.email.text.localeCompare(user.email) == '0' && !form.password.text
+  const isDefault = form.name.text.localeCompare(user.name) === 0
+    && form.email.text.localeCompare(user.email) === 0
+    && !form.password.text;
 
   useEffect(() => {
     dispatch(getUser());
@@ -51,17 +53,21 @@ export function ProfilePage() {
     dispatch(logout());
   }
 
-  const onConfirmChange = () => {
-    dispatch(updateUser(form.name.text, form.email.text, form.password.text));
-  }
+  const onConfirmChange = useCallback(
+    e => {
+      e.preventDefault();
+      dispatch(updateUser(form.name.text, form.email.text, form.password.text));
+    }, [form]);
 
-  const onResetChange = () => {
-    setValue({
-      ...form,
-      name: {text: user?.name, disabled: form.name.disabled},
-      email: {text: user?.email, disabled: form.email.disabled},
-    });
-  }
+  const onResetChange = useCallback(
+    e => {
+      e.preventDefault();
+      setValue({
+        ...form,
+        name: {text: user?.name, disabled: form.name.disabled},
+        email: {text: user?.email, disabled: form.email.disabled},
+      });
+    }, [form, user]);
 
   return (
     <div className={`${styles.container}`}>
@@ -69,15 +75,13 @@ export function ProfilePage() {
         <NavLink
           to={""}
           className={styles.link}
-          activeClassName={styles.active_link}
-        >
+          activeClassName={styles.active_link}>
           <p className={'text text_type_main-medium mt-2 mb-2'}>Профиль</p>
         </NavLink>
         <NavLink
           to={"orders"}
           className={styles.link}
-          activeClassName={styles.active_link}
-        >
+          activeClassName={styles.active_link}>
           <p className={'text text_type_main-medium mt-2 mb-2'}>История заказов</p>
         </NavLink>
         <button className={styles.button + ' text_type_main-medium mt-2'} onClick={onLogout}>Выход</button>
@@ -87,7 +91,7 @@ export function ProfilePage() {
           </p>
         </div>
       </nav>
-      <div className={`ml-15 ${styles.editor}`}>
+      <form className={`ml-15 ${styles.editor}`} onSubmit={onConfirmChange} onReset={onResetChange}>
         <div>
           <Input
             type={'text'}
@@ -122,16 +126,16 @@ export function ProfilePage() {
             onChange={onChange}/>
         </div>
         <div className={styles.buttons + ' mt-6'}>
-          <Button disabled={isDefault} onClick={onResetChange} type='secondary' htmlType={'reset'}>
+          <Button disabled={isDefault} type='secondary' htmlType={'reset'}>
             Отмена
           </Button>
-          <Button disabled={isDefault} onClick={onConfirmChange} type={'primary'} htmlType={'submit'}>
+          <Button disabled={isDefault} type={'primary'} htmlType={'submit'}>
             Сохранить
           </Button>
           {updateUserRequest && <Loader/>}
         </div>
         {updateUserError && <p className={'text text_type_main-default text_color_error mt-2'}>{updateUserError}</p>}
-      </div>
+      </form>
     </div>
   )
 }

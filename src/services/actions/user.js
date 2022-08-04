@@ -64,14 +64,11 @@ export function loginUser(email, password) {
 
 export function logout() {
   return function (dispatch) {
-    logoutApi().finally((data) => {
       deleteCookie('accessToken');
       localStorage.removeItem('refreshToken');
       dispatch({
         type: LOGOUT,
-        data: data?.user,
       })
-    })
   }
 }
 

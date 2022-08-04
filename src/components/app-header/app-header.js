@@ -1,7 +1,7 @@
 import React from "react";
 import {Logo, BurgerIcon, ListIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import headerStyle from './app-header.module.css';
-import {NavLink, useRouteMatch} from 'react-router-dom';
+import {Link, NavLink, useRouteMatch} from 'react-router-dom';
 
 const LINK_MARGIN = 'p-5 mt-4 mb-4';
 
@@ -34,9 +34,9 @@ function AppHeader() {
             <p className={'text text_type_main-default ml-2'}>Лента заказов</p>
           </NavLink>
         </div>
-
-        <Logo/>
-
+        <Link to={'/'}>
+          <Logo/>
+        </Link>
         <NavLink
           to='/profile'
           className={[headerStyle.link, LINK_MARGIN].join(' ')}

@@ -123,7 +123,7 @@ export function checkToken() {
             type: AUTH_CHECKOUT_SUCCESS,
           }
         )
-      }) //todo finally срабатывает раньше чем выполняется then и catch... надо разобарться почему
+      })
   }
 }
 

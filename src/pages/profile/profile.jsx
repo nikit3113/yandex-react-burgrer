@@ -65,7 +65,8 @@ export function ProfilePage() {
       setValue({
         ...form,
         name: {text: user?.name, disabled: form.name.disabled},
-        email: {text: user?.email, disabled: form.email.disabled},
+        email: {text: user?.email},
+        password: {text: '', disabled: form.password.disabled},
       });
     }, [form, user]);
 

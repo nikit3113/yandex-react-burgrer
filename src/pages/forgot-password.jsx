@@ -1,42 +1,38 @@
 import styles from './home.module.css';
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {passwordForgot} from "../api/api";
+import {useForm} from "../hooks/useForm";
 
 export function ForgotPasswordPage() {
-  const [form, setValue] = useState({email: ''});
-  const history = useHistory();
+  const {values, handleChange} = useForm({email: ''});
 
-  const onChange = e => {
-    setValue({...form, [e.target.name]: e.target.value});
-  };
+  const history = useHistory();
 
   const onConfirm = useCallback(
     async e => {
       e.preventDefault();
-      await passwordForgot(form.email)
+      await passwordForgot(values.email)
         .then(() => {
           history.replace({pathname: '/reset-password'});
         })
         .catch((er) => console.error(er))
-    },
-    [form]
-  );
+    }, [values]);
 
   return (
     <div className={styles.container}>
-      <form>
+      <form onSubmit={onConfirm}>
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
         <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="Укажите e-mail"
-            value={form.email}
+            value={values.email}
             name="email"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
-          <Button onClick={onConfirm} primary={true}>
+          <Button primary={true} htmlType={"submit"}>
             Восстановить
           </Button>
         </div>

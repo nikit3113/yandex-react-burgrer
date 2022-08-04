@@ -1,50 +1,46 @@
 import styles from './home.module.css';
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {passwordReset} from "../api/api";
+import {useForm} from "../hooks/useForm";
 
 export function ResetPasswordPage() {
-  const [form, setValue] = useState({newPassword: '', secretCode: ''});
-  const history = useHistory();
+  const {values, handleChange} = useForm({newPassword: '', secretCode: ''});
 
-  const onChange = e => {
-    setValue({...form, [e.target.name]: e.target.value});
-  };
+  const history = useHistory();
 
   const onConfirm = useCallback(
     async e => {
       e.preventDefault();
-      await passwordReset(form.newPassword, form.secretCode)
+      await passwordReset(values.newPassword, values.secretCode)
         .then(() => {
           history.replace({pathname: '/login'});
         })
         .catch((er) => console.error(er))
-    },
-    [form]
-  );
+    }, [values]);
 
   return (
     <div className={styles.container}>
-      <form>
+      <form onSubmit={onConfirm}>
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
         <div className={'mt-6 ' + styles.input}>
           <Input
             type={"password"}
             placeholder="Введите новый пароль"
-            value={form.newPassword}
+            value={values.newPassword}
             name="newPassword"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="Введите код из письма"
-            value={form.secretCode}
+            value={values.secretCode}
             name="secretCode"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
-          <Button onClick={onConfirm} primary={true}>
+          <Button primary={true} htmlType={"submit"}>
             Сохранить
           </Button>
         </div>

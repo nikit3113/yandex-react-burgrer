@@ -1,55 +1,51 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {Link} from "react-router-dom";
 import {registerUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
+import {useForm} from "../hooks/useForm";
 
 export function RegisterPage() {
-  const [form, setValue] = useState({name: '', email: '', password: ''});
+  const {values, handleChange} = useForm({name: '', email: '', password: ''});
+
   const dispatch = useDispatch();
   const {registerUserRequest, registerUserError} = useSelector(store => store.user);
-
-  const onChange = e => {
-    setValue({...form, [e.target.name]: e.target.value});
-  };
 
   const onRegister = useCallback(
     e => {
       e.preventDefault();
-      dispatch(registerUser(form.email, form.password, form.name));
-    },
-    [form]
-  );
+      dispatch(registerUser(values.email, values.password, values.name));
+    }, [values]);
 
   return (
     <div className={styles.container}>
-      <form>
+      <form onSubmit={onRegister}>
         <h1 className={'text_type_main-large'}>Регистрация</h1>
         <div className={'mt-6'}>
           <Input
             placeholder="Имя"
-            value={form.name}
+            value={values.name}
             name="name"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
           <Input
             placeholder="E-mail"
-            value={form.email}
+            value={values.email}
             name="email"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
           <PasswordInput
             placeholder="Пароль"
-            value={form.password}
+            value={values.password}
             name="password"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={styles.button_container + ' mt-6'}>
-          <Button disabled={registerUserRequest} onClick={onRegister} primary={true}>
+          <Button disabled={registerUserRequest} htmlType={"submit"} primary={true}>
             Зарегистрироваться
           </Button>
           {registerUserRequest && <Loader/>}

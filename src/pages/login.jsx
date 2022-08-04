@@ -1,47 +1,44 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback, useState} from "react";
+import {useCallback} from "react";
 import {Link} from "react-router-dom";
 import {loginUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
+import {useForm} from "../hooks/useForm";
 
 export function LoginPage() {
-  const [form, setValue] = useState({email: '', password: ''});
+  const {values, handleChange} = useForm({email: '', password: ''});
 
   const dispatch = useDispatch();
   const {loginUserRequest, loginUserError} = useSelector(store => store.user);
 
-  const onChange = e => {
-    setValue({...form, [e.target.name]: e.target.value});
-  };
-
   const onLogin = useCallback(
     e => {
       e.preventDefault();
-      dispatch(loginUser(form.email, form.password));
-    }, [form]);
+      dispatch(loginUser(values.email, values.password));
+    }, [values]);
 
   return (
     <div className={styles.container}>
-      <form>
+      <form onSubmit={onLogin}>
         <h1 className={'text_type_main-large'}>Вход</h1>
         <div className={'mt-6 ' + styles.input}>
           <Input
             placeholder="E-mail"
-            value={form.email}
+            value={values.email}
             name="email"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={'mt-6 ' + styles.input}>
           <PasswordInput
             placeholder="Пароль"
-            value={form.password}
+            value={values.password}
             name="password"
-            onChange={onChange}/>
+            onChange={handleChange}/>
         </div>
         <div className={styles.button_container + ' mt-6'}>
-          <Button disabled={loginUserRequest} onClick={onLogin} primary={true}>
+          <Button disabled={loginUserRequest} htmlType={"submit"} primary={true}>
             Войти
           </Button>
           {loginUserRequest && <Loader/>}

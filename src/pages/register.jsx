@@ -9,13 +9,13 @@ import Loader from "../components/loader/loader";
 export function RegisterPage() {
   const [form, setValue] = useState({name: '', email: '', password: ''});
   const dispatch = useDispatch();
-  const {user, registerUserRequest, registerUserError} = useSelector(store => store.user);
+  const {registerUserRequest, registerUserError} = useSelector(store => store.user);
 
   const onChange = e => {
     setValue({...form, [e.target.name]: e.target.value});
   };
 
-  let onRegister = useCallback(
+  const onRegister = useCallback(
     e => {
       e.preventDefault();
       dispatch(registerUser(form.email, form.password, form.name));
@@ -54,7 +54,8 @@ export function RegisterPage() {
           </Button>
           {registerUserRequest && <Loader/>}
         </div>
-        {registerUserError && <p className={'text text_type_main-default text_color_error mt-2'}>{registerUserError}</p>}
+        {registerUserError &&
+          <p className={'text text_type_main-default text_color_error mt-2'}>{registerUserError}</p>}
       </form>
       <p className={`text text_type_main-default text_color_inactive mt-20`}>
         Уже зарегистрированы?{" "}

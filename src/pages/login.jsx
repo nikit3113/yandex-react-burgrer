@@ -1,7 +1,7 @@
 import styles from './home.module.css';
 import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useCallback, useState} from "react";
-import {Link, Redirect, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {loginUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
@@ -16,7 +16,7 @@ export function LoginPage() {
     setValue({...form, [e.target.name]: e.target.value});
   };
 
-  let login = useCallback(
+  const onLogin = useCallback(
     e => {
       e.preventDefault();
       dispatch(loginUser(form.email, form.password));
@@ -41,7 +41,7 @@ export function LoginPage() {
             onChange={onChange}/>
         </div>
         <div className={styles.button_container + ' mt-6'}>
-          <Button disabled={loginUserRequest} onClick={login} primary={true}>
+          <Button disabled={loginUserRequest} onClick={onLogin} primary={true}>
             Войти
           </Button>
           {loginUserRequest && <Loader/>}

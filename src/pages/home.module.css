@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+}
+
+.button_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

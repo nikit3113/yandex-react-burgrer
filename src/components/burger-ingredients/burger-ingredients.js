@@ -4,8 +4,8 @@ import ingredientsStyles from './burgrer-ingredients.module.css';
 import PropTypes, {shape} from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
-import {SET_CURRENT_ITEM} from "../../services/actions";
 import {IngredientPropType} from "../../utils/types";
+import {Link, useLocation} from "react-router-dom";
 
 const Tabs = ({currentTab, setCurrentTab}) => {
   const onTabClick = (tab) => {
@@ -69,20 +69,12 @@ IngredientList.propTypes = {
 };
 
 const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
-  const dispatch = useDispatch();
   return (
     <>
       <h1 className='text_type_main-medium' id={id} ref={refer}>{title}</h1>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
         {ingredients.map((ingredient) =>
           <IngredientCard
-            onClick={() => {
-              dispatch(
-                {
-                  type: SET_CURRENT_ITEM,
-                  item: ingredient,
-                })
-            }}
             key={ingredient._id}
             id={ingredient._id}
             text={ingredient.name}
@@ -101,8 +93,9 @@ IngredientsCategoryList.propTypes = {
   refer: PropTypes.any,
 };
 
-const IngredientCard = ({text, thumbnail, price, onClick, id, type}) => {
+const IngredientCard = ({text, thumbnail, price, id, type}) => {
   const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id ? ++prev : prev, 0);
+  const location = useLocation();
 
   const [{opacity}, ref] = useDrag({
     type: type,
@@ -113,25 +106,32 @@ const IngredientCard = ({text, thumbnail, price, onClick, id, type}) => {
   })
 
   return (
-    <div onClick={onClick} ref={ref} style={{opacity}}>
-      <div className={ingredientsStyles.counter_container}>
-        {!!count && <Counter count={count}/>}
-      </div>
-      <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
-      <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
+    <Link
+      className={ingredientsStyles.link}
+      to={{
+        pathname: 'ingredients/' + id,
+        state: {background: location},
+      }}
+    >
+      <div ref={ref} style={{opacity}}>
+        <div className={ingredientsStyles.counter_container}>
+          {!!count && <Counter count={count}/>}
+        </div>
+        <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
+        <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
         {price}
-        <CurrencyIcon type={'primary'}/>
+          <CurrencyIcon type={'primary'}/>
           </span>
-      <span
-        className={ingredientsStyles.ingredient_card__text + " text text_type_main-default pb-8"}>{text}</span>
-    </div>
+        <span
+          className={ingredientsStyles.ingredient_card__text + " text text_type_main-default pb-8"}>{text}</span>
+      </div>
+    </Link>
   )
 }
 IngredientCard.propTypes = {
   text: PropTypes.string.isRequired,
   thumbnail: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
 };

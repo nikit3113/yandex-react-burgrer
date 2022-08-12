@@ -11,6 +11,7 @@ import {
   dispatchOrderNumber,
 } from "../../services/actions";
 import {ConstructorItemPropType} from "../../utils/types";
+import {useHistory} from "react-router-dom";
 
 const ConstructorItem = ({ingredient}) => {
   const dispatch = useDispatch();
@@ -76,7 +77,9 @@ ConstructorItem.propTypes = {
 
 function BurgerConstructor({openOrderModal}) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {constructorItems} = useSelector(state => state.common);
+  const {user} = useSelector(store => store.user);
   const bun = constructorItems.find((item) => item.type === 'bun');
   const buttonDisabled = !constructorItems.length;
 
@@ -91,6 +94,10 @@ function BurgerConstructor({openOrderModal}) {
   });
 
   function handleCheckoutButton() {
+    if (!user) {
+      history.push('/login');
+      return;
+    }
     dispatch(dispatchOrderNumber({ingredients: [...constructorItems.map((el => el._id))]}));
     openOrderModal();
   }

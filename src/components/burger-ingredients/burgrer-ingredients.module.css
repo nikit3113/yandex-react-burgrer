@@ -51,5 +51,10 @@
     margin-left: 9px;
 }
 
+.link {
+    color: var(--text-primary-color);
+    text-decoration:none;
+}
+
 
 

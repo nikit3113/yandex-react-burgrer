@@ -1,0 +1,14 @@
+.loader {
+    margin: 15px;
+    border: 8px solid; /* Light grey */
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #801AB3 0%, #4C4CFF 100%);;
+    width: 20px;
+    height: 20px;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

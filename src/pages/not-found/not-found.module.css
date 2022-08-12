@@ -1,0 +1,15 @@
+.container {
+    margin: 30px auto;
+}
+
+.link {
+    color: #7153fc;
+}
+
+.image {
+    height: 60vh;
+    width: auto;
+    padding: 10px;
+    background: transparent;
+    object-fit: contain;
+}

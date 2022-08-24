@@ -10,7 +10,7 @@ import {
   addToConstructor,
   dispatchOrderNumber,
 } from "../../services/actions";
-import {ConstructorItemPropType} from "../../utils/types";
+import {TConstructorItem} from "../../utils/types";
 import {useHistory} from "react-router-dom";
 
 const ConstructorItem = ({ingredient}) => {

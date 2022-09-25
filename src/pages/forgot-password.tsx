@@ -1,24 +1,24 @@
 import styles from './home.module.css';
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback} from "react";
+import {FormEvent, useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {passwordReset} from "../api/api";
+import {passwordForgot} from "../api/api";
 import {useForm} from "../hooks/useForm";
 
-export function ResetPasswordPage() {
-  const {values, handleChange} = useForm({newPassword: '', secretCode: ''});
+export function ForgotPasswordPage() {
+  const {values, handleChange} = useForm({email: ''});
 
   const history = useHistory();
 
   const onConfirm = useCallback(
-    async e => {
+    async (e: FormEvent) => {
       e.preventDefault();
-      await passwordReset(values.newPassword, values.secretCode)
+      await passwordForgot(values.email)
         .then(() => {
-          history.replace({pathname: '/login'});
+          history.replace({pathname: '/reset-password'});
         })
         .catch((er) => console.error(er))
-    }, [values]);
+    }, [values, history]);
 
   return (
     <div className={styles.container}>
@@ -26,22 +26,15 @@ export function ResetPasswordPage() {
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
         <div className={'mt-6 ' + styles.input}>
           <Input
-            type={"password"}
-            placeholder="Введите новый пароль"
-            value={values.newPassword}
-            name="newPassword"
-            onChange={handleChange}/>
-        </div>
-        <div className={'mt-6 ' + styles.input}>
-          <Input
-            placeholder="Введите код из письма"
-            value={values.secretCode}
-            name="secretCode"
+            placeholder="Укажите e-mail"
+            value={values.email}
+            name="email"
             onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
+          {/* @ts-ignore*/}
           <Button primary={true} htmlType={"submit"}>
-            Сохранить
+            Восстановить
           </Button>
         </div>
       </form>

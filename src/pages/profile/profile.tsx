@@ -1,16 +1,22 @@
 import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {RefObject, useCallback, useEffect, useState} from "react";
 import {Input, EmailInput, Button} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, updateUser} from "../../services/actions/user";
 import Loader from "../../components/loader/loader";
 
+type TFormState = {
+  name: { text: string, disabled: boolean },
+  email: { text: string },
+  password: { text: string, disabled: boolean },
+}
+
 export function ProfilePage() {
   const dispatch = useDispatch();
-  const {user, updateUserRequest, updateUserError} = useSelector(store => store.user);
+  const {user, updateUserRequest, updateUserError} = useSelector((store: any) => store.user);
 
-  const [form, setValue] = useState({
+  const [form, setValue] = useState<TFormState>({
     name: {text: '', disabled: true},
     email: {text: ''},
     password: {text: '', disabled: true}
@@ -21,46 +27,51 @@ export function ProfilePage() {
     && !form.password.text;
 
   useEffect(() => {
-    dispatch(getUser());
-  }, [])
+    dispatch<any>(getUser());
+  }, [dispatch])
 
   useEffect(() => {
     setValue({
       ...form,
       name: {text: user?.name, disabled: form.name.disabled},
-      email: {text: user?.email, disabled: form.email.disabled},
+      email: {text: user?.email},
     });
-  }, [user])
+  }, [user, form])
 
-  const onChange = e => {
-    setValue({...form, [e.target.name]: {text: e.target.value, disabled: form[e.target.name].disabled}});
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue({
+      ...form, [e.target.name]: {
+        text: e.target.value,
+        disabled: (form as any)[e.target.name].disabled
+      }
+    });
   };
 
-  const inputRefName = React.useRef(null);
-  const inputRefPass = React.useRef(null);
+  const inputRefName: RefObject<HTMLInputElement> = React.useRef(null);
+  const inputRefPass: RefObject<HTMLInputElement> = React.useRef(null);
 
-  const onIconClick = (type, inputRef) => {
-    setValue({...form, [type]: {text: form[type].text, disabled: false}});
+  const onIconClick = (type: string, inputRef: RefObject<any>) => {
+    setValue({...form, [type]: {text: (form as any)[type].text, disabled: false}});
     setTimeout(() => inputRef.current.focus(), 0);
   }
 
-  const onBlur = (type, inputRef) => {
-    setValue({...form, [type]: {text: form[type].text, disabled: true}});
+  const onBlur = (type: string, inputRef: RefObject<any>) => {
+    setValue({...form, [type]: {text: (form as any)[type].text, disabled: true}});
     setTimeout(() => inputRef.current.blur(), 0);
   }
 
   const onLogout = () => {
-    dispatch(logout());
+    dispatch<any>(logout());
   }
 
-  const onConfirmChange = useCallback(
-    e => {
+  const onConfirmChange: any = useCallback(
+    (e: Event) => {
       e.preventDefault();
-      dispatch(updateUser(form.name.text, form.email.text, form.password.text));
-    }, [form]);
+      dispatch<any>(updateUser(form.name.text, form.email.text, form.password.text));
+    }, [form, dispatch]);
 
-  const onResetChange = useCallback(
-    e => {
+  const onResetChange: any = useCallback(
+    (e: Event) => {
       e.preventDefault();
       setValue({
         ...form,
@@ -108,7 +119,6 @@ export function ProfilePage() {
         </div>
         <div className={'mt-6'}>
           <EmailInput
-            placeholder="Логин"
             value={form.email.text}
             name="email"
             onChange={onChange}/>
@@ -127,9 +137,11 @@ export function ProfilePage() {
             onChange={onChange}/>
         </div>
         <div className={styles.buttons + ' mt-6'}>
+          {/* @ts-ignore*/}
           <Button disabled={isDefault} type='secondary' htmlType={'reset'}>
             Отмена
           </Button>
+          {/* @ts-ignore*/}
           <Button disabled={isDefault} type={'primary'} htmlType={'submit'}>
             Сохранить
           </Button>

@@ -1,24 +1,24 @@
 import styles from './home.module.css';
 import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback} from "react";
+import {FormEvent, useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
-import {passwordForgot} from "../api/api";
+import {passwordReset} from "../api/api";
 import {useForm} from "../hooks/useForm";
 
-export function ForgotPasswordPage() {
-  const {values, handleChange} = useForm({email: ''});
+export function ResetPasswordPage() {
+  const {values, handleChange} = useForm({newPassword: '', secretCode: ''});
 
   const history = useHistory();
 
   const onConfirm = useCallback(
-    async e => {
+    async (e:FormEvent) => {
       e.preventDefault();
-      await passwordForgot(values.email)
+      await passwordReset(values.newPassword, values.secretCode)
         .then(() => {
-          history.replace({pathname: '/reset-password'});
+          history.replace({pathname: '/login'});
         })
         .catch((er) => console.error(er))
-    }, [values]);
+    }, [history, values.newPassword, values.secretCode]);
 
   return (
     <div className={styles.container}>
@@ -26,14 +26,23 @@ export function ForgotPasswordPage() {
         <h1 className={'text_type_main-large'}>Восстановление пароля</h1>
         <div className={'mt-6 ' + styles.input}>
           <Input
-            placeholder="Укажите e-mail"
-            value={values.email}
-            name="email"
+            type={"password"}
+            placeholder="Введите новый пароль"
+            value={values.newPassword}
+            name="newPassword"
+            onChange={handleChange}/>
+        </div>
+        <div className={'mt-6 ' + styles.input}>
+          <Input
+            placeholder="Введите код из письма"
+            value={values.secretCode}
+            name="secretCode"
             onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
+          {/* @ts-ignore*/}
           <Button primary={true} htmlType={"submit"}>
-            Восстановить
+            Сохранить
           </Button>
         </div>
       </form>

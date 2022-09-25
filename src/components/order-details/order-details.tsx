@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import Loader from "../loader/loader";
 
 function OrderDetails() {
-  const {orderNumber, orderNumberFailed, orderNumberRequest} = useSelector(store => store.common);
+  const {orderNumber, orderNumberFailed, orderNumberRequest} = useSelector((store: any) => store.common);
   return (
     <div className={styles.root}>
       {orderNumberRequest ? (

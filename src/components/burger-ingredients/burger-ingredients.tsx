@@ -1,43 +1,58 @@
-import React, {useMemo, useRef} from "react";
+import React, {FC, useMemo, useRef} from "react";
 import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
-import ingredientsStyles from './burgrer-ingredients.module.css';
-import PropTypes, {shape} from "prop-types";
-import {useDispatch, useSelector} from "react-redux";
+import ingredientsStyles from './burger-ingredients.module.css';
+import {useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
-import {IngredientPropType} from "../../utils/types";
 import {Link, useLocation} from "react-router-dom";
+import {TIngredient} from "../../utils/types";
 
-const Tabs = ({currentTab, setCurrentTab}) => {
-  const onTabClick = (tab) => {
+
+type TTabsProps = {
+  readonly currentTab: string;
+  readonly setCurrentTab: (tab: string) => void;
+};
+const Tabs = ({currentTab, setCurrentTab}: TTabsProps) => {
+  const onTabClick = (tab: string) => {
     setCurrentTab(tab);
     const headerCategory = document.getElementById(tab);
     if (headerCategory) headerCategory.scrollIntoView({behavior: 'smooth'});
   }
   return (
     <div className={ingredientsStyles.tabs}>
+      {/* @ts-ignore */}
       <Tab value="buns" active={currentTab === 'buns'} onClick={onTabClick}>Булки</Tab>
+      {/* @ts-ignore */}
       <Tab value="sauces" active={currentTab === 'sauces'} onClick={onTabClick}>Соусы</Tab>
+      {/* @ts-ignore */}
       <Tab value="mains" active={currentTab === 'mains'} onClick={onTabClick}>Начинки</Tab>
     </div>
   )
 }
 
-const IngredientList = ({ingredients, setCurrentTab}) => {
-  const buns = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'bun'), [ingredients]);
-  const sauces = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'sauce'), [ingredients]);
-  const mains = useMemo(() => ingredients.filter(ingredient => ingredient.type === 'main'), [ingredients]);
+type TIngredientListProps = {
+  readonly ingredients: Array<TIngredient>;
+  readonly setCurrentTab: (tab: string) => void;
+}
+const IngredientList = ({ingredients, setCurrentTab}: TIngredientListProps) => {
+  const buns = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'bun'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'sauce'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'main'), [ingredients]);
 
-  const scrollRef = useRef(null),
-    bunsHeaderRef = useRef(null),
-    sauceHeaderRef = useRef(null),
-    mainHeaderRef = useRef(null);
+  const scrollRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null),
+    bunsHeaderRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null),
+    sauceHeaderRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null),
+    mainHeaderRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const scrollHandler = () => {
-    const scrollPosition = scrollRef.current.getBoundingClientRect().top;
+    const scrollPosition = scrollRef.current?.getBoundingClientRect().top;
+    const bunsHeaderPosition = bunsHeaderRef.current?.getBoundingClientRect().top;
+    const saucesHeaderPosition = sauceHeaderRef.current?.getBoundingClientRect().top;
+    const mainsHeaderPosition = mainHeaderRef.current?.getBoundingClientRect().top;
 
-    const bunsHeaderPosition = bunsHeaderRef.current.getBoundingClientRect().top;
-    const saucesHeaderPosition = sauceHeaderRef.current.getBoundingClientRect().top;
-    const mainsHeaderPosition = mainHeaderRef.current.getBoundingClientRect().top;
+    if (scrollPosition === undefined) return;
+    if (bunsHeaderPosition === undefined) return;
+    if (saucesHeaderPosition === undefined) return;
+    if (mainsHeaderPosition === undefined) return;
 
     const bunDiff = Math.abs(scrollPosition - bunsHeaderPosition);
     const sauceDiff = Math.abs(scrollPosition - saucesHeaderPosition);
@@ -63,17 +78,20 @@ const IngredientList = ({ingredients, setCurrentTab}) => {
     </div>
   )
 }
-IngredientList.propTypes = {
-  ingredients: PropTypes.arrayOf(shape(IngredientPropType)).isRequired,
-  setCurrentTab: PropTypes.func.isRequired,
-};
 
-const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
+
+type TIngredientsCategoryListProps = {
+  readonly title: string;
+  readonly ingredients: Array<TIngredient>;
+  readonly id: string;
+  readonly refer: React.RefObject<HTMLDivElement>;
+};
+const IngredientsCategoryList = ({title, ingredients, id, refer}: TIngredientsCategoryListProps) => {
   return (
     <>
       <h1 className='text_type_main-medium' id={id} ref={refer}>{title}</h1>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
-        {ingredients.map((ingredient) =>
+        {ingredients.map((ingredient: TIngredient) =>
           <IngredientCard
             key={ingredient._id}
             id={ingredient._id}
@@ -86,15 +104,19 @@ const IngredientsCategoryList = ({title, ingredients, id, refer}) => {
     </>
   )
 }
-IngredientsCategoryList.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(shape(IngredientPropType)).isRequired,
-  id: PropTypes.string.isRequired,
-  refer: PropTypes.any,
-};
 
-const IngredientCard = ({text, thumbnail, price, id, type}) => {
-  const count = useSelector(store => store.common.constructorItems).reduce((prev, cur) => cur._id === id ? ++prev : prev, 0);
+
+type TIngredientCardProps = {
+  readonly text: string,
+  readonly thumbnail: string,
+  readonly price: number,
+  readonly id: string,
+  readonly type: string
+}
+const IngredientCard: FC<TIngredientCardProps> = ({text, thumbnail, price, id, type}: TIngredientCardProps) => {
+  const count = useSelector((store: any) => store.common.constructorItems).reduce(
+    (prev: number, cur: TIngredient) => cur._id === id ? ++prev : prev, 0
+  );
   const location = useLocation();
 
   const [{opacity}, ref] = useDrag({
@@ -118,7 +140,8 @@ const IngredientCard = ({text, thumbnail, price, id, type}) => {
           {!!count && <Counter count={count}/>}
         </div>
         <img className={ingredientsStyles.ingredient_card__image} src={thumbnail} alt={thumbnail}/>
-        <span className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
+        <span
+          className={ingredientsStyles.ingredient_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
         {price}
           <CurrencyIcon type={'primary'}/>
           </span>
@@ -128,16 +151,9 @@ const IngredientCard = ({text, thumbnail, price, id, type}) => {
     </Link>
   )
 }
-IngredientCard.propTypes = {
-  text: PropTypes.string.isRequired,
-  thumbnail: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 function BurgerIngredients() {
-  const {ingredients} = useSelector(store => store.common);
+  const {ingredients} = useSelector((store: any) => store.common);
   const [currentTab, setCurrentTab] = React.useState('buns')
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>
@@ -145,8 +161,7 @@ function BurgerIngredients() {
       <Tabs currentTab={currentTab} setCurrentTab={setCurrentTab}/>
       <IngredientList
         ingredients={ingredients}
-        setCurrentTab={setCurrentTab}>
-      </IngredientList>
+        setCurrentTab={setCurrentTab}/>
     </section>
   );
 }

@@ -16,3 +16,7 @@ export type TIngredient = {
 export type TConstructorItem = TIngredient & {
   readonly id: string,
 }
+
+export type TArrayToSend = {
+  ingredients: Array<string>,
+}

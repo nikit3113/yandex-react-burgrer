@@ -2,14 +2,19 @@ import React, {useMemo} from 'react';
 import styles from './ingredient-details.module.css'
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {TIngredient} from "../../utils/types";
 
 function IngredientDetails() {
-  const {ingredients} = useSelector(store => store.common);
-  const {ingredientId} = useParams();
-  const ingredient = useMemo(() => ingredients.find(ingredient => ingredient._id === ingredientId), [ingredients]);
+  const {ingredients} = useSelector((store: any) => store.common);
+  const {ingredientId} = useParams<any>(); //todo fix any
+  const ingredient = useMemo(() =>
+      ingredients.find((ingredient: TIngredient) => ingredient._id === ingredientId)
+    , [ingredientId, ingredients]);
 
   if (!ingredient) {
-    return 'Ингредиент не найден...';
+    return (
+      <p className={'text_type_main-medium pt-4 pb-8'}>'Ингредиент не найден...'</p>
+    );
   }
 
   return (

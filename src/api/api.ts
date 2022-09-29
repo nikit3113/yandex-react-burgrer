@@ -38,7 +38,7 @@ export async function getIngredients() {
 
 // Сброс пароля:
 export async function passwordForgot(email: string) {
-    const response: Response = await fetch(BASE_URL + '/password-reset', {
+    const response = await fetch(BASE_URL + '/password-reset', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export async function passwordForgot(email: string) {
 
 // Сброс пароля:
 export async function passwordReset(password: string, token: string) {
-    const response: Response = await fetch(BASE_URL + '/password-reset/reset', {
+    const response = await fetch(BASE_URL + '/password-reset/reset', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export async function passwordReset(password: string, token: string) {
 
 // Регистрация:
 export async function register(email: string, password: string, name: string) {
-    const response: Response = await fetch(BASE_URL + '/auth/register', {
+    const response = await fetch(BASE_URL + '/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ export async function register(email: string, password: string, name: string) {
 
 // Авторизация:
 export async function login(email: string, password: string) {
-    const response: Response = await fetch(BASE_URL + '/auth/login', {
+    const response = await fetch(BASE_URL + '/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ export async function login(email: string, password: string) {
 
 // Выход из системы:
 export async function logoutApi() {
-    const response: Response = await fetch(BASE_URL + '/auth/logout', {
+    const response = await fetch(BASE_URL + '/auth/logout', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ export async function logoutApi() {
 
 // Обновление токена:
 export async function refreshTokenApi() {
-    const response: Response = await fetch(BASE_URL + '/auth/token', {
+    const response = await fetch(BASE_URL + '/auth/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

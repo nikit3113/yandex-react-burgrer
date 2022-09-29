@@ -11,7 +11,7 @@ type TModalProps = JSX.IntrinsicElements["div"] & {
 
 function Modal({children, textHeader, onClose}: TModalProps) {
   useEffect(() => {
-    function onEscape(e: any) {
+    function onEscape(e: KeyboardEvent) {
       if (e.key === "Escape") {
         onClose();
       }

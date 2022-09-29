@@ -1,11 +1,12 @@
 import styles from './home.module.css';
-import {Button, Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {FormEvent, useCallback} from "react";
 import {Link} from "react-router-dom";
 import {registerUser} from "../services/actions/user";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
 import {useForm} from "../hooks/useForm";
+import {Button} from "../components/fixed-ya-components-to-react18";
 
 export function RegisterPage() {
   const {values, handleChange} = useForm({name: '', email: '', password: ''});
@@ -44,8 +45,7 @@ export function RegisterPage() {
             onChange={handleChange}/>
         </div>
         <div className={styles.button_container + ' mt-6'}>
-          {/* @ts-ignore*/}
-          <Button disabled={registerUserRequest} htmlType={"submit"} primary={true}>
+          <Button disabled={registerUserRequest} htmlType={"submit"}>
             Зарегистрироваться
           </Button>
           {registerUserRequest && <Loader/>}

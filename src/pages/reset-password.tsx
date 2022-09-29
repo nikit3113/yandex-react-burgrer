@@ -1,9 +1,10 @@
 import styles from './home.module.css';
-import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Input} from "@ya.praktikum/react-developer-burger-ui-components";
 import {FormEvent, useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {passwordReset} from "../api/api";
 import {useForm} from "../hooks/useForm";
+import {Button} from "../components/fixed-ya-components-to-react18";
 
 export function ResetPasswordPage() {
   const {values, handleChange} = useForm({newPassword: '', secretCode: ''});
@@ -40,8 +41,7 @@ export function ResetPasswordPage() {
             onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
-          {/* @ts-ignore*/}
-          <Button primary={true} htmlType={"submit"}>
+          <Button htmlType={"submit"}>
             Сохранить
           </Button>
         </div>

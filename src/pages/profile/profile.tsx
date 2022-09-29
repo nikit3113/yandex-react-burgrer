@@ -1,10 +1,11 @@
 import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
 import React, {RefObject, useCallback, useEffect, useState} from "react";
-import {Input, EmailInput, Button} from "@ya.praktikum/react-developer-burger-ui-components";
+import {Input, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, updateUser} from "../../services/actions/user";
 import Loader from "../../components/loader/loader";
+import {Button} from "../../components/fixed-ya-components-to-react18";
 
 type TFormState = {
   name: { text: string, disabled: boolean },
@@ -137,11 +138,9 @@ export function ProfilePage() {
             onChange={onChange}/>
         </div>
         <div className={styles.buttons + ' mt-6'}>
-          {/* @ts-ignore*/}
           <Button disabled={isDefault} type='secondary' htmlType={'reset'}>
             Отмена
           </Button>
-          {/* @ts-ignore*/}
           <Button disabled={isDefault} type={'primary'} htmlType={'submit'}>
             Сохранить
           </Button>

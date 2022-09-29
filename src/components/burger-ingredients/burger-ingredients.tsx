@@ -1,10 +1,11 @@
 import React, {FC, useMemo, useRef} from "react";
-import {Tab, CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
+import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burger-ingredients.module.css';
 import {useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 import {Link, useLocation} from "react-router-dom";
 import {TIngredient} from "../../utils/types";
+import {Tab} from "../fixed-ya-components-to-react18";
 
 
 type TTabsProps = {
@@ -19,11 +20,8 @@ const Tabs = ({currentTab, setCurrentTab}: TTabsProps) => {
   }
   return (
     <div className={ingredientsStyles.tabs}>
-      {/* @ts-ignore */}
       <Tab value="buns" active={currentTab === 'buns'} onClick={onTabClick}>Булки</Tab>
-      {/* @ts-ignore */}
       <Tab value="sauces" active={currentTab === 'sauces'} onClick={onTabClick}>Соусы</Tab>
-      {/* @ts-ignore */}
       <Tab value="mains" active={currentTab === 'mains'} onClick={onTabClick}>Начинки</Tab>
     </div>
   )

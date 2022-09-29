@@ -37,7 +37,7 @@ export function ProfilePage() {
       name: {text: user?.name, disabled: form.name.disabled},
       email: {text: user?.email},
     });
-  }, [user, form])
+  }, [user])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({

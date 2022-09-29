@@ -12,13 +12,13 @@ export function RegisterPage() {
   const {values, handleChange} = useForm({name: '', email: '', password: ''});
 
   const dispatch = useDispatch();
-  const {registerUserRequest, registerUserError} = useSelector((store:any) => store.user);
+  const {registerUserRequest, registerUserError} = useSelector((store: any) => store.user);
 
   const onRegister = useCallback(
-    (e:FormEvent) => {
+    (e: FormEvent) => {
       e.preventDefault();
       dispatch<any>(registerUser(values.email, values.password, values.name));
-    }, [values,dispatch]);
+    }, [values, dispatch]);
 
   return (
     <div className={styles.container}>

@@ -12,7 +12,7 @@ export function ResetPasswordPage() {
   const history = useHistory();
 
   const onConfirm = useCallback(
-    async (e:FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
       await passwordReset(values.newPassword, values.secretCode)
         .then(() => {

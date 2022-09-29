@@ -1,16 +1,12 @@
-import {Redirect, Route} from "react-router-dom";
+import {Redirect, Route, RouteProps} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getCookie} from "../utils/cookie";
-import {useEffect} from "react";
+import {ReactNode, useEffect} from "react";
 import {AUTH_CHECKOUT_IS_END, checkToken} from "../services/actions/user";
 import Loader from "./loader/loader";
 
-type TProtectedRouteProps = JSX.IntrinsicElements["div"] & {
-  readonly path: string;
-  readonly exact?: boolean;
-};
 
-export function ProtectedRoute({path, exact, children}: TProtectedRouteProps) {
+export function ProtectedRoute({path, exact, children}: RouteProps & {children?: ReactNode}) {
   const {user, authIsChecked} = useSelector((store: any) => store.user);
   const dispatch = useDispatch();
 

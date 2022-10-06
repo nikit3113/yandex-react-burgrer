@@ -1,9 +1,10 @@
 import styles from './home.module.css';
-import {Button, Input} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useCallback} from "react";
+import {Input} from "@ya.praktikum/react-developer-burger-ui-components";
+import {FormEvent, useCallback} from "react";
 import {Link, useHistory} from "react-router-dom";
 import {passwordReset} from "../api/api";
 import {useForm} from "../hooks/useForm";
+import {Button} from "../components/fixed-ya-components-to-react18";
 
 export function ResetPasswordPage() {
   const {values, handleChange} = useForm({newPassword: '', secretCode: ''});
@@ -11,14 +12,14 @@ export function ResetPasswordPage() {
   const history = useHistory();
 
   const onConfirm = useCallback(
-    async e => {
+    async (e: FormEvent) => {
       e.preventDefault();
       await passwordReset(values.newPassword, values.secretCode)
         .then(() => {
           history.replace({pathname: '/login'});
         })
         .catch((er) => console.error(er))
-    }, [values]);
+    }, [history, values.newPassword, values.secretCode]);
 
   return (
     <div className={styles.container}>
@@ -40,7 +41,7 @@ export function ResetPasswordPage() {
             onChange={handleChange}/>
         </div>
         <div className={'mt-6'}>
-          <Button primary={true} htmlType={"submit"}>
+          <Button htmlType={"submit"}>
             Сохранить
           </Button>
         </div>

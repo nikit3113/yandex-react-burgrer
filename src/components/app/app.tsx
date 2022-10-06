@@ -21,23 +21,32 @@ import {ProfilePage} from "../../pages/profile/profile";
 import {ProtectedRoute} from "../protected-route";
 import {NonAuthRoute} from "../non-auth-route";
 
+type TOrderModal = {
+  readonly visible: boolean,
+  readonly orderNumber: number | undefined,
+}
+
+type TBackgroundLocation = {
+  readonly background: any,
+}
+
 function App() {
-  const [orderModal, setOrderModal] = useState({
+  const [orderModal, setOrderModal] = useState<TOrderModal>({
     visible: false,
     orderNumber: undefined,
   });
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const location = useLocation();
+  const location = useLocation<TBackgroundLocation | undefined>();
   const background = location.state && location.state.background;
 
   useEffect(() => {
-    dispatch(dispatchIngredients());
-  }, []);
+    dispatch<any>(dispatchIngredients());
+  }, [dispatch]);
 
   function handleOpenOrderModal() {
-    setOrderModal({visible: true});
+    setOrderModal({...orderModal, visible: true});
   }
 
   function handleCloseOrderModal() {
@@ -47,7 +56,7 @@ function App() {
   const modalOrderDetails = () => {
     return (
       <Modal onClose={handleCloseOrderModal}>
-        <OrderDetails orderNumber={orderModal.orderNumber}/>
+        <OrderDetails/>
       </Modal>
     );
   }

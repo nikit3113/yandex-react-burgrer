@@ -1,19 +1,23 @@
 import React, {useEffect} from "react";
-import PropTypes from "prop-types";
 import styleModal from './modal.module.css';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-function Modal({children, textHeader, onClose}) {
+
+type TModalProps = JSX.IntrinsicElements["div"] & {
+  readonly textHeader?: string;
+  readonly onClose: () => void;
+};
+
+function Modal({children, textHeader, onClose}: TModalProps) {
   useEffect(() => {
-    function onEscape(e) {
+    function onEscape(e: KeyboardEvent) {
       if (e.key === "Escape") {
         onClose();
       }
     }
 
     document.body.addEventListener("keyup", onEscape);
-
     return () => {
       document.body.removeEventListener("keyup", onEscape);
     };
@@ -32,12 +36,6 @@ function Modal({children, textHeader, onClose}) {
       </section>
     </ModalOverlay>
   );
-}
-
-Modal.propTypes = {
-  textHeader: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired
 }
 
 export default Modal;

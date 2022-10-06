@@ -1,7 +1,6 @@
 import React, {useRef} from "react";
-import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
+import {ConstructorElement, CurrencyIcon, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
-import PropTypes from "prop-types";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -10,12 +9,17 @@ import {
   addToConstructor,
   dispatchOrderNumber,
 } from "../../services/actions";
-import {ConstructorItemPropType} from "../../utils/types";
 import {useHistory} from "react-router-dom";
+import {TArrayToSend, TConstructorItem, TIngredient} from "../../utils/types";
+import {Button} from "../fixed-ya-components-to-react18";
 
-const ConstructorItem = ({ingredient}) => {
+
+type TConstructorItemProps = JSX.IntrinsicElements["div"] & {
+  ingredient: TConstructorItem;
+};
+const ConstructorItem = ({ingredient}: TConstructorItemProps) => {
   const dispatch = useDispatch();
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   const deleteItem = () => {
     dispatch({
       type: DELETE_INGREDIENT,
@@ -36,7 +40,7 @@ const ConstructorItem = ({ingredient}) => {
     collect: monitor => ({
       isHover: monitor.isOver()
     }),
-    drop(item) {
+    drop(item: any) {
       dispatch({
         type: SWAP_INGREDIENTS,
         payload: {
@@ -71,16 +75,16 @@ const ConstructorItem = ({ingredient}) => {
   );
 }
 
-ConstructorItem.propTypes = {
-  ingredient: PropTypes.shape(ConstructorItemPropType).isRequired,
-};
 
-function BurgerConstructor({openOrderModal}) {
+type TBurgerConstructorProps = {
+  openOrderModal: () => void
+}
+const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {constructorItems} = useSelector(state => state.common);
-  const {user} = useSelector(store => store.user);
-  const bun = constructorItems.find((item) => item.type === 'bun');
+  const {constructorItems} = useSelector((state: any) => state.common);
+  const {user} = useSelector((store: any) => store.user);
+  const bun = constructorItems.find((item: TIngredient) => item.type === 'bun');
   const buttonDisabled = !constructorItems.length;
 
   const [{isHover}, dropTarget] = useDrop({
@@ -88,27 +92,29 @@ function BurgerConstructor({openOrderModal}) {
     collect: monitor => ({
       isHover: monitor.isOver()
     }),
-    drop({id}) {
+    drop({id}: any) {
       moveItem(id)
     },
   });
 
-  function handleCheckoutButton() {
+
+  const handleCheckoutButton = () => {
     if (!user) {
       history.push('/login');
       return;
     }
-    dispatch(dispatchOrderNumber({ingredients: [...constructorItems.map((el => el._id))]}));
+    const arrayToSend: TArrayToSend = {ingredients: [...constructorItems.map(((el: TIngredient) => el._id))]}
+    dispatch<any>(dispatchOrderNumber(arrayToSend));
     openOrderModal();
   }
 
   const cost = React.useMemo(() => {
-    return constructorItems.reduce((prev, cur) => prev + cur.price, 0);
+    return constructorItems.reduce((prev: number, cur: TIngredient) => prev + cur.price, 0);
   }, [constructorItems]);
 
   const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
 
-  const moveItem = (id) => {
+  const moveItem = (id: number) => {
     dispatch(addToConstructor(id));
   };
 
@@ -125,7 +131,7 @@ function BurgerConstructor({openOrderModal}) {
       </div>}
 
       <div className={constructorStyles.scrollView}>
-        {constructorItems.map((ingredient) => ingredient.type !== 'bun' ?
+        {constructorItems.map((ingredient: TConstructorItem) => ingredient.type !== 'bun' ?
           <ConstructorItem ingredient={ingredient} key={ingredient.id}/> : null)}
       </div>
 
@@ -142,14 +148,11 @@ function BurgerConstructor({openOrderModal}) {
             {cost}
             <CurrencyIcon type={'primary'}/>
           </span>
-          <Button disabled={buttonDisabled} onClick={handleCheckoutButton}>Оформить заказ</Button>
-        </span>
+        <Button disabled={buttonDisabled} onClick={handleCheckoutButton} htmlType={"button"}>Оформить заказ</Button>
+      </span>
     </section>
   );
 }
 
-BurgerConstructor.propTypes = {
-  openOrderModal: PropTypes.func.isRequired,
-};
 
 export default BurgerConstructor;

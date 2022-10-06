@@ -5,18 +5,23 @@ import {useEffect} from "react";
 import {AUTH_CHECKOUT_IS_END, checkToken} from "../services/actions/user";
 import Loader from "./loader/loader";
 
-export function NonAuthRoute({children, ...rest}) {
-  const {user, authIsChecked} = useSelector(store => store.user);
+type TNonAuthRouteProps = JSX.IntrinsicElements["div"] & {
+  readonly path: string;
+  readonly exact?: boolean;
+};
+
+export function NonAuthRoute({children, path}: TNonAuthRouteProps) {
+  const {user, authIsChecked} = useSelector((store: any) => store.user);
   const dispatch = useDispatch();
-  const {state} = useLocation();
+  const {state} = useLocation<any>();
   useEffect(() => {
-    dispatch(checkToken());
+    dispatch<any>(checkToken());
     return (function cleanup() {
       dispatch({
         type: AUTH_CHECKOUT_IS_END,
       });
     })
-  }, []);
+  }, [dispatch]);
 
   if (!authIsChecked) {
     return (<Loader/>);
@@ -24,9 +29,9 @@ export function NonAuthRoute({children, ...rest}) {
 
   const tokenIsExist = !!getCookie('accessToken');
   return (
-    <Route {...rest}
-           render={({location}) =>
-             tokenIsExist && !!user ? (<Redirect to={state?.from || "/"}/> ) : (children)
+    <Route path={path}
+           render={() =>
+             tokenIsExist && !!user ? (<Redirect to={state?.from || "/"}/>) : (children)
            }
     />
   );

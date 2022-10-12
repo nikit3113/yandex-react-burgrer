@@ -1,27 +1,30 @@
-import {combineReducers} from "redux";
+import {TConstructorItem, TIngredient} from "../../utils/types";
 import {
   ADD_INGREDIENT,
-  DELETE_INGREDIENT,
-  GET_INGREDIENTS_FAILED,
+  DELETE_INGREDIENT, GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
-  GET_INGREDIENTS_SUCCESS, GET_ORDER_NUMBER_FAILED,
-  GET_ORDER_NUMBER_REQUEST, GET_ORDER_NUMBER_SUCCESS, SET_CURRENT_ITEM, SWAP_INGREDIENTS, UNSET_CURRENT_ITEM
-} from "../actions";
-import {userReducer} from "./user";
+  GET_INGREDIENTS_SUCCESS, SWAP_INGREDIENTS
+} from "../constants/ingredient";
+import {TIngredientActions} from "../actions/ingredient";
 
-const initialState = {
+type TIngredientState = {
+  ingredients: Array<TIngredient>,
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+
+  constructorItems: Array<TConstructorItem>,
+}
+
+const initialState: TIngredientState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
 
   constructorItems: [],
-
-  orderNumber: undefined,
-  orderNumberRequest: false,
-  orderNumberFailed: false,
 }
 
-const commonReducer = (state = initialState, action) => {
+
+export const ingredientReducer = (state = initialState, action: TIngredientActions): TIngredientState => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return {
@@ -33,7 +36,7 @@ const commonReducer = (state = initialState, action) => {
     case GET_INGREDIENTS_SUCCESS: {
       return {
         ...state,
-        ingredients: action.data,
+        ingredients: action.ingredients,
         ingredientsRequest: false,
         ingredientsFailed: false,
       }
@@ -45,32 +48,9 @@ const commonReducer = (state = initialState, action) => {
         ingredientsFailed: true,
       }
     }
-    case GET_ORDER_NUMBER_REQUEST: {
-      return {
-        ...state,
-        orderNumber: initialState.orderNumber,
-        orderNumberRequest: true,
-      }
-    }
-    case GET_ORDER_NUMBER_SUCCESS: {
-      return {
-        ...state,
-        orderNumber: action.orderNumber,
-        orderNumberRequest: false,
-        orderNumberFailed: false,
-        constructorItems: initialState.constructorItems,
-      }
-    }
-    case GET_ORDER_NUMBER_FAILED: {
-      return {
-        ...state,
-        orderNumberRequest: false,
-        orderNumberFailed: true,
-      }
-    }
     case DELETE_INGREDIENT: {
-      let index = state.constructorItems.map(item => item.id).indexOf(action.payload.id);
-      if (index===-1) return {...state}
+      let index = state.constructorItems.map(item => item.id).indexOf(action.id);
+      if (index === -1) return {...state}
       const constructorItems = [...state.constructorItems];
       constructorItems.splice(index, 1);
       return {
@@ -82,8 +62,8 @@ const commonReducer = (state = initialState, action) => {
       const item = {
         ...state.ingredients.find(item => item._id === action.payload.id),
         id: action.payload.uuid,
-      };
-      let constructorItems = [];
+      } as TConstructorItem;
+      let constructorItems;
       if (item.type === 'bun') {
         constructorItems = [...state.constructorItems.filter((item) => item.type !== 'bun'), item, item];
       } else {
@@ -113,7 +93,4 @@ const commonReducer = (state = initialState, action) => {
   }
 }
 
-export const rootReducer = combineReducers({
-  common: commonReducer,
-  user: userReducer,
-});
+

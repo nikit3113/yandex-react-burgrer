@@ -1,4 +1,5 @@
 import {getCookie, setCookie} from "../utils/cookie";
+import {TArrayToSend} from "../utils/types";
 
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
@@ -132,13 +133,13 @@ export function updateUserApi(name: string, email: string, password: string) {
 }
 
 // Сделать заказ:
-export function postOrder(data = {}) {
+export function postOrder(ingredientIds: TArrayToSend) {
   return request(BASE_URL + '/orders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       authorization: getCookie('accessToken'),
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(ingredientIds),
   });
 }

@@ -6,8 +6,6 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {dispatchIngredients} from "../../services/actions";
-import {useDispatch} from "react-redux";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {Route, Switch, useHistory, useLocation} from "react-router-dom";
@@ -20,6 +18,8 @@ import {NotFound404} from "../../pages/not-found/not-found";
 import {ProfilePage} from "../../pages/profile/profile";
 import {ProtectedRoute} from "../protected-route";
 import {NonAuthRoute} from "../non-auth-route";
+import {dispatchIngredients} from "../../services/actions/ingredient";
+import {useDispatch} from "../../services/hooks";
 
 type TOrderModal = {
   readonly visible: boolean,
@@ -42,7 +42,7 @@ function App() {
   const background = location.state && location.state.background;
 
   useEffect(() => {
-    dispatch<any>(dispatchIngredients());
+    dispatch(dispatchIngredients());
   }, [dispatch]);
 
   function handleOpenOrderModal() {

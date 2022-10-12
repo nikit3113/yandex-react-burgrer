@@ -2,10 +2,11 @@ import styles from './profile.module.css';
 import {NavLink} from "react-router-dom";
 import React, {RefObject, useCallback, useEffect, useState} from "react";
 import {Input, EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import {useDispatch, useSelector} from "react-redux";
 import {getUser, logout, updateUser} from "../../services/actions/user";
 import Loader from "../../components/loader/loader";
 import {Button} from "../../components/fixed-ya-components-to-react18";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {RootState} from "../../services/types";
 
 type TFormState = {
   name: { text: string, disabled: boolean },
@@ -15,7 +16,7 @@ type TFormState = {
 
 export function ProfilePage() {
   const dispatch = useDispatch();
-  const {user, updateUserRequest, updateUserError} = useSelector((store: any) => store.user);
+  const {user, updateUserRequest, updateUserError} = useSelector((store: RootState) => store.user);
 
   const [form, setValue] = useState<TFormState>({
     name: {text: '', disabled: true},
@@ -23,19 +24,19 @@ export function ProfilePage() {
     password: {text: '', disabled: true}
   });
 
-  const isDefault = form.name.text.localeCompare(user.name) === 0
+  const isDefault = user && form.name.text.localeCompare(user.name) === 0
     && form.email.text.localeCompare(user.email) === 0
-    && !form.password.text;
+    && !form.password.text || false;
 
   useEffect(() => {
-    dispatch<any>(getUser());
+    dispatch(getUser());
   }, [dispatch])
 
   useEffect(() => {
     setValue({
       ...form,
-      name: {text: user?.name, disabled: form.name.disabled},
-      email: {text: user?.email},
+      name: {text: user?.name || '', disabled: form.name.disabled},
+      email: {text: user?.email || ''},
     });
   }, [user])
 
@@ -62,13 +63,13 @@ export function ProfilePage() {
   }
 
   const onLogout = () => {
-    dispatch<any>(logout());
+    dispatch(logout());
   }
 
   const onConfirmChange: any = useCallback(
     (e: Event) => {
       e.preventDefault();
-      dispatch<any>(updateUser(form.name.text, form.email.text, form.password.text));
+      dispatch(updateUser(form.name.text, form.email.text, form.password.text));
     }, [form, dispatch]);
 
   const onResetChange: any = useCallback(
@@ -76,8 +77,8 @@ export function ProfilePage() {
       e.preventDefault();
       setValue({
         ...form,
-        name: {text: user?.name, disabled: form.name.disabled},
-        email: {text: user?.email},
+        name: {text: user?.name || '', disabled: form.name.disabled},
+        email: {text: user?.email || ''},
         password: {text: '', disabled: form.password.disabled},
       });
     }, [form, user]);

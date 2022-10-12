@@ -14,41 +14,61 @@ import {
   LOGOUT,
   AUTH_CHECKOUT_SUCCESS,
   AUTH_CHECKOUT_IS_END,
-} from "../actions/user";
+} from "../constants/user";
+import {TUserActions} from "../actions/user";
+import {TUser} from "../types/data";
 
-const initialState = {
+export type TUserState = {
+  user: TUser | null;
+
+  registerUserRequest: boolean;
+  registerUserError: string;
+
+  loginUserRequest: boolean;
+  loginUserError: string;
+
+  getUserRequest: boolean;
+  getUserError: string;
+
+  updateUserRequest: boolean;
+  updateUserError: string;
+
+  authIsChecked: boolean;
+}
+
+const initialState: TUserState = {
   user: null,
 
   registerUserRequest: false,
-  registerUserError: null,
+  registerUserError: '',
 
   loginUserRequest: false,
-  loginUserError: null,
+  loginUserError: '',
 
   getUserRequest: false,
-  getUserError: null,
+  getUserError: '',
 
   updateUserRequest: false,
-  updateUserError: null,
+  updateUserError: '',
 
   authIsChecked: false,
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: TUserActions): TUserState => {
   switch (action.type) {
     case REGISTER_USER_REQUEST: {
       return {
         ...state,
         registerUserRequest: true,
-        registerUserError: false,
+        registerUserError: '',
       };
     }
     case REGISTER_USER_SUCCESS: {
       return {
         ...state,
-        user: action.data,
+        user: action.user,
         registerUserRequest: false,
-        registerUserError: null,
+        registerUserError: '',
       };
     }
     case REGISTER_USER_FAILED: {
@@ -62,15 +82,15 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loginUserRequest: true,
-        loginUserError: false,
+        loginUserError: '',
       };
     }
     case LOGIN_USER_SUCCESS: {
       return {
         ...state,
-        user: action.data,
+        user: action.user,
         loginUserRequest: false,
-        loginUserError: null,
+        loginUserError: '',
       };
     }
     case LOGIN_USER_FAILED: {
@@ -84,15 +104,15 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         getUserRequest: true,
-        getUserError: false,
+        getUserError: '',
       };
     }
     case GET_USER_SUCCESS: {
       return {
         ...state,
-        user: action.data,
+        user: action.user,
         getUserRequest: false,
-        getUserError: null,
+        getUserError: '',
       };
     }
     case GET_USER_FAILED: {
@@ -107,15 +127,15 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         updateUserRequest: true,
-        updateUserError: false,
+        updateUserError: '',
       };
     }
     case UPDATE_USER_SUCCESS: {
       return {
         ...state,
-        user: action.data,
+        user: action.user,
         updateUserRequest: false,
-        updateUserError: null,
+        updateUserError: '',
       };
     }
     case UPDATE_USER_FAILED: {

@@ -1,9 +1,11 @@
 import {Redirect, Route, useLocation} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
 import {getCookie} from "../utils/cookie";
 import {useEffect} from "react";
-import {AUTH_CHECKOUT_IS_END, checkToken} from "../services/actions/user";
+import {checkToken} from "../services/actions/user";
 import Loader from "./loader/loader";
+import {AUTH_CHECKOUT_IS_END} from "../services/constants/user";
+import {useDispatch, useSelector} from "../services/hooks";
+import {RootState} from "../services/types";
 
 type TNonAuthRouteProps = JSX.IntrinsicElements["div"] & {
   readonly path: string;
@@ -11,11 +13,11 @@ type TNonAuthRouteProps = JSX.IntrinsicElements["div"] & {
 };
 
 export function NonAuthRoute({children, path}: TNonAuthRouteProps) {
-  const {user, authIsChecked} = useSelector((store: any) => store.user);
+  const {user, authIsChecked} = useSelector((store: RootState) => store.user);
   const dispatch = useDispatch();
   const {state} = useLocation<any>();
   useEffect(() => {
-    dispatch<any>(checkToken());
+    dispatch(checkToken());
     return (function cleanup() {
       dispatch({
         type: AUTH_CHECKOUT_IS_END,

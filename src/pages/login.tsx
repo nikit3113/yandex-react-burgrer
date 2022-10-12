@@ -3,21 +3,22 @@ import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-comp
 import {FormEvent, useCallback} from "react";
 import {Link} from "react-router-dom";
 import {loginUser} from "../services/actions/user";
-import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
 import {useForm} from "../hooks/useForm";
 import {Button} from "../components/fixed-ya-components-to-react18";
+import {useDispatch, useSelector} from "../services/hooks";
+import {RootState} from "../services/types";
 
 export function LoginPage() {
   const {values, handleChange} = useForm({email: '', password: ''});
 
   const dispatch = useDispatch();
-  const {loginUserRequest, loginUserError} = useSelector((store: any) => store.user);
+  const {loginUserRequest, loginUserError} = useSelector((store: RootState) => store.user);
 
   const onLogin = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      dispatch<any>(loginUser(values.email, values.password));
+      dispatch(loginUser(values.email, values.password));
     }, [values, dispatch]);
 
   return (

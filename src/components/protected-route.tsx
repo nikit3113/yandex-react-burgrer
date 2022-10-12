@@ -1,17 +1,19 @@
 import {Redirect, Route, RouteProps} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
 import {getCookie} from "../utils/cookie";
 import {ReactNode, useEffect} from "react";
-import {AUTH_CHECKOUT_IS_END, checkToken} from "../services/actions/user";
+import {checkToken} from "../services/actions/user";
 import Loader from "./loader/loader";
+import {AUTH_CHECKOUT_IS_END} from "../services/constants/user";
+import {useDispatch, useSelector} from "../services/hooks";
+import {RootState} from "../services/types";
 
 
-export function ProtectedRoute({path, exact, children}: RouteProps & {children?: ReactNode}) {
-  const {user, authIsChecked} = useSelector((store: any) => store.user);
+export function ProtectedRoute({path, exact, children}: RouteProps & { children?: ReactNode }) {
+  const {user, authIsChecked} = useSelector((store: RootState) => store.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch<any>(checkToken());
+    dispatch(checkToken());
     return (function cleanup() {
       dispatch({
         type: AUTH_CHECKOUT_IS_END,

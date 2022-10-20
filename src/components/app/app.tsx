@@ -20,6 +20,7 @@ import {ProtectedRoute} from "../protected-route";
 import {NonAuthRoute} from "../non-auth-route";
 import {dispatchIngredients} from "../../services/actions/ingredient";
 import {useDispatch} from "../../services/hooks";
+import Feed from "../feed/feed";
 
 type TOrderModal = {
   readonly visible: boolean,
@@ -78,6 +79,9 @@ function App() {
               />
               {orderModal.visible && (modalOrderDetails())}
             </Route>
+            <NonAuthRoute path="/feed" exact={true}>
+              <Feed/>
+            </NonAuthRoute>
             <ProtectedRoute path="/profile" exact={true}>
               <ProfilePage/>
             </ProtectedRoute>

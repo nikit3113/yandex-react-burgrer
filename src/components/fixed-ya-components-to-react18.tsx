@@ -1,7 +1,7 @@
-import { Button as ButtonUI, Tab as TabUI } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, {FC, SyntheticEvent} from "react";
+import {Button as ButtonUI, Tab as TabUI} from "@ya.praktikum/react-developer-burger-ui-components";
+import {FC, SyntheticEvent, ReactNode} from "react";
 
-export const Button: React.FC<{
+export const Button: FC<{
   type?: 'secondary' | 'primary';
   size?: 'small' | 'medium' | 'large';
   onClick?: (() => void) | ((e: SyntheticEvent) => void);
@@ -9,12 +9,12 @@ export const Button: React.FC<{
   name?: string;
   htmlType?: 'button' | 'submit' | 'reset';
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }> = ButtonUI
 
 export const Tab: FC<{
   active: boolean;
   value: string;
   onClick: (value: string) => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }> = TabUI

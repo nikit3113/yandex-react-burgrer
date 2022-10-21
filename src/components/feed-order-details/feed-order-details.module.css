@@ -1,0 +1,37 @@
+.root {
+    text-align: left;
+}
+
+.ingredients_list {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow: auto;
+    gap: 16px;
+}
+
+.ingredient {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 24px;
+}
+
+.ingredient_block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.icon {
+    position: relative;
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    margin-right: 16px;
+}
+
+.bottom_block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

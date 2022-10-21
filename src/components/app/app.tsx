@@ -21,6 +21,7 @@ import {NonAuthRoute} from "../non-auth-route";
 import {dispatchIngredients} from "../../services/actions/ingredient";
 import {useDispatch} from "../../services/hooks";
 import Feed from "../feed/feed";
+import FeedOrderDetails from "../feed-order-details/feed-order-details";
 
 type TOrderModal = {
   readonly visible: boolean,
@@ -100,6 +101,11 @@ function App() {
             <Route path='/ingredients/:ingredientId' exact>
               <div className={appStyles.ingredientDetails}>
                 <IngredientDetails/>
+              </div>
+            </Route>
+            <Route path='/feed/:id' exact>
+              <div className={appStyles.ingredientDetails}>
+                <FeedOrderDetails/>
               </div>
             </Route>
             <Route>

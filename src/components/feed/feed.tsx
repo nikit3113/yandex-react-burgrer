@@ -1,59 +1,68 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import feedStyles from './feed.module.css';
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import FeedInfo from "../feed-info/feed-info";
+import {WS_CLOSE, WS_OPEN} from "../../services/constants/ws";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {RootState} from "../../services/types";
+import Loader from "../loader/loader";
+import {TOrder} from "../../services/types/data";
 
-const items = [1, 2, 3, 4, 5, 6];
-const itemsImage = [1, 2, 3, 4, 5, 6, 7];
+const WS_URL_ORDER_ALL = 'wss://norma.nomoreparties.space/orders/all';
 
 type TFeedItemsProps = {
-  readonly item: number;
+  readonly order: TOrder;
 }
 
-const FeedItem: FC<TFeedItemsProps> = ({item}: TFeedItemsProps) => {
+const FeedItem: FC<TFeedItemsProps> = ({order}) => {
+  const {ingredients} = useSelector(((store: RootState) => store.ingredient));
+  const ingredientsList = order.ingredients.map((value) => ingredients.find(({_id}) => _id == value))
+  const price = ingredientsList.reduce((previousValue, currentValue) => {
+    return currentValue ? previousValue + currentValue.price : previousValue;
+  }, 0)
   return (
     <div className={feedStyles.feedItem}>
       <div className={feedStyles.feedItemContainer}>
-        <span className="text_type_digits-default">#{324234 + item}</span>
-        <span className="text text_type_main-default text_color_inactive">сегодня, 16:20 gmt +3</span>
+        <span className="text_type_digits-default">#{order.number}</span>
+        <span
+          className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
       </div>
-      <span className="text_type_main-medium">Burger name</span>
+      <span className="text_type_main-medium">{order.name}</span>
       <div className={feedStyles.feedItemContainer}>
         <div className={feedStyles.feedItemImages}>
-          {itemsImage.map((src, index) => {
+          {ingredientsList.map((ingredient, index) => {
             if (index >= 6) return null;
             if (index === 5) return (
               <div
                 className={feedStyles.feedItemLastImage}
                 style={{
-                  zIndex: itemsImage.length - index,
+                  zIndex: ingredientsList.length - index,
                   right: index * 16
-                }}>
+                }}
+                key={index}>
                 <img
-                  className={`${feedStyles.icon}`}
-                  src={src.toString()}
+                  className={`${feedStyles.icon} ${feedStyles.icon_last}`}
+                  src={ingredient?.image}
                   key={index}
                   alt="img"
                 />
-                {(itemsImage.length > 6) && <span style={{
-                  position: "relative",
-                  right: 40
-                }}>+{itemsImage.length - index - 1}</span>}
+                {(ingredientsList.length > 6) && <span
+                  className={feedStyles.text_add + ' text_type_digits-default'}>+{ingredientsList.length - index}</span>}
               </div>
             )
             return (
               <img
                 className={`${feedStyles.icon}`}
-                src={src.toString()}
+                src={ingredient?.image}
                 key={index}
-                style={{zIndex: itemsImage.length - index, right: index * 16}}
+                style={{zIndex: ingredientsList.length - index, right: index * 16}}
                 alt="img"
               />)
           })}
         </div>
         <span
           className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
-        {234}
+        {price}
           <CurrencyIcon type={'primary'}/>
           </span>
       </div>
@@ -62,14 +71,39 @@ const FeedItem: FC<TFeedItemsProps> = ({item}: TFeedItemsProps) => {
 }
 
 const Feed = () => {
+  const dispatch = useDispatch();
+  useEffect(
+    () => {
+      dispatch({
+        type: WS_OPEN,
+        payload: WS_URL_ORDER_ALL,
+      });
+      return () => {
+        dispatch({type: WS_CLOSE})
+      };
+    },
+    [dispatch]
+  );
+  const {orders, total, totalToday} = useSelector(((store: RootState) => store.ws));
+
+  if (!orders.length) return Loader();
+
+  const readyOrders: Array<number> = [];
+  const inWorkOrders: Array<number> = [];
+
+  orders.forEach((value) => {
+    if (value.status === 'done') readyOrders.push(value.number)
+    else inWorkOrders.push(value.number)
+  })
+
   return (
     <section style={{textAlign: 'left'}}>
       <h1 className="text text_type_main-large mt-10 mb-5">Лента заказов</h1>
       <div className={feedStyles.main + ' mr-10'}>
         <div className={feedStyles.scrollView}>
-          {items.map((num) => <FeedItem item={num}/>)}
+          {orders.map((order) => <FeedItem order={order} key={order._id}/>)}
         </div>
-        <FeedInfo/>
+        <FeedInfo total={total} totalToday={totalToday} readyOrders={readyOrders} inWorkOrders={inWorkOrders}/>
       </div>
     </section>
   );

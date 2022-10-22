@@ -80,9 +80,9 @@ function App() {
               />
               {orderModal.visible && (modalOrderDetails())}
             </Route>
-            <NonAuthRoute path="/feed" exact={true}>
+            <Route path="/feed" exact={true}>
               <Feed/>
-            </NonAuthRoute>
+            </Route>
             <ProtectedRoute path="/profile" exact={true}>
               <ProfilePage/>
             </ProtectedRoute>

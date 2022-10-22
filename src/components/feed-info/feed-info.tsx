@@ -1,30 +1,42 @@
 import feedStyles from "./feed-info.module.css";
-import React from "react";
+import React, {FC} from "react";
 
-const items = [243, 2123, 3123, 4324, 3415, 6234, 723];
+type TFeedInfoProps = {
+  readonly total?: number;
+  readonly totalToday?: number;
+  readonly readyOrders?: Array<number>;
+  readonly inWorkOrders?: Array<number>;
+}
 
-const FeedInfo = () => {
+const FeedInfo: FC<TFeedInfoProps> = ({total, totalToday, readyOrders, inWorkOrders}) => {
   return (
     <div className={feedStyles.main}>
       <div className={feedStyles.top_block}>
-        <div style={{flex: 1, flexDirection: "column"}}>
+        <div style={{flex: 1}}>
           <span className="text_type_main-medium">Готовы:</span>
-          {items.map((number) => (<p className={"text_type_digits-default text_color_success"}>{number}</p>))}
+          <div style={{maxHeight: '240px', overflowY: 'auto',}}>
+            {readyOrders?.map((number) => (
+              <p className={"text_type_digits-default text_color_success"} key={number}>{number}</p>
+            ))}
+          </div>
         </div>
         <div style={{flex: 1}}>
           <span className="text_type_main-medium">В работе:</span>
-          {items.map((number) => (<p className={"text_type_digits-default"}>{number}</p>))}
-          <div></div>
+          <div style={{maxHeight: '240px', overflowY: 'auto',}}>
+            {inWorkOrders?.map((number) => (
+              <p className={"text_type_digits-default"} key={number}>{number}</p>
+            ))}
+          </div>
         </div>
       </div>
       <div className={feedStyles.completed_block}>
         <span className="text_type_main-medium">Выполнено за все время:</span>
-        <span className={`${feedStyles.text_shadow} text_type_digits-large`}>28753</span>
+        <span className={`${feedStyles.text_shadow} text_type_digits-large`}>{total}</span>
       </div>
 
       <div className={feedStyles.completed_block}>
         <span className="text_type_main-medium">Выполнено за сегодня:</span>
-        <span className={`${feedStyles.text_shadow} text_type_digits-large`}>324</span>
+        <span className={`${feedStyles.text_shadow} text_type_digits-large`}>{totalToday}</span>
       </div>
     </div>
   );

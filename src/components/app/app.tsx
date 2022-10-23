@@ -83,7 +83,7 @@ function App() {
             <Route path="/feed" exact={true}>
               <Feed/>
             </Route>
-            <ProtectedRoute path="/profile" exact={true}>
+            <ProtectedRoute path="/profile">
               <ProfilePage/>
             </ProtectedRoute>
             <NonAuthRoute path="/login" exact={true}>

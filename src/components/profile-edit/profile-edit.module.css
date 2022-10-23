@@ -1,0 +1,12 @@
+.editor {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 350px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}

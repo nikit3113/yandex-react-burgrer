@@ -1,28 +1,16 @@
-import React, {PropsWithoutRef} from 'react';
+import React, {PropsWithoutRef, useMemo} from 'react';
 import styles from './feed-order-details.module.css'
 import feedStyles from "../feed/feed.module.css";
 import {CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-
-const TestData = {
-  number: '#32344',
-  name: 'Black Hole Singularity spices burger',
-  status: 'Выполнен',
-  ingredients: [
-    {name: 'Флюоресцентная булка R2-D3', price: 100, count: 3, img: 'Nikita'},
-    {name: 'Филе Люминесцентного тетраодонтимформа', price: 200, count: 1, img: 'Shukalin'},
-    {name: 'Сухарики', price: 3232, count: 4, img: 'Dmitrievich'},
-    {name: 'Флюоресцентная булка R2-D3', price: 100, count: 3, img: 'Nikita'},
-    {name: 'Филе Люминесцентного тетраодонтимформа', price: 200, count: 1, img: 'Shukalin'},
-    {name: 'Сухарики', price: 3232, count: 4, img: 'Dmitrievich'},
-  ],
-  date: 'Вчера, 13:50 i-GMT+3',
-}
+import {useSelector} from "../../services/hooks";
+import {RootState} from "../../services/types";
+import {useParams} from "react-router-dom";
 
 const ListItem: React.FC<PropsWithoutRef<{
-  name: string,
-  price: number,
-  count: number,
-  img: string,
+  name?: string,
+  price?: number,
+  count?: number,
+  img?: string,
 }>> = (props) => {
   return (
     <div className={styles.ingredient}>
@@ -32,7 +20,7 @@ const ListItem: React.FC<PropsWithoutRef<{
           src={props.img}
           alt="img"
         />
-        <p className={'text text_type_main-small'}>{props.name}</p>
+        <p className={'text text_type_main-small pl-4'}>{props.name}</p>
       </div>
       <span
         className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1 ml-4'}
@@ -43,22 +31,57 @@ const ListItem: React.FC<PropsWithoutRef<{
 }
 
 function FeedOrderDetails() {
+  const {orders} = useSelector((store: RootState) => store.ws);
+  const {ingredients} = useSelector((store: RootState) => store.ingredient)
+  const {orderId} = useParams<{ orderId: string }>();
+  const order = useMemo(() =>
+      orders.find((order) => order._id === orderId)
+    , [orderId, orders]);
+
+  if (!order) {
+    return (
+      <p className={'text_type_main-medium pt-4 pb-8'}>'Заказ не найден...'</p>
+    );
+  }
+
+  const result: any = {};
+  order.ingredients.forEach((value) => {
+    console.log(value)
+    if (result[value] != undefined) {
+      ++result[value];
+    } else {
+      result[value] = 1
+    }
+  })
+
+  const ingredientsList: Array<any> = [];
+  for (const key in result) {
+    ingredientsList.push({...ingredients.find(({_id}) => _id == key), count: result[key]})
+  }
+
+  console.log(JSON.stringify(ingredientsList, null, 2))
+
+  const price = ingredientsList.reduce((prev: number, {price, count}) => prev + price * count, 0);
+
+
   return (
     <div className={styles.root}>
-      <p className={'text_type_digits-default pt-4'} style={{textAlign: "center"}}>{TestData.number}</p>
-      <p className={'text_type_main-medium pt-10'}>{TestData.name}</p>
-      <p className={'text_type_main-small  text_color_success pt-3'}>{TestData.status}</p>
+      <p className={'text_type_digits-default pt-4'} style={{textAlign: "center"}}>#{order.number}</p>
+      <p className={'text_type_main-medium pt-10'}>{order.name}</p>
+      <p
+        className={'text_type_main-small  text_color_success pt-3'}>{order.status === 'done' ? 'Готов' : 'В работе'}</p>
       <p className={'text_type_main-medium  pt-15 pb-6'}>Состав :</p>
       <div className={`${styles.ingredients_list} mb-15`}>
-        {TestData.ingredients.map((item) => {
-          return (<ListItem name={item.name} price={item.price} count={item.count} img={item.img}/>)
+        {ingredientsList.map((item: any) => {
+          return (<ListItem name={item?.name} price={item?.price} img={item?.image} count={item?.count}/>)
         })}
       </div>
       <div className={styles.bottom_block}>
-        <span className="text text_type_main-default text_color_inactive">{TestData.date}</span>
+        <span
+          className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
         <span
           className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1 ml-4'}
-        >{TestData.ingredients.reduce((prev: number, {price, count}) => prev + price * count, 0)}< CurrencyIcon
+        >{price}< CurrencyIcon
           type={'primary'}/>
           </span>
       </div>

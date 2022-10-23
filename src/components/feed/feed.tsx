@@ -7,8 +7,10 @@ import {useDispatch, useSelector} from "../../services/hooks";
 import {RootState} from "../../services/types";
 import Loader from "../loader/loader";
 import {TOrder} from "../../services/types/data";
+import {Link, useLocation} from "react-router-dom";
 
 const WS_URL_ORDER_ALL = 'wss://norma.nomoreparties.space/orders/all';
+const MAX_VISIBLE_IMAGES = 6;
 
 type TFeedItemsProps = {
   readonly order: TOrder;
@@ -20,53 +22,64 @@ const FeedItem: FC<TFeedItemsProps> = ({order}) => {
   const price = ingredientsList.reduce((previousValue, currentValue) => {
     return currentValue ? previousValue + currentValue.price : previousValue;
   }, 0)
+
+  const location = useLocation();
   return (
-    <div className={feedStyles.feedItem}>
-      <div className={feedStyles.feedItemContainer}>
-        <span className="text_type_digits-default">#{order.number}</span>
-        <span
-          className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
-      </div>
-      <span className="text_type_main-medium">{order.name}</span>
-      <div className={feedStyles.feedItemContainer}>
-        <div className={feedStyles.feedItemImages}>
-          {ingredientsList.map((ingredient, index) => {
-            if (index >= 6) return null;
-            if (index === 5) return (
-              <div
-                className={feedStyles.feedItemLastImage}
-                style={{
-                  zIndex: ingredientsList.length - index,
-                  right: index * 16
-                }}
-                key={index}>
+    <Link
+      className={feedStyles.link}
+      to={{
+        pathname: 'feed/' + order._id,
+        state: {background: location},
+      }}
+    >
+      <div className={feedStyles.feedItem}>
+        <div className={feedStyles.feedItemContainer}>
+          <span className="text_type_digits-default">#{order.number}</span>
+          <span
+            className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
+        </div>
+        <span className="text_type_main-medium">{order.name}</span>
+        <div className={feedStyles.feedItemContainer}>
+          <div className={feedStyles.feedItemImages}>
+            {ingredientsList.map((ingredient, index) => {
+              if (index >= MAX_VISIBLE_IMAGES) return null;
+              if (index === MAX_VISIBLE_IMAGES - 1) return (
+                <div
+                  className={feedStyles.feedItemLastImage}
+                  style={{
+                    zIndex: MAX_VISIBLE_IMAGES - index,
+                    right: index * 16
+                  }}
+                  key={index}>
+                  <img
+                    className={`${feedStyles.icon} ${feedStyles.icon_last}`}
+                    src={ingredient?.image}
+                    key={index}
+                    alt="img"
+                  />
+                  {(ingredientsList.length > MAX_VISIBLE_IMAGES) && <span
+                    className={feedStyles.text_add + ' text_type_digits-default'}>+{ingredientsList.length - index}</span>}
+                </div>
+              )
+              return (
                 <img
-                  className={`${feedStyles.icon} ${feedStyles.icon_last}`}
+                  className={`${feedStyles.icon}`}
                   src={ingredient?.image}
                   key={index}
+                  style={{zIndex: MAX_VISIBLE_IMAGES - index, right: index * 16}}
                   alt="img"
-                />
-                {(ingredientsList.length > 6) && <span
-                  className={feedStyles.text_add + ' text_type_digits-default'}>+{ingredientsList.length - index}</span>}
-              </div>
-            )
-            return (
-              <img
-                className={`${feedStyles.icon}`}
-                src={ingredient?.image}
-                key={index}
-                style={{zIndex: ingredientsList.length - index, right: index * 16}}
-                alt="img"
-              />)
-          })}
-        </div>
-        <span
-          className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
+                />)
+            })}
+          </div>
+          <span
+            className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
         {price}
-          <CurrencyIcon type={'primary'}/>
+            <CurrencyIcon type={'primary'}/>
           </span>
+        </div>
       </div>
-    </div>
+
+    </Link>
   )
 }
 

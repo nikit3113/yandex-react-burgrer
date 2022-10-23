@@ -121,6 +121,14 @@ function App() {
               </Modal>
             </Route>
           )}
+          {background && (
+          <Route path='/feed/:orderId'>
+            <Modal
+              onClose={handleModalClose}>
+              <FeedOrderDetails/>
+            </Modal>
+          </Route>
+          )}
         </main>
       </DndProvider>
     </div>

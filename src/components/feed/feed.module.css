@@ -75,3 +75,8 @@
     position: relative;
     right: 48px;
 }
+
+.link {
+    color: var(--text-primary-color);
+    text-decoration:none;
+}

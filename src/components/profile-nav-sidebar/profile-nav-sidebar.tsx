@@ -1,11 +1,15 @@
 import React, {FC} from "react";
 import styles from "./profile-nav-sidebar.module.css";
-import {NavLink} from "react-router-dom";
+import {NavLink, useRouteMatch} from "react-router-dom";
 import {logout} from "../../services/actions/user";
 import {useDispatch} from "../../services/hooks";
 
+const PROFILE_PHRASE = 'В этом разделе вы можете изменить свои персональные данные';
+const ORDER_PHRASE = 'В этом разделе вы можете просмотреть свою историю заказов';
+
 const ProfileNavSidebar: FC<any> = () => {
   const dispatch = useDispatch();
+  const rootIsProfileOrders = !!useRouteMatch('/profile/orders');
 
   const onLogout = () => {
     dispatch(logout());
@@ -28,9 +32,9 @@ const ProfileNavSidebar: FC<any> = () => {
         <p className={'text text_type_main-medium mt-2 mb-2'}>История заказов</p>
       </NavLink>
       <button className={styles.button + ' text_type_main-medium mt-2'} onClick={onLogout}>Выход</button>
-      <div className={`mt-20`}>
-        <p className={`text text_type_main-default text_color_inactive`}>
-          В этом разделе вы можете изменить свои персональные данные
+      <div className={`mt-20`} style={{textAlign: "left"}}>
+        <p className={`text text_type_main-default text_color_inactive mr-2`}>
+          {rootIsProfileOrders ? ORDER_PHRASE : PROFILE_PHRASE}
         </p>
       </div>
     </nav>

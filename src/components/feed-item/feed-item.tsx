@@ -20,13 +20,14 @@ const FeedItem: FC<TFeedItemsProps> = ({order, publicList}) => {
   }, 0)
   const status = order.status === 'done' ? 'Выполнен' : order.status === 'pending' ? 'Готовиться' : order.status === 'created' ? 'Создан' : '';
   const orderTextColor = order.status === 'done' ? ' text_color_success' : '';
+  const link = publicList ? 'feed/' + order._id : 'orders/' + order._id;
 
   const location = useLocation();
   return (
     <Link
       className={feedStyles.link}
       to={{
-        pathname: 'feed/' + order._id,
+        pathname: link,
         state: {background: location},
       }}
     >

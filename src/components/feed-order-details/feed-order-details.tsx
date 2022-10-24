@@ -46,7 +46,6 @@ function FeedOrderDetails() {
 
   const result: any = {};
   order.ingredients.forEach((value) => {
-    console.log(value)
     if (result[value] != undefined) {
       ++result[value];
     } else {
@@ -59,10 +58,7 @@ function FeedOrderDetails() {
     ingredientsList.push({...ingredients.find(({_id}) => _id == key), count: result[key]})
   }
 
-  console.log(JSON.stringify(ingredientsList, null, 2))
-
   const price = ingredientsList.reduce((prev: number, {price, count}) => prev + price * count, 0);
-
 
   return (
     <div className={styles.root}>
@@ -72,8 +68,9 @@ function FeedOrderDetails() {
         className={'text_type_main-small  text_color_success pt-3'}>{order.status === 'done' ? 'Готов' : 'В работе'}</p>
       <p className={'text_type_main-medium  pt-15 pb-6'}>Состав :</p>
       <div className={`${styles.ingredients_list} mb-15`}>
-        {ingredientsList.map((item: any) => {
-          return (<ListItem name={item?.name} price={item?.price} img={item?.image} count={item?.count}/>)
+        {ingredientsList.map((item: any, index) => {
+          return (
+            <ListItem name={item?.name} price={item?.price} img={item?.image} count={item?.count} key={index}/>)
         })}
       </div>
       <div className={styles.bottom_block}>

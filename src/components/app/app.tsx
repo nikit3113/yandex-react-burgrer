@@ -98,12 +98,12 @@ function App() {
             <NonAuthRoute path="/reset-password" exact={true}>
               <ResetPasswordPage/>
             </NonAuthRoute>
-            <Route path='/ingredients/:ingredientId' exact>
+            <Route path='/ingredients/:ingredientId' exact={true}>
               <div className={appStyles.ingredientDetails}>
                 <IngredientDetails/>
               </div>
             </Route>
-            <Route path='/feed/:id' exact>
+            <Route path='/feed/:orderId' exact={true}>
               <div className={appStyles.ingredientDetails}>
                 <FeedOrderDetails/>
               </div>
@@ -122,12 +122,12 @@ function App() {
             </Route>
           )}
           {background && (
-          <Route path='/feed/:orderId'>
-            <Modal
-              onClose={handleModalClose}>
-              <FeedOrderDetails/>
-            </Modal>
-          </Route>
+            <Route path='/feed/:orderId'>
+              <Modal
+                onClose={handleModalClose}>
+                <FeedOrderDetails/>
+              </Modal>
+            </Route>
           )}
         </main>
       </DndProvider>

@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React from "react";
 import styles from "./profile-nav-sidebar.module.css";
 import {NavLink, useRouteMatch} from "react-router-dom";
 import {logout} from "../../services/actions/user";
@@ -7,7 +7,7 @@ import {useDispatch} from "../../services/hooks";
 const PROFILE_PHRASE = 'В этом разделе вы можете изменить свои персональные данные';
 const ORDER_PHRASE = 'В этом разделе вы можете просмотреть свою историю заказов';
 
-const ProfileNavSidebar: FC<any> = () => {
+const ProfileNavSidebar = () => {
   const dispatch = useDispatch();
   const rootIsProfileOrders = !!useRouteMatch('/profile/orders');
 

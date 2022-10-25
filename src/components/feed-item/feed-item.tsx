@@ -8,11 +8,11 @@ import {TOrder} from "../../services/types/data";
 
 type TFeedItemsProps = {
   readonly order: TOrder;
-  readonly publicList: boolean;
+  readonly isPublicList: boolean;
 }
 const MAX_VISIBLE_IMAGES = 6;
 
-const FeedItem: FC<TFeedItemsProps> = ({order, publicList}) => {
+const FeedItem: FC<TFeedItemsProps> = ({order, isPublicList}) => {
   const {ingredients} = useSelector(((store: RootState) => store.ingredient));
   const ingredientsList = order.ingredients.map((value) => ingredients.find(({_id}) => _id == value))
   const price = ingredientsList.reduce((previousValue, currentValue) => {
@@ -20,7 +20,7 @@ const FeedItem: FC<TFeedItemsProps> = ({order, publicList}) => {
   }, 0)
   const status = order.status === 'done' ? 'Выполнен' : order.status === 'pending' ? 'Готовиться' : order.status === 'created' ? 'Создан' : '';
   const orderTextColor = order.status === 'done' ? ' text_color_success' : '';
-  const link = publicList ? 'feed/' + order._id : 'orders/' + order._id;
+  const link = isPublicList ? 'feed/' + order._id : 'orders/' + order._id;
 
   const location = useLocation();
   return (
@@ -37,7 +37,7 @@ const FeedItem: FC<TFeedItemsProps> = ({order, publicList}) => {
           <span
             className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
         </div>
-        {!publicList && <span
+        {!isPublicList && <span
           className={"text_type_main-small" + orderTextColor}>{status}</span>}
         <span className="text_type_main-medium">{order.name}</span>
         <div className={feedStyles.feedItemContainer}>

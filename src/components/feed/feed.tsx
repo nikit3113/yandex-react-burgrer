@@ -39,7 +39,7 @@ const Feed = () => {
     <section className={feedStyles.container}>
       <h1 className="text text_type_main-large mt-10 mb-5">Лента заказов</h1>
       <div className={feedStyles.main + ' mr-10'}>
-        <FeedList orders={orders} publicList={true}/>
+        <FeedList orders={orders} isPublicList={true}/>
         <FeedInfo total={total} totalToday={totalToday} readyOrders={readyOrders} inWorkOrders={inWorkOrders}/>
       </div>
     </section>

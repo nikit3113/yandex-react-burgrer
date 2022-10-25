@@ -27,7 +27,7 @@ const ProfileOrders: FC<any> = () => {
 
   if (!orders.length) return Loader();
 
-  return (<FeedList orders={orders} publicList={false}/>);
+  return (<FeedList orders={orders} isPublicList={false}/>);
 }
 
 export default ProfileOrders;

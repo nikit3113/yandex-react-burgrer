@@ -13,7 +13,7 @@ type TFormState = {
   password: { text: string, disabled: boolean },
 }
 
-const ProfileEdit: FC<any> = () => {
+const ProfileEdit: FC = () => {
   const {user, updateUserRequest, updateUserError} = useSelector((store: RootState) => store.user);
   const dispatch = useDispatch();
 

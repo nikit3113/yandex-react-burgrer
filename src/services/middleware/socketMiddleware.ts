@@ -7,6 +7,8 @@ import {
   WS_OPEN
 } from "../constants/ws";
 
+const MS_PER_SEC = 1000;
+
 export const socketMiddleware = (): Middleware => {
   return store => {
     let socket: WebSocket | null = null;
@@ -27,7 +29,7 @@ export const socketMiddleware = (): Middleware => {
           dispatch({
             type: WS_ON_MESSAGE, payload: {
               message: objectMessage,
-              timestamp: new Date().getTime() / 1000
+              timestamp: new Date().getTime() / MS_PER_SEC,
             }
           })
         };

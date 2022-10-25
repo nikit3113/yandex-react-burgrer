@@ -1,9 +1,10 @@
 import React, {FC} from "react";
 import styles from "../feed/feed.module.css";
 import FeedItem from "../feed-item/feed-item";
+import {TOrder} from "../../services/types/data";
 
 type TFeedListProps = {
-  readonly orders: Array<any>;
+  readonly orders: Array<TOrder>;
   readonly isPublicList: boolean;
 }
 

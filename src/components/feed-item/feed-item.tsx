@@ -20,7 +20,7 @@ const FeedItem: FC<TFeedItemsProps> = ({order, isPublicList}) => {
   }, 0)
   const status = order.status === 'done' ? 'Выполнен' : order.status === 'pending' ? 'Готовиться' : order.status === 'created' ? 'Создан' : '';
   const orderTextColor = order.status === 'done' ? ' text_color_success' : '';
-  const link = isPublicList ? 'feed/' + order._id : 'orders/' + order._id;
+  const link = (isPublicList ? 'feed/' : 'orders/') + order._id;
 
   const location = useLocation();
   return (
@@ -37,8 +37,7 @@ const FeedItem: FC<TFeedItemsProps> = ({order, isPublicList}) => {
           <span
             className="text text_type_main-default text_color_inactive">{new Date(order.createdAt).toLocaleString()}</span>
         </div>
-        {!isPublicList && <span
-          className={"text_type_main-small" + orderTextColor}>{status}</span>}
+        {!isPublicList && (<span className={"text_type_main-small" + orderTextColor}>{status}</span>)}
         <span className="text_type_main-medium">{order.name}</span>
         <div className={feedStyles.feedItemContainer}>
           <div className={feedStyles.feedItemImages}>
@@ -73,13 +72,10 @@ const FeedItem: FC<TFeedItemsProps> = ({order, isPublicList}) => {
             })}
           </div>
           <span
-            className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1'}>
-        {price}
-            <CurrencyIcon type={'primary'}/>
-          </span>
+            className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1'}>{price}<CurrencyIcon
+            type={'primary'}/></span>
         </div>
       </div>
-
     </Link>
   )
 }

@@ -59,22 +59,22 @@ export const ingredientReducer = (state = initialState, action: TIngredientActio
       };
     }
     case ADD_INGREDIENT: {
-      const item = {
-        ...state.ingredients.find(item => item._id === action.payload.id),
-        id: action.payload.uuid,
-      } as TConstructorItem;
+      const ingredient = state.ingredients.find(item => item._id === action.payload.id);
+      if (!ingredient) return {...state};
+      const ingredientWithId: TConstructorItem = {...ingredient, id: action.payload.uuid};
       let constructorItems;
-      if (item.type === 'bun') {
-        constructorItems = [...state.constructorItems.filter((item) => item.type !== 'bun'), item, item];
+      if (ingredientWithId.type === 'bun') {
+        constructorItems = [...state.constructorItems.filter((item) => item.type !== 'bun'), ingredientWithId, ingredientWithId];
       } else {
-        constructorItems = [...state.constructorItems, item];
+        constructorItems = [...state.constructorItems, ingredientWithId];
       }
       return {
         ...state,
         constructorItems,
       };
     }
-    case SWAP_INGREDIENTS: {
+    case
+    SWAP_INGREDIENTS: {
       const constructorItems = [...state.constructorItems];
       const mapId = constructorItems.map(item => item.id);
       const oldIndex = mapId.indexOf(action.payload.oldId);

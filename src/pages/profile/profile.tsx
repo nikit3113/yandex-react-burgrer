@@ -22,8 +22,6 @@ export function ProfilePage() {
   const handleModalClose = () => {
     history.goBack();
   };
-  console.log('background ' + JSON.stringify(background,null,2));
-  console.log('location ' + JSON.stringify(location,null,2));
   return (
     <div className={`${styles.container}`}>
       <Switch location={background || location}>

@@ -12,17 +12,17 @@ const FeedInfo: FC<TFeedInfoProps> = ({total, totalToday, readyOrders, inWorkOrd
   return (
     <div className={feedStyles.main}>
       <div className={feedStyles.top_block}>
-        <div style={{flex: 1}}>
+        <div className={feedStyles.container}>
           <span className="text_type_main-medium">Готовы:</span>
-          <div style={{maxHeight: '240px', overflowY: 'auto',}}>
+          <div className={feedStyles.scrollView}>
             {readyOrders?.map((number) => (
               <p className={"text_type_digits-default text_color_success"} key={number}>{number}</p>
             ))}
           </div>
         </div>
-        <div style={{flex: 1}}>
+        <div className={feedStyles.container}>
           <span className="text_type_main-medium">В работе:</span>
-          <div style={{maxHeight: '240px', overflowY: 'auto',}}>
+          <div  className={feedStyles.scrollView}>
             {inWorkOrders?.map((number) => (
               <p className={"text_type_digits-default"} key={number}>{number}</p>
             ))}

@@ -62,7 +62,7 @@ function FeedOrderDetails() {
 
   return (
     <div className={styles.root}>
-      <p className={'text_type_digits-default pt-4'} style={{textAlign: "center"}}>#{order.number}</p>
+      <p className={styles.order_number_text + ' text_type_digits-default pt-4'}>#{order.number}</p>
       <p className={'text_type_main-medium pt-10'}>{order.name}</p>
       <p
         className={'text_type_main-small  text_color_success pt-3'}>{order.status === 'done' ? 'Готов' : 'В работе'}</p>

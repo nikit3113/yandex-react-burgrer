@@ -1,3 +1,7 @@
+.container {
+    text-align: left;
+}
+
 .main {
     display: flex;
     flex-direction: row;

@@ -3,6 +3,10 @@
     margin: 0 50px 50px 50px;
 }
 
+.order_number_text {
+    text-align: center;
+}
+
 .ingredients_list {
     display: flex;
     flex-direction: column;

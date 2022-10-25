@@ -13,6 +13,17 @@
     gap: 24px;
 }
 
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.scrollView {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
 .completed_block {
     display: flex;
     flex-direction: column;

@@ -32,7 +32,7 @@ const ProfileNavSidebar = () => {
         <p className={'text text_type_main-medium mt-2 mb-2'}>История заказов</p>
       </NavLink>
       <button className={styles.button + ' text_type_main-medium mt-2'} onClick={onLogout}>Выход</button>
-      <div className={`mt-20`} style={{textAlign: "left"}}>
+      <div className={`mt-20`}>
         <p className={`text text_type_main-default text_color_inactive mr-2`}>
           {rootIsProfileOrders ? ORDER_PHRASE : PROFILE_PHRASE}
         </p>

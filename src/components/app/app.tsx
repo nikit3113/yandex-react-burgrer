@@ -6,8 +6,6 @@ import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import {dispatchIngredients} from "../../services/actions";
-import {useDispatch} from "react-redux";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {Route, Switch, useHistory, useLocation} from "react-router-dom";
@@ -20,6 +18,10 @@ import {NotFound404} from "../../pages/not-found/not-found";
 import {ProfilePage} from "../../pages/profile/profile";
 import {ProtectedRoute} from "../protected-route";
 import {NonAuthRoute} from "../non-auth-route";
+import {dispatchIngredients} from "../../services/actions/ingredient";
+import {useDispatch} from "../../services/hooks";
+import Feed from "../feed/feed";
+import FeedOrderDetails from "../feed-order-details/feed-order-details";
 
 type TOrderModal = {
   readonly visible: boolean,
@@ -42,7 +44,7 @@ function App() {
   const background = location.state && location.state.background;
 
   useEffect(() => {
-    dispatch<any>(dispatchIngredients());
+    dispatch(dispatchIngredients());
   }, [dispatch]);
 
   function handleOpenOrderModal() {
@@ -78,7 +80,10 @@ function App() {
               />
               {orderModal.visible && (modalOrderDetails())}
             </Route>
-            <ProtectedRoute path="/profile" exact={true}>
+            <Route path="/feed" exact={true}>
+              <Feed/>
+            </Route>
+            <ProtectedRoute path="/profile">
               <ProfilePage/>
             </ProtectedRoute>
             <NonAuthRoute path="/login" exact={true}>
@@ -93,9 +98,14 @@ function App() {
             <NonAuthRoute path="/reset-password" exact={true}>
               <ResetPasswordPage/>
             </NonAuthRoute>
-            <Route path='/ingredients/:ingredientId' exact>
+            <Route path='/ingredients/:ingredientId' exact={true}>
               <div className={appStyles.ingredientDetails}>
                 <IngredientDetails/>
+              </div>
+            </Route>
+            <Route path='/feed/:orderId' exact={true}>
+              <div className={appStyles.ingredientDetails}>
+                <FeedOrderDetails/>
               </div>
             </Route>
             <Route>
@@ -108,6 +118,14 @@ function App() {
                 textHeader={'Детали ингредиента'}
                 onClose={handleModalClose}>
                 <IngredientDetails/>
+              </Modal>
+            </Route>
+          )}
+          {background && (
+            <Route path='/feed/:orderId'>
+              <Modal
+                onClose={handleModalClose}>
+                <FeedOrderDetails/>
               </Modal>
             </Route>
           )}

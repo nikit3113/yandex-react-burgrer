@@ -1,0 +1,42 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    text-align: left;
+    gap: 60px;
+}
+
+.top_block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.chunk {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 15px;
+}
+
+
+.block {
+    display: flex;
+    flex-direction: column;
+}
+
+.completed_block {
+    display: flex;
+    flex-direction: column;
+}
+
+.text_shadow {
+    text-shadow: 0 0 16px rgba(51, 51, 255, 0.25), 0 0 8px rgba(51, 51, 255, 0.25), 0 4px 32px rgba(51, 51, 255, 0.5);
+}

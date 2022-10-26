@@ -2,46 +2,5 @@
     display: flex;
     flex-direction: row;
     position: fixed;
-    margin-left: 20px;
     margin-top: 50px;
-}
-
-.links {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    width: 350px;
-}
-
-.link {
-    background-color: var(--background-alt);
-    color: var(--text-inactive-color);
-    text-decoration:none;
-}
-
-.button {
-    background-color: var(--background-alt);
-    color: var(--text-inactive-color);
-    padding: 0;
-    border: none;
-    cursor: pointer;
-}
-
-.active_link {
-    background-color: var(--background-alt);
-    color: var(--text-primary-color);
-    text-decoration:none;
-}
-
-.editor {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    width: 350px;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
 }

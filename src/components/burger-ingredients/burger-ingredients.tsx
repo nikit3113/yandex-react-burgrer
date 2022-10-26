@@ -1,11 +1,12 @@
 import React, {FC, useMemo, useRef} from "react";
 import {CurrencyIcon, Counter} from '@ya.praktikum/react-developer-burger-ui-components';
 import ingredientsStyles from './burger-ingredients.module.css';
-import {useSelector} from "react-redux";
 import {useDrag} from "react-dnd";
 import {Link, useLocation} from "react-router-dom";
 import {TIngredient} from "../../utils/types";
 import {Tab} from "../fixed-ya-components-to-react18";
+import {RootState} from "../../services/types";
+import {useSelector} from "../../services/hooks";
 
 
 type TTabsProps = {
@@ -32,9 +33,9 @@ type TIngredientListProps = {
   readonly setCurrentTab: (tab: string) => void;
 }
 const IngredientList = ({ingredients, setCurrentTab}: TIngredientListProps) => {
-  const buns = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'bun'), [ingredients]);
-  const sauces = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'sauce'), [ingredients]);
-  const mains = useMemo(() => ingredients.filter((ingredient: TIngredient) => ingredient.type === 'main'), [ingredients]);
+  const buns = useMemo(() => ingredients?.filter((ingredient: TIngredient) => ingredient.type === 'bun'), [ingredients]);
+  const sauces = useMemo(() => ingredients?.filter((ingredient: TIngredient) => ingredient.type === 'sauce'), [ingredients]);
+  const mains = useMemo(() => ingredients?.filter((ingredient: TIngredient) => ingredient.type === 'main'), [ingredients]);
 
   const scrollRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null),
     bunsHeaderRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null),
@@ -89,7 +90,7 @@ const IngredientsCategoryList = ({title, ingredients, id, refer}: TIngredientsCa
     <>
       <h1 className='text_type_main-medium' id={id} ref={refer}>{title}</h1>
       <div className={[ingredientsStyles.grid, 'mt-10'].join(' ')}>
-        {ingredients.map((ingredient: TIngredient) =>
+        {ingredients?.map((ingredient: TIngredient) =>
           <IngredientCard
             key={ingredient._id}
             id={ingredient._id}
@@ -112,7 +113,7 @@ type TIngredientCardProps = {
   readonly type: string
 }
 const IngredientCard: FC<TIngredientCardProps> = ({text, thumbnail, price, id, type}: TIngredientCardProps) => {
-  const count = useSelector((store: any) => store.common.constructorItems).reduce(
+  const count = useSelector((store) => store.ingredient.constructorItems).reduce(
     (prev: number, cur: TIngredient) => cur._id === id ? ++prev : prev, 0
   );
   const location = useLocation();
@@ -151,7 +152,7 @@ const IngredientCard: FC<TIngredientCardProps> = ({text, thumbnail, price, id, t
 }
 
 function BurgerIngredients() {
-  const {ingredients} = useSelector((store: any) => store.common);
+  const {ingredients} = useSelector((store: RootState) => store.ingredient);
   const [currentTab, setCurrentTab] = React.useState('buns')
   return (
     <section className={ingredientsStyles.main + ' mr-10'}>

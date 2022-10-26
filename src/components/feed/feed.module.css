@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.feed_item_card__price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.feed_item_card__price svg {
+    margin-left: 9px;
+}

@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './order-details.module.css';
-import {useSelector} from "react-redux";
 import Loader from "../loader/loader";
+import {useSelector} from "../../services/hooks";
+import {RootState} from "../../services/types";
 
 function OrderDetails() {
-  const {orderNumber, orderNumberFailed, orderNumberRequest} = useSelector((store: any) => store.common);
+  const {orderNumber, orderNumberFailed, orderNumberRequest} = useSelector((store: RootState) => store.order);
   return (
     <div className={styles.root}>
       {orderNumberRequest ? (

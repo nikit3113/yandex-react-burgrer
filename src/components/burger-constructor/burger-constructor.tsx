@@ -2,16 +2,14 @@ import React, {useRef} from "react";
 import {ConstructorElement, CurrencyIcon, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import constructorStyles from './burger-construcor.module.css';
 import {useDrag, useDrop} from "react-dnd";
-import {useDispatch, useSelector} from "react-redux";
-import {
-  SWAP_INGREDIENTS,
-  DELETE_INGREDIENT,
-  addToConstructor,
-  dispatchOrderNumber,
-} from "../../services/actions";
 import {useHistory} from "react-router-dom";
 import {TArrayToSend, TConstructorItem, TIngredient} from "../../utils/types";
 import {Button} from "../fixed-ya-components-to-react18";
+import {DELETE_INGREDIENT, SWAP_INGREDIENTS} from "../../services/constants/ingredient";
+import {dispatchOrderNumber} from "../../services/actions/order";
+import {addToConstructor} from "../../services/actions/ingredient";
+import {useDispatch, useSelector} from "../../services/hooks";
+import {RootState} from "../../services/types";
 
 
 type TConstructorItemProps = JSX.IntrinsicElements["div"] & {
@@ -23,7 +21,7 @@ const ConstructorItem = ({ingredient}: TConstructorItemProps) => {
   const deleteItem = () => {
     dispatch({
       type: DELETE_INGREDIENT,
-      payload: {id: ingredient.id},
+      id: ingredient.id,
     });
   };
 
@@ -82,8 +80,8 @@ type TBurgerConstructorProps = {
 const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {constructorItems} = useSelector((state: any) => state.common);
-  const {user} = useSelector((store: any) => store.user);
+  const {constructorItems} = useSelector((store: RootState) => store.ingredient);
+  const {user} = useSelector((store: RootState) => store.user);
   const bun = constructorItems.find((item: TIngredient) => item.type === 'bun');
   const buttonDisabled = !constructorItems.length;
 
@@ -104,7 +102,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
       return;
     }
     const arrayToSend: TArrayToSend = {ingredients: [...constructorItems.map(((el: TIngredient) => el._id))]}
-    dispatch<any>(dispatchOrderNumber(arrayToSend));
+    dispatch(dispatchOrderNumber(arrayToSend));
     openOrderModal();
   }
 

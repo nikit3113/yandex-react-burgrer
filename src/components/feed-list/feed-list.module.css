@@ -1,0 +1,10 @@
+.scrollView {
+    overflow: auto;
+    min-width: 700px;
+    max-width: 800px;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 8px;
+}

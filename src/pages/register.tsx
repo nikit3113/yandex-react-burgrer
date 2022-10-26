@@ -3,21 +3,22 @@ import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-comp
 import {FormEvent, useCallback} from "react";
 import {Link} from "react-router-dom";
 import {registerUser} from "../services/actions/user";
-import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/loader/loader";
 import {useForm} from "../hooks/useForm";
 import {Button} from "../components/fixed-ya-components-to-react18";
+import {useDispatch, useSelector} from "../services/hooks";
+import {RootState} from "../services/types";
 
 export function RegisterPage() {
   const {values, handleChange} = useForm({name: '', email: '', password: ''});
 
   const dispatch = useDispatch();
-  const {registerUserRequest, registerUserError} = useSelector((store: any) => store.user);
+  const {registerUserRequest, registerUserError} = useSelector((store: RootState) => store.user);
 
   const onRegister = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      dispatch<any>(registerUser(values.email, values.password, values.name));
+      dispatch(registerUser(values.email, values.password, values.name));
     }, [values, dispatch]);
 
   return (

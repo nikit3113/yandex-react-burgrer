@@ -17,7 +17,7 @@ const FileOrderDetailsListItem: React.FC<PropsWithoutRef<{
           src={props.img}
           alt="img"
         />
-        <p className={'text text_type_main-small pl-4'}>{props.name}</p>
+        <p className={'text text_type_main-default pl-4'}>{props.name}</p>
       </div>
       <span
         className={feedStyles.feed_item_card__price + ' text  text_type_digits-default mt-1 mb-1 ml-4'}

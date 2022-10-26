@@ -19,9 +19,17 @@
     flex-direction: column;
 }
 
-.scrollView {
-    max-height: 240px;
-    overflow-y: auto;
+.chunk {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 15px;
+}
+
+
+.block {
+    display: flex;
+    flex-direction: column;
 }
 
 .completed_block {

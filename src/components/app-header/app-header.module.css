@@ -16,6 +16,12 @@
 .leftSideMenu {
     display: flex;
     flex-direction: row;
+    justify-self: flex-start;
+}
+.rightSideMenu {
+    display: flex;
+    flex-direction: row;
+    justify-self: flex-end;
 }
 
 .link {

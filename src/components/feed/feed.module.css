@@ -1,4 +1,6 @@
 .container {
+    display: flex;
+    flex-direction: column;
     text-align: left;
 }
 
@@ -7,14 +9,16 @@
     flex-direction: row;
     text-align: left;
     gap: 60px;
+    flex-wrap: wrap;
 }
 
-.scrollView {
-    overflow: auto;
-    width: 600px;
-    height: 912px;
+.feed_item_card__price {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-right: 8px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.feed_item_card__price svg {
+    margin-left: 9px;
 }

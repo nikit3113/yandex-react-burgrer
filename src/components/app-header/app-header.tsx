@@ -37,6 +37,7 @@ function AppHeader() {
         <Link to={'/'}>
           <Logo/>
         </Link>
+        <div className={headerStyle.rightSideMenu}>
         <NavLink
           to='/profile'
           className={[headerStyle.link, LINK_MARGIN].join(' ')}
@@ -45,6 +46,7 @@ function AppHeader() {
           <ProfileIcon type={rootIsProfile ? 'primary' : 'secondary'}/>
           <p className={'text text_type_main-default ml-2'}>Личный кабинет</p>
         </NavLink>
+        </div>
       </nav>
     </header>
   );

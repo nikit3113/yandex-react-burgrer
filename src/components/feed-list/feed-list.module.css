@@ -1,6 +1,7 @@
 .scrollView {
     overflow: auto;
-    width: 600px;
+    min-width: 700px;
+    max-width: 800px;
     height: 912px;
     display: flex;
     flex-direction: column;

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import styles from "../feed/feed.module.css";
+import styles from "./feed-list.module.css";
 import FeedItem from "../feed-item/feed-item";
 import {TOrder} from "../../services/types/data";
 

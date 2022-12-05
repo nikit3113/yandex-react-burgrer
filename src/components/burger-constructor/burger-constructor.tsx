@@ -110,7 +110,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
     return constructorItems.reduce((prev: number, cur: TIngredient) => prev + cur.price, 0);
   }, [constructorItems]);
 
-  const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
+  const className = isHover ? constructorStyles.constructor_drop_down_dropped : constructorStyles.constructor_drop_down;
 
   const moveItem = (id: number) => {
     dispatch(addToConstructor(id));

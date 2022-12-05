@@ -2,6 +2,7 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nikit3113.github.io/yandex-react-burgrer/",
   "dependencies": {
     "@reduxjs/toolkit": "1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
@@ -33,7 +34,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +58,7 @@
   },
   "devDependencies": {
     "@4tw/cypress-drag-drop": "^2.2.2",
-    "cypress": "^11.2.0"
+    "cypress": "^11.2.0",
+    "gh-pages": "^4.0.0"
   }
 }

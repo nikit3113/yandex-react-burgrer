@@ -16,9 +16,9 @@ describe('main app spec', () => {
     cy.get('@ingredients').contains('Биокотлета из марсианской Магнолии').click();
     cy.get("[class*=ingredient-details_root]").contains("Биокотлета из марсианской Магнолии").should("exist");
 
-    cy.get("[class*=modal_closeButton]").click()
+    cy.get("[class*=modal-overlay_modal]").click({x: 5, y: 5})
 
-    cy.get('@ingredients') .contains('Соус фирменный Space Sauce').click()
+    cy.get('@ingredients').contains('Соус фирменный Space Sauce').click()
     cy.get("[class*=ingredient-details_root]").contains("Соус фирменный Space Sauce").should("exist");
 
 

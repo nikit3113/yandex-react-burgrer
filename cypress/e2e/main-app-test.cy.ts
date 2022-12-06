@@ -42,8 +42,6 @@ describe('main app spec', () => {
       .drag("@constructorDropDown");
 
     cy.get('@orderButton').click();
-    cy.wait(500); // Всё тут правильно!!! см. комментарий на GITHUB
-    cy.get('@orderButton').click();
 
     cy.get("[class*=order-details_root]").contains("123").should("exist");
 

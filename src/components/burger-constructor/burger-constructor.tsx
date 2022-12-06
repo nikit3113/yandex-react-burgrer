@@ -10,6 +10,7 @@ import {dispatchOrderNumber} from "../../services/actions/order";
 import {addToConstructor} from "../../services/actions/ingredient";
 import {useDispatch, useSelector} from "../../services/hooks";
 import {RootState} from "../../services/types";
+import {getCookie} from "../../utils/cookie";
 
 
 type TConstructorItemProps = JSX.IntrinsicElements["div"] & {
@@ -84,6 +85,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
   const {user} = useSelector((store: RootState) => store.user);
   const bun = constructorItems.find((item: TIngredient) => item.type === 'bun');
   const buttonDisabled = !constructorItems.length;
+  const accessToken = getCookie('accessToken');
 
   const [{isHover}, dropTarget] = useDrop({
     accept: ['bun', 'sauce', 'main'],
@@ -97,7 +99,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
 
 
   const handleCheckoutButton = () => {
-    if (!user) {
+    if (!accessToken) {
       history.push('/login');
       return;
     }

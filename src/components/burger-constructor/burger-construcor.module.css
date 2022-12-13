@@ -1,11 +1,11 @@
-.main {
+.constructor_drop_down {
     display: flex;
     flex-direction: column;
     width: 568px;
     height: 912px;
 }
 
-.main_dropped {
+.constructor_drop_down_dropped {
     display: flex;
     flex-direction: column;
     width: 568px;

@@ -2,6 +2,7 @@
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nikit3113.github.io/yandex-react-burgrer/",
   "dependencies": {
     "@reduxjs/toolkit": "1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
@@ -15,9 +16,9 @@
     "@ya.praktikum/react-developer-burger-ui-components": "^1.13.1",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
+    "react-dom": "18.2.0",
     "react-redux": "8.0.1",
     "react-router-dom": "5.2.1",
     "react-scripts": "5.0.1",
@@ -32,7 +33,10 @@
     "start-pc": "set PORT=3113&& react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +55,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.2",
+    "cypress": "^11.2.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "gh-pages": "^4.0.0"
   }
 }

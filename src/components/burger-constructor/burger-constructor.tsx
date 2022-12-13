@@ -10,6 +10,7 @@ import {dispatchOrderNumber} from "../../services/actions/order";
 import {addToConstructor} from "../../services/actions/ingredient";
 import {useDispatch, useSelector} from "../../services/hooks";
 import {RootState} from "../../services/types";
+import {getCookie} from "../../utils/cookie";
 
 
 type TConstructorItemProps = JSX.IntrinsicElements["div"] & {
@@ -84,6 +85,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
   const {user} = useSelector((store: RootState) => store.user);
   const bun = constructorItems.find((item: TIngredient) => item.type === 'bun');
   const buttonDisabled = !constructorItems.length;
+  const accessToken = getCookie('accessToken');
 
   const [{isHover}, dropTarget] = useDrop({
     accept: ['bun', 'sauce', 'main'],
@@ -97,7 +99,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
 
 
   const handleCheckoutButton = () => {
-    if (!user) {
+    if (!accessToken) {
       history.push('/login');
       return;
     }
@@ -110,7 +112,7 @@ const BurgerConstructor = ({openOrderModal}: TBurgerConstructorProps) => {
     return constructorItems.reduce((prev: number, cur: TIngredient) => prev + cur.price, 0);
   }, [constructorItems]);
 
-  const className = isHover ? constructorStyles.main_dropped : constructorStyles.main;
+  const className = isHover ? constructorStyles.constructor_drop_down_dropped : constructorStyles.constructor_drop_down;
 
   const moveItem = (id: number) => {
     dispatch(addToConstructor(id));
